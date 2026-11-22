@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TOUCH PRO TECH — Réparation de téléphones | Oupoyo</title>
+  <meta name="description" content="TOUCH PRO TECH : réparation de téléphones toutes marques, écrans, logiciel, matériel, diagnostic et suivi à Oupoyo.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+</head>
+<body>
+  <section class="tp-hero compact" style="--hero-img:url('images/tp/dept-tech.jpg')">
+    <div class="wrap">
+      <p class="tp-signature" style="color:var(--bleu)">DÉPARTEMENT 02</p>
+      <h1>📱 TOUCH PRO <span>TECH</span></h1>
+      <p class="tp-intro">Réparation de téléphones toutes marques : écrans, batteries, logiciel, matériel, diagnostic. Déposez votre appareil, suivez votre réparation.</p>
+    </div>
+  </section>
+
+  <section class="tp-section">
+    <div class="wrap">
+      <div class="tp-depts" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+        <div class="tp-dept" style="--dept-couleur:var(--bleu)"><div class="icone">🖥️</div><h3>Écrans</h3><p>Remplacement d'écrans toutes marques</p></div>
+        <div class="tp-dept" style="--dept-couleur:var(--bleu)"><div class="icone">🔧</div><h3>Matériel</h3><p>Batteries, connectiques, caméras…</p></div>
+        <div class="tp-dept" style="--dept-couleur:var(--bleu)"><div class="icone">💾</div><h3>Logiciel</h3><p>Flash, déblocage, virus, données</p></div>
+        <div class="tp-dept" style="--dept-couleur:var(--bleu)"><div class="icone">🔍</div><h3>Diagnostic</h3><p>Diagnostic technique complet</p></div>
+      </div>
+
+      <div class="tp-section-titre" style="margin-top:4rem"><em>DÉPÔT D'APPAREIL</em><h2>Demande de réparation</h2></div>
+      <form id="formRepa" class="form-tp" novalidate>
+        <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
+        <label>Votre nom *<input name="nom" required maxlength="80"></label>
+        <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="01 02 03 04 05"></label>
+        <label>Appareil *<input name="appareil" required maxlength="80" placeholder="Ex. iPhone 11, Tecno Spark 10…"></label>
+        <label>Panne constatée *<textarea name="panne" required maxlength="500" rows="3" placeholder="Décrivez le problème…"></textarea></label>
+        <div id="alerteRepa"></div>
+        <button class="btn btn-bleu btn-bloc" type="submit" style="margin-top:1.2rem">Envoyer ma demande</button>
+        <p style="color:var(--gris);font-size:.82rem;margin-top:.8rem;text-align:center">Vous recevrez un numéro de suivi. Suivez votre réparation dans « Mon compte ».</p>
+      </form>
+    </div>
+  </section>
+  <script type="module" src="js/tp-tech.js?v=17"></script>
+</body>
+</html>

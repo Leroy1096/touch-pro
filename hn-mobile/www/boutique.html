@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Boutique — TOUCH PRO | Accessoires, mode, gadgets</title>
+  <meta name="description" content="Boutique TOUCH PRO : accessoires téléphone, gadgets, mode. Commandez en ligne, payez à la livraison ou en boutique.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+  <style>
+    .filtres { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem }
+    .filtres button { background:var(--noir-3); color:var(--gris); border:var(--bordure); border-radius:999px; padding:.45rem 1.1rem; cursor:pointer; font-weight:600 }
+    .filtres button.actif { background:var(--or); color:#171310 }
+    #panier .ligne { display:flex; align-items:center; gap:.8rem; padding:.7rem 0; border-bottom:1px dashed rgba(214,169,79,.2) }
+    #panier .ligne .qte button { background:var(--noir-3); color:var(--or); border:var(--bordure); border-radius:8px; width:30px; height:30px; cursor:pointer }
+    .form-tp input, .form-tp select, .form-tp textarea { width:100%; background:var(--noir-3); border:var(--bordure); border-radius:10px; color:var(--blanc); padding:.8rem; margin-top:.4rem }
+    .form-tp label { font-size:.85rem; color:var(--gris); display:block; margin-top:1rem }
+    .hp { position:absolute; left:-9999px; opacity:0 }
+  </style>
+</head>
+<body>
+  <section class="tp-section" style="padding-top:3rem">
+    <div class="wrap">
+      <div class="tp-section-titre">
+        <em>TOUCH PRO</em>
+        <h2>🛍️ Boutique</h2>
+        <p style="color:var(--gris)">Commandez en ligne — payez à la livraison ou en boutique.</p>
+      </div>
+      <div class="filtres" id="filtres">
+        <button data-dep="" class="actif">Tout</button>
+        <button data-dep="access">🎧 Accessoires</button>
+        <button data-dep="fashion">👕 Fashion</button>
+        <button data-dep="tech">📱 Tech</button>
+        <button data-dep="digital">🎨 Digital</button>
+      </div>
+      <div class="tp-cartes" id="grille"><div class="tp-vide">Chargement…</div></div>
+
+      <div id="panier" style="margin-top:4rem">
+        <div class="tp-section-titre"><em>VOTRE SÉLECTION</em><h2>🛒 Panier</h2></div>
+        <div id="contenuPanier"></div>
+        <form id="formCommande" class="form-tp" style="max-width:520px;margin:1.5rem auto 0" novalidate hidden>
+          <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
+          <label>Votre nom *<input name="nom" required maxlength="80" placeholder="Ex. Awa Koné"></label>
+          <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="Ex. 01 02 03 04 05"></label>
+          <label>Mode de récupération *
+            <select name="livraison">
+              <option value="boutique">Retrait en boutique (gratuit)</option>
+              <option value="livraison">Livraison (frais à convenir sur WhatsApp)</option>
+            </select>
+          </label>
+          <label id="zoneAdresse" hidden>Adresse de livraison<input name="adresse" maxlength="200" placeholder="Quartier, rue, repère"></label>
+          <label>Note (optionnel)<textarea name="note" maxlength="300" rows="2"></textarea></label>
+          <p style="color:var(--gris);font-size:.85rem;margin-top:1rem">💵 Paiement : à la livraison ou en boutique. Confirmation immédiate possible via WhatsApp.</p>
+          <div id="alerteCmd"></div>
+          <button class="btn btn-or btn-bloc" id="btnCommander" type="submit" style="margin-top:1.2rem">Valider ma commande</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="js/tp-boutique.js?v=17"></script>
+</body>
+</html>

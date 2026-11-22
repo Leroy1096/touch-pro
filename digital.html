@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TOUCH PRO DIGITAL — Création & communication | Oupoyo</title>
+  <meta name="description" content="TOUCH PRO DIGITAL : shooting photo, logos, flyers, vidéos publicitaires, sites web, contenus réseaux sociaux, musiques personnalisées. Devis gratuit.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+</head>
+<body>
+  <section class="tp-hero compact" style="--hero-img:url('images/tp/dept-digital.jpg')">
+    <div class="wrap">
+      <p class="tp-signature" style="color:#7a5ac0">DÉPARTEMENT 05</p>
+      <h1>🎨 TOUCH PRO <span>DIGITAL</span></h1>
+      <p class="tp-intro">Création et communication digitale : donnez une image professionnelle à votre activité.</p>
+    </div>
+  </section>
+
+  <section class="tp-section">
+    <div class="wrap">
+      <div class="tp-depts" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">📸</div><h3>Shooting photo</h3><p>Portraits, produits, événements</p></div>
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">✏️</div><h3>Logos & flyers</h3><p>Création graphique, affiches</p></div>
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🎬</div><h3>Vidéos pub</h3><p>Spots publicitaires percutants</p></div>
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🌐</div><h3>Sites web</h3><p>Votre présence en ligne</p></div>
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">📱</div><h3>Réseaux sociaux</h3><p>Contenus & gestion</p></div>
+        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🎵</div><h3>Musiques</h3><p>Compositions personnalisées</p></div>
+      </div>
+
+      <div class="tp-section-titre" style="margin-top:4rem"><em>DEVIS GRATUIT</em><h2>Demande de devis</h2></div>
+      <form id="formDevis" class="form-tp" novalidate>
+        <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
+        <label>Votre nom *<input name="nom" required maxlength="80"></label>
+        <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="01 02 03 04 05"></label>
+        <label>E-mail (optionnel)<input name="email" type="email" maxlength="120"></label>
+        <label>Service souhaité *
+          <select name="service">
+            <option>Shooting photo</option><option>Création de logo</option><option>Flyers / affiches</option>
+            <option>Vidéo publicitaire</option><option>Création de site web</option><option>Contenus réseaux sociaux</option>
+            <option>Musique personnalisée</option><option>Autre</option>
+          </select>
+        </label>
+        <label>Décrivez votre projet *<textarea name="description" required maxlength="800" rows="4"></textarea></label>
+        <label>Budget estimé (FCFA, optionnel)<input name="budget" type="number" min="0" max="100000000" placeholder="Ex. 25000"></label>
+        <div id="alerteDevis"></div>
+        <button class="btn btn-or btn-bloc" type="submit" style="margin-top:1.2rem">Recevoir mon devis</button>
+      </form>
+    </div>
+  </section>
+  <script type="module" src="js/tp-digital.js?v=17"></script>
+</body>
+</html>

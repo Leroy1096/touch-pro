@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Carte de visite — TOUCH PRO | Oupoyo</title>
+  <meta name="description" content="Carte de visite numérique TOUCH PRO : beauté, tech, fashion, digital à Oupoyo. Appelez, WhatsApp, itinéraire, enregistrez le contact.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+  <style>
+    .carte {
+      max-width: 430px; margin: 2rem auto; background: linear-gradient(165deg, #1d1913, #0b0a08);
+      border: 1px solid rgba(214,169,79,.4); border-radius: 24px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.6); text-align: center;
+    }
+    .carte .bande { background: radial-gradient(400px 120px at 50% -20%, rgba(214,169,79,.35), transparent), #14110c; padding: 2rem 1rem 1.2rem; }
+    .carte .bande img { width: 110px; height: 110px; border-radius: 50%; border: 2px solid var(--or); margin: 0 auto .8rem; }
+    .carte h1 { font-size: 1.6rem; letter-spacing: 2px; }
+    .carte h1 span { color: var(--or); }
+    .carte .sig { color: var(--or); font-size: .72rem; letter-spacing: 3px; font-weight: 700; }
+    .carte .slogan { color: var(--gris); font-style: italic; font-size: .85rem; margin-top: .3rem; }
+    .carte .corps { padding: 1.4rem 1.4rem 2rem; display: flex; flex-direction: column; gap: .65rem; }
+    .carte .actions { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+    .carte .actions .btn { padding: .8rem .5rem; font-size: .88rem; }
+    .carte .qr { background: #f5f2ea; border-radius: 16px; padding: .8rem; width: 170px; margin: .6rem auto 0; }
+    .carte .infos { font-size: .86rem; color: var(--gris); }
+    .carte .infos strong { color: var(--blanc); }
+    .depts-mini { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin-top: .4rem; }
+    .depts-mini span { font-size: .72rem; border: 1px solid rgba(214,169,79,.35); color: var(--or-clair); border-radius: 999px; padding: .18rem .6rem; }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="carte" id="carteVisite">
+      <div class="bande">
+        <img src="images/tp/logo-tp.png" alt="TOUCH PRO" id="cLogo">
+        <p class="sig">BEAUTY • TECH • FASHION • DIGITAL</p>
+        <h1>TOUCH <span>PRO</span></h1>
+        <p class="slogan" id="cSlogan">Tout ce dont vous avez besoin, au même endroit !</p>
+      </div>
+      <div class="corps">
+        <p class="infos" id="cAdresse">📍 <strong>Oupoyo</strong>, derrière le marché<br>Carrefour Boutique de Malick</p>
+        <p class="infos" id="cHoraires">🕒 Lun–Sam : 08h00 – 20h00 · Dim : fermé</p>
+        <div class="depts-mini">
+          <span>💇 Beauty</span><span>📱 Tech</span><span>🎧 Access</span><span>👕 Fashion</span><span>🎨 Digital</span>
+        </div>
+        <div class="actions">
+          <a class="btn btn-or" id="cAppeler" href="tel:+2250140810415">📞 Appeler</a>
+          <a class="btn btn-wa" id="cWhatsapp" href="https://wa.me/2250140810415" target="_blank" rel="noopener">💬 WhatsApp</a>
+          <a class="btn btn-bleu" id="cItineraire" href="#" target="_blank" rel="noopener">🧭 Itinéraire</a>
+          <button class="btn btn-contour" id="cVcf">📇 Enregistrer le contact</button>
+          <button class="btn btn-contour" id="cPartager" style="grid-column:1/-1">🔗 Partager ma carte</button>
+        </div>
+        <div class="qr">
+          <img src="images/tp/qr-carte.png" alt="QR Code — carte TOUCH PRO">
+        </div>
+        <p class="infos" style="font-size:.75rem">Scannez pour retrouver cette carte</p>
+      </div>
+    </div>
+    <p style="text-align:center;margin-bottom:2rem"><a href="index.html">← Retour au site TOUCH PRO</a></p>
+  </div>
+
+  <script type="module" src="js/tp-carte.js?v=17"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mon compte — TOUCH PRO</title>
+  <meta name="description" content="Espace client TOUCH PRO : suivez vos commandes, réparations et devis.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+</head>
+<body>
+  <section class="tp-section" style="padding-top:3rem;min-height:70vh">
+    <div class="wrap">
+
+      <!-- Connexion / inscription -->
+      <div id="zoneAuth">
+        <div class="tp-section-titre"><em>ESPACE CLIENT</em><h2>👤 Mon compte</h2>
+          <p style="color:var(--gris)">Suivez vos commandes, réparations et devis en un coup d'œil.</p></div>
+        <div class="auth-tabs">
+          <button id="tabConnexion" class="actif">Connexion</button>
+          <button id="tabInscription">Inscription</button>
+        </div>
+        <form id="formAuth" class="form-tp" novalidate>
+          <div id="champNom" hidden><label>Votre nom *<input name="nom" maxlength="80"></label></div>
+          <div id="champTel" hidden><label>Téléphone *<input name="telephone" maxlength="20" placeholder="01 02 03 04 05"></label></div>
+          <label>E-mail *<input name="email" type="email" required maxlength="120"></label>
+          <label>Mot de passe *<input name="motdepasse" type="password" required minlength="6" autocomplete="current-password"></label>
+          <div id="alerteAuth"></div>
+          <button class="btn btn-or btn-bloc" type="submit" id="btnAuth" style="margin-top:1.2rem">Se connecter</button>
+        </form>
+      </div>
+
+      <!-- Tableau client -->
+      <div id="zoneCompte" hidden>
+        <div class="tp-section-titre"><em>BONJOUR</em><h2 id="nomClient">👤</h2>
+          <p><button class="btn btn-contour" id="btnLogout" style="padding:.5rem 1.3rem">Se déconnecter</button></p></div>
+
+        <div class="tp-section-titre" style="margin-top:2rem"><em>SUIVI</em><h2>🛒 Mes commandes</h2></div>
+        <div id="mesCommandes"><div class="tp-vide">Chargement…</div></div>
+
+        <div class="tp-section-titre" style="margin-top:2.5rem"><em>SUIVI</em><h2>📱 Mes réparations</h2></div>
+        <div id="mesReparations"><div class="tp-vide">Chargement…</div></div>
+
+        <div class="tp-section-titre" style="margin-top:2.5rem"><em>SUIVI</em><h2>🎨 Mes devis</h2></div>
+        <div id="mesDevis"><div class="tp-vide">Chargement…</div></div>
+      </div>
+
+    </div>
+  </section>
+  <script type="module" src="js/tp-compte.js?v=17"></script>
+</body>
+</html>
