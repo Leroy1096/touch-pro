@@ -7,58 +7,86 @@
   <meta name="description" content="Boutique TOUCH PRO : accessoires téléphone, gadgets, mode. Commandez en ligne, payez à la livraison ou en boutique.">
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
-  <link rel="stylesheet" href="css/style.css?v=17">
-  <link rel="stylesheet" href="css/touchpro.css?v=17">
+  <link rel="stylesheet" href="css/style.css?v=18">
+  <link rel="stylesheet" href="css/touchpro.css?v=18">
   <style>
-    .filtres { display:flex; gap:.5rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem }
-    .filtres button { background:var(--noir-3); color:var(--gris); border:var(--bordure); border-radius:999px; padding:.45rem 1.1rem; cursor:pointer; font-weight:600 }
-    .filtres button.actif { background:var(--or); color:#171310 }
-    #panier .ligne { display:flex; align-items:center; gap:.8rem; padding:.7rem 0; border-bottom:1px dashed rgba(214,169,79,.2) }
-    #panier .ligne .qte button { background:var(--noir-3); color:var(--or); border:var(--bordure); border-radius:8px; width:30px; height:30px; cursor:pointer }
-    .form-tp input, .form-tp select, .form-tp textarea { width:100%; background:var(--noir-3); border:var(--bordure); border-radius:10px; color:var(--blanc); padding:.8rem; margin-top:.4rem }
-    .form-tp label { font-size:.85rem; color:var(--gris); display:block; margin-top:1rem }
     .hp { position:absolute; left:-9999px; opacity:0 }
+    #badgePanier { display:none !important } /* remplacé par la barre panier SHEIN */
   </style>
 </head>
 <body>
-  <section class="tp-section" style="padding-top:3rem">
-    <div class="wrap">
-      <div class="tp-section-titre">
-        <em>TOUCH PRO</em>
-        <h2>🛍️ Boutique</h2>
-        <p style="color:var(--gris)">Commandez en ligne — payez à la livraison ou en boutique.</p>
-      </div>
-      <div class="filtres" id="filtres">
-        <button data-dep="" class="actif">Tout</button>
-        <button data-dep="access">🎧 Accessoires</button>
-        <button data-dep="fashion">👕 Fashion</button>
-        <button data-dep="tech">📱 Tech</button>
-        <button data-dep="digital">🎨 Digital</button>
-      </div>
-      <div class="tp-cartes" id="grille"><div class="tp-vide">Chargement…</div></div>
+  <div class="shop-page">
 
-      <div id="panier" style="margin-top:4rem">
-        <div class="tp-section-titre"><em>VOTRE SÉLECTION</em><h2>🛒 Panier</h2></div>
-        <div id="contenuPanier"></div>
-        <form id="formCommande" class="form-tp" style="max-width:520px;margin:1.5rem auto 0" novalidate hidden>
-          <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
-          <label>Votre nom *<input name="nom" required maxlength="80" placeholder="Ex. Awa Koné"></label>
-          <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="Ex. 01 02 03 04 05"></label>
-          <label>Mode de récupération *
-            <select name="livraison">
-              <option value="boutique">Retrait en boutique (gratuit)</option>
-              <option value="livraison">Livraison (frais à convenir sur WhatsApp)</option>
-            </select>
-          </label>
-          <label id="zoneAdresse" hidden>Adresse de livraison<input name="adresse" maxlength="200" placeholder="Quartier, rue, repère"></label>
-          <label>Note (optionnel)<textarea name="note" maxlength="300" rows="2"></textarea></label>
-          <p style="color:var(--gris);font-size:.85rem;margin-top:1rem">💵 Paiement : à la livraison ou en boutique. Confirmation immédiate possible via WhatsApp.</p>
-          <div id="alerteCmd"></div>
-          <button class="btn btn-or btn-bloc" id="btnCommander" type="submit" style="margin-top:1.2rem">Valider ma commande</button>
-        </form>
+    <!-- Barre recherche + compte (sticky, façon SHEIN) -->
+    <div class="shop-topbar">
+      <div class="shop-recherche">
+        <span aria-hidden="true">🔍</span>
+        <input id="recherche" type="search" placeholder="Rechercher un article…" autocomplete="off" enterkeyhint="search">
       </div>
+      <a class="shop-compte" href="compte.html" aria-label="Mon compte">👤</a>
     </div>
-  </section>
-  <script type="module" src="js/tp-boutique.js?v=17"></script>
+
+    <!-- Bandeau avantages -->
+    <div class="shop-avantages">
+      <span>🛵 Livraison disponible</span><i>•</i>
+      <span>💵 Paiement à la livraison</span><i>•</i>
+      <span>🏬 Retrait boutique gratuit</span>
+    </div>
+
+    <!-- Chips catégories (scroll horizontal, sticky) -->
+    <nav class="shop-chips" id="chips" aria-label="Catégories">
+      <button data-dep="" class="actif">Tout</button>
+      <button data-dep="access">🎧 Accessoires</button>
+      <button data-dep="fashion">👕 Fashion</button>
+      <button data-dep="tech">📱 Tech</button>
+      <button data-dep="digital">🎨 Digital</button>
+    </nav>
+
+    <!-- Grille produits -->
+    <main class="shop-grille" id="grille"><div class="tp-vide">Chargement…</div></main>
+
+    <p class="shop-note">💬 Une question sur un article ? <a id="waShop" href="#" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p>
+  </div>
+
+  <!-- Barre panier fixe en bas (façon SHEIN) -->
+  <div class="shop-barre-panier" id="barrePanier" hidden>
+    <div class="total">
+      <small id="nbArticles">0 article</small>
+      <strong id="totalBarre">0 FCFA</strong>
+    </div>
+    <button class="btn btn-or" id="btnVoirPanier">🛒 Voir le panier</button>
+  </div>
+
+  <!-- Tiroir panier (bottom sheet) -->
+  <div class="shop-overlay" id="overlay" hidden></div>
+  <aside class="shop-tiroir" id="tiroir" hidden aria-label="Panier">
+    <div class="tiroir-poignee"></div>
+    <div class="tiroir-tete">
+      <h3>🛒 Mon panier</h3>
+      <button id="btnFermerTiroir" aria-label="Fermer">✕</button>
+    </div>
+    <div class="tiroir-corps">
+      <div id="contenuPanier"></div>
+      <form id="formCommande" class="form-tp" novalidate hidden>
+        <h4>📦 Finaliser la commande</h4>
+        <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
+        <label>Votre nom *<input name="nom" required maxlength="80" placeholder="Ex. Awa Koné"></label>
+        <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="Ex. 01 02 03 04 05"></label>
+        <label>Mode de récupération *
+          <select name="livraison">
+            <option value="boutique">🏬 Retrait en boutique (gratuit)</option>
+            <option value="livraison">🛵 Livraison (frais à convenir sur WhatsApp)</option>
+          </select>
+        </label>
+        <label id="zoneAdresse" hidden>Adresse de livraison<input name="adresse" maxlength="200" placeholder="Quartier, rue, repère"></label>
+        <label>Note (optionnel)<textarea name="note" maxlength="300" rows="2" placeholder="Couleur, précision…"></textarea></label>
+        <p class="tiroir-paiement">💵 Paiement à la livraison ou en boutique — aucun paiement en ligne.</p>
+        <div id="alerteCmd"></div>
+        <button class="btn btn-or btn-bloc" id="btnCommander" type="submit">Valider ma commande</button>
+      </form>
+    </div>
+  </aside>
+
+  <script type="module" src="js/tp-boutique.js?v=18"></script>
 </body>
 </html>

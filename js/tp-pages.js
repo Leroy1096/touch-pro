@@ -42,7 +42,7 @@ export function majBadgePanier() {
   if (!b) {
     b = document.createElement("a");
     b.id = "badgePanier";
-    b.href = "boutique.html#panier";
+    b.href = "boutique.html";
     b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:90;background:var(--or);color:#171310;border-radius:999px;padding:.6rem 1.1rem;font-weight:800;box-shadow:0 8px 30px rgba(214,169,79,.4);display:none";
     document.body.append(b);
   }

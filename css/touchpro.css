@@ -1,244 +1,92 @@
-/* ==========================================================================
-   TOUCH PRO — Extension du design system (surcharge css/style.css)
-   Palette : noir profond · or élégant · blanc · touche bleu tech
-   Conception : Kouamelan
-   ========================================================================== */
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Boutique — TOUCH PRO | Accessoires, mode, gadgets</title>
+  <meta name="description" content="Boutique TOUCH PRO : accessoires téléphone, gadgets, mode. Commandez en ligne, payez à la livraison ou en boutique.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=18">
+  <link rel="stylesheet" href="css/touchpro.css?v=18">
+  <style>
+    .hp { position:absolute; left:-9999px; opacity:0 }
+    #badgePanier { display:none !important } /* remplacé par la barre panier SHEIN */
+  </style>
+</head>
+<body>
+  <div class="shop-page">
 
-:root {
-  --tp-bleu: #2ea8ff;
-  --tp-bleu-fonce: #1b7fd0;
-  --tp-or: #d6a94f;
-  --tp-wa: #22b358;
-}
+    <!-- Barre recherche + compte (sticky, façon SHEIN) -->
+    <div class="shop-topbar">
+      <div class="shop-recherche">
+        <span aria-hidden="true">🔍</span>
+        <input id="recherche" type="search" placeholder="Rechercher un article…" autocomplete="off" enterkeyhint="search">
+      </div>
+      <a class="shop-compte" href="compte.html" aria-label="Mon compte">👤</a>
+    </div>
 
-/* ---------- En-tête TOUCH PRO ---------- */
-.tp-header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(0, 0, 0, .88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(214, 169, 79, .25);
-}
-.tp-nav { display: flex; align-items: center; gap: 1rem; padding: .65rem 0; }
-.tp-logo { display: flex; align-items: center; gap: .7rem; color: var(--blanc, #f5f2ea); }
-.tp-logo:hover { text-decoration: none; }
-.tp-logo img { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--tp-or); box-shadow: 0 0 18px rgba(214, 169, 79, .35); }
-.tp-logo .nom { font-family: var(--font-serif, Georgia, serif); font-weight: 800; font-size: 1.15rem; letter-spacing: 2.5px; color: #fdf9f1; line-height: 1.05; }
-.tp-logo .nom span { color: var(--tp-or); }
-.tp-logo small { display: block; font-family: var(--font-sans, system-ui); font-size: .55rem; letter-spacing: 2.6px; color: var(--tp-or); font-weight: 700; margin-top: 2px; }
-.tp-nav nav { display: flex; gap: .15rem; margin-left: auto; flex-wrap: wrap; align-items: center; }
-.tp-nav nav a {
-  color: #b3a78f; padding: .5rem .8rem; border-radius: 10px;
-  font-size: .9rem; font-weight: 600; transition: .2s;
-}
-.tp-nav nav a:hover { color: var(--tp-or); text-decoration: none; }
-.tp-nav nav a.actif { color: #171310; background: var(--tp-or); }
-.tp-nav .nav-compte { border: 1px solid var(--tp-or); color: var(--tp-or); margin-left: .4rem; }
-.tp-nav .nav-compte:hover { background: var(--tp-or); color: #171310; }
-.tp-burger { display: none; background: none; border: 1px solid rgba(214,169,79,.4); color: var(--tp-or); border-radius: 10px; padding: .45rem .75rem; font-size: 1.15rem; cursor: pointer; }
+    <!-- Bandeau avantages -->
+    <div class="shop-avantages">
+      <span>🛵 Livraison disponible</span><i>•</i>
+      <span>💵 Paiement à la livraison</span><i>•</i>
+      <span>🏬 Retrait boutique gratuit</span>
+    </div>
 
-@media (max-width: 920px) {
-  .tp-burger { display: block; margin-left: auto; }
-  .tp-nav nav {
-    display: none; position: absolute; top: 100%; left: 0; right: 0;
-    flex-direction: column; align-items: stretch;
-    background: rgba(10, 8, 5, .98); padding: 1rem 4%; border-bottom: 1px solid rgba(214,169,79,.3);
-  }
-  .tp-nav nav.ouvert { display: flex; }
-  .tp-nav nav a { padding: .8rem 1rem; font-size: 1rem; }
-  .tp-nav .nav-compte { margin: .4rem 0 0; text-align: center; }
-}
+    <!-- Chips catégories (scroll horizontal, sticky) -->
+    <nav class="shop-chips" id="chips" aria-label="Catégories">
+      <button data-dep="" class="actif">Tout</button>
+      <button data-dep="access">🎧 Accessoires</button>
+      <button data-dep="fashion">👕 Fashion</button>
+      <button data-dep="tech">📱 Tech</button>
+      <button data-dep="digital">🎨 Digital</button>
+    </nav>
 
-/* ---------- Hero spectaculaire ---------- */
-.tp-hero {
-  position: relative; overflow: hidden; isolation: isolate;
-  min-height: min(88vh, 780px); display: flex; align-items: center;
-}
-.tp-hero::before {
-  content: ""; position: absolute; inset: 0; z-index: -2;
-  background: var(--hero-img, url("../images/tp/hero-tp.jpg")) center/cover no-repeat;
-  animation: tpHeroZoom 16s ease-out forwards;
-}
-.tp-hero::after {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(100deg, rgba(0,0,0,.92) 20%, rgba(0,0,0,.55) 60%, rgba(0,0,0,.35)),
-              radial-gradient(800px 300px at 80% 100%, rgba(46,168,255,.14), transparent 60%);
-}
-@keyframes tpHeroZoom { from { transform: scale(1.14); } to { transform: scale(1.03); } }
+    <!-- Grille produits -->
+    <main class="shop-grille" id="grille"><div class="tp-vide">Chargement…</div></main>
 
-.tp-hero .container, .tp-hero .wrap { padding: 5.5rem 0; }
-.tp-hero .kicker {
-  display: inline-block; color: var(--tp-or); letter-spacing: 4px; font-weight: 700;
-  font-size: .78rem; border: 1px solid rgba(214,169,79,.45); border-radius: 999px;
-  padding: .35rem 1.1rem; background: rgba(0,0,0,.4);
-}
-.tp-hero h1 {
-  font-family: var(--font-serif, Georgia, serif);
-  font-size: clamp(2.4rem, 6.5vw, 4.4rem); line-height: 1.08; color: #fdf9f1;
-  margin: 1.1rem 0 .6rem; max-width: 14ch;
-}
-.tp-hero h1 span, .tp-hero h1 em {
-  font-style: normal;
-  background: linear-gradient(120deg, #e9cd93, #d6a94f 55%, #a8813f);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.tp-hero .lead { font-size: 1.12rem; color: #e9e0cd; max-width: 52ch; }
-.tp-slogan-hero { color: var(--tp-or); font-style: italic; font-size: 1rem; margin-top: .8rem; }
-.tp-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.8rem; }
-.tp-hero .hero-rating { margin-top: 1.6rem; color: #e9e0cd; font-size: .95rem; }
-.tp-hero .hero-rating strong { color: #fdf9f1; }
+    <p class="shop-note">💬 Une question sur un article ? <a id="waShop" href="#" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p>
+  </div>
 
-.tp-anim { opacity: 0; transform: translateY(26px); animation: tpUp .9s cubic-bezier(.22,1,.36,1) forwards; }
-.tp-anim:nth-child(1) { animation-delay: .1s; } .tp-anim:nth-child(2) { animation-delay: .25s; }
-.tp-anim:nth-child(3) { animation-delay: .4s; } .tp-anim:nth-child(4) { animation-delay: .55s; }
-.tp-anim:nth-child(5) { animation-delay: .7s; } .tp-anim:nth-child(6) { animation-delay: .85s; }
-@keyframes tpUp { to { opacity: 1; transform: none; } }
+  <!-- Barre panier fixe en bas (façon SHEIN) -->
+  <div class="shop-barre-panier" id="barrePanier" hidden>
+    <div class="total">
+      <small id="nbArticles">0 article</small>
+      <strong id="totalBarre">0 FCFA</strong>
+    </div>
+    <button class="btn btn-or" id="btnVoirPanier">🛒 Voir le panier</button>
+  </div>
 
-/* ---------- Boutons ---------- */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; }
-.btn-or { background: linear-gradient(135deg, #e0bd6e, #c39a3e); color: #171310; font-weight: 700; box-shadow: 0 10px 28px rgba(214,169,79,.28); border: none; border-radius: 999px; padding: .85rem 1.7rem; cursor: pointer; transition: .2s; }
-.btn-or:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(214,169,79,.4); color: #171310; text-decoration: none; }
-.btn-bleu { background: linear-gradient(135deg, var(--tp-bleu), var(--tp-bleu-fonce)); color: #fff; font-weight: 700; border: none; border-radius: 999px; padding: .85rem 1.7rem; cursor: pointer; transition: .2s; }
-.btn-bleu:hover { transform: translateY(-2px); color: #fff; text-decoration: none; }
-.btn-wa { background: var(--tp-wa); color: #fff; font-weight: 700; border: none; border-radius: 999px; padding: .85rem 1.7rem; cursor: pointer; transition: .2s; }
-.btn-wa:hover { transform: translateY(-2px); color: #fff; text-decoration: none; }
-.btn-contour { background: rgba(0,0,0,.35); border: 1.5px solid var(--tp-or); color: var(--tp-or); font-weight: 700; border-radius: 999px; padding: .85rem 1.7rem; cursor: pointer; transition: .2s; }
-.btn-contour:hover { background: var(--tp-or); color: #171310; text-decoration: none; }
-.btn-bloc { width: 100%; }
+  <!-- Tiroir panier (bottom sheet) -->
+  <div class="shop-overlay" id="overlay" hidden></div>
+  <aside class="shop-tiroir" id="tiroir" hidden aria-label="Panier">
+    <div class="tiroir-poignee"></div>
+    <div class="tiroir-tete">
+      <h3>🛒 Mon panier</h3>
+      <button id="btnFermerTiroir" aria-label="Fermer">✕</button>
+    </div>
+    <div class="tiroir-corps">
+      <div id="contenuPanier"></div>
+      <form id="formCommande" class="form-tp" novalidate hidden>
+        <h4>📦 Finaliser la commande</h4>
+        <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
+        <label>Votre nom *<input name="nom" required maxlength="80" placeholder="Ex. Awa Koné"></label>
+        <label>Téléphone *<input name="telephone" required maxlength="20" placeholder="Ex. 01 02 03 04 05"></label>
+        <label>Mode de récupération *
+          <select name="livraison">
+            <option value="boutique">🏬 Retrait en boutique (gratuit)</option>
+            <option value="livraison">🛵 Livraison (frais à convenir sur WhatsApp)</option>
+          </select>
+        </label>
+        <label id="zoneAdresse" hidden>Adresse de livraison<input name="adresse" maxlength="200" placeholder="Quartier, rue, repère"></label>
+        <label>Note (optionnel)<textarea name="note" maxlength="300" rows="2" placeholder="Couleur, précision…"></textarea></label>
+        <p class="tiroir-paiement">💵 Paiement à la livraison ou en boutique — aucun paiement en ligne.</p>
+        <div id="alerteCmd"></div>
+        <button class="btn btn-or btn-bloc" id="btnCommander" type="submit">Valider ma commande</button>
+      </form>
+    </div>
+  </aside>
 
-/* ---------- Sections ---------- */
-.tp-section { padding: 4.5rem 0; }
-.tp-section.alt { background: #0e0c08; }
-.tp-section-titre { text-align: center; margin-bottom: 2.6rem; }
-.tp-section-titre .kicker { color: var(--tp-or); letter-spacing: 4px; font-size: .75rem; font-weight: 700; }
-.tp-section-titre h2 { font-family: var(--font-serif, Georgia, serif); font-size: clamp(1.7rem, 4vw, 2.5rem); color: #fbf6ea; margin-top: .5rem; }
-.tp-section-titre p { color: #b3a78f; margin-top: .4rem; }
-
-/* ---------- Bandeau stats ---------- */
-.tp-stats { background: linear-gradient(135deg, #14110c, #0b0a08); border-block: 1px solid rgba(214,169,79,.25); }
-.tp-stats .grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
-.tp-stat { padding: 2rem 1rem; text-align: center; }
-.tp-stat + .tp-stat { border-left: 1px solid rgba(214,169,79,.18); }
-.tp-stat b { display: block; font-family: var(--font-serif, Georgia, serif); font-size: 2rem; color: var(--tp-or); }
-.tp-stat span { color: #b3a78f; font-size: .85rem; }
-
-/* ---------- Cartes départements (avec image) ---------- */
-.tp-depts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.3rem; }
-.tp-dept {
-  position: relative; border-radius: 18px; overflow: hidden; min-height: 300px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  border: 1px solid rgba(214,169,79,.25); color: #f5f2ea; transition: .3s;
-}
-.tp-dept:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.6); border-color: var(--dept-couleur, var(--tp-or)); text-decoration: none; color: #fff; }
-.tp-dept .fond { position: absolute; inset: 0; background-size: cover; background-position: center; transition: .5s; }
-.tp-dept:hover .fond { transform: scale(1.06); }
-.tp-dept::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.9)); }
-.tp-dept .txt { position: relative; z-index: 1; padding: 1.3rem; }
-.tp-dept .txt .num { font-size: .68rem; letter-spacing: 3px; color: var(--dept-couleur, var(--tp-or)); font-weight: 800; }
-.tp-dept .txt h3 { font-family: var(--font-serif, Georgia, serif); font-size: 1.15rem; letter-spacing: 1px; margin: .2rem 0; }
-.tp-dept .txt p { font-size: .82rem; color: #d8d0bf; }
-.tp-dept .txt .lien { display: inline-block; margin-top: .7rem; font-size: .82rem; font-weight: 700; color: var(--dept-couleur, var(--tp-or)); border-bottom: 2px solid var(--dept-couleur, var(--tp-or)); padding-bottom: 2px; }
-
-/* ---------- Cartes produits / actus / promos ---------- */
-.tp-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 1.4rem; }
-.tp-carte {
-  background: #16120c; border: 1px solid rgba(214,169,79,.2); border-radius: 18px;
-  overflow: hidden; transition: .25s; display: flex; flex-direction: column;
-}
-.tp-carte:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,.55); border-color: rgba(214,169,79,.45); }
-.tp-carte .visuel { aspect-ratio: 4/3; width: 100%; object-fit: cover; background: #1d1913; }
-.tp-carte .corps { padding: 1.15rem 1.25rem 1.35rem; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
-.tp-carte .cat { font-size: .68rem; letter-spacing: 2.5px; color: var(--tp-or); font-weight: 800; text-transform: uppercase; }
-.tp-carte h3 { font-family: var(--font-serif, Georgia, serif); font-size: 1.12rem; color: #fbf6ea; }
-.tp-carte p { color: #b3a78f; font-size: .88rem; flex: 1; }
-.tp-carte .date { font-size: .75rem; color: #8a7b5e; }
-.tp-prix { font-weight: 800; color: var(--tp-or); font-size: 1.15rem; }
-.tp-prix del { color: #8a7b5e; font-size: .85rem; font-weight: 400; margin-right: .5rem; }
-.tp-vide { text-align: center; color: #b3a78f; padding: 2.6rem 1rem; border: 1px dashed rgba(214,169,79,.35); border-radius: 18px; grid-column: 1 / -1; }
-
-/* ---------- Témoignages ---------- */
-.tp-temoignage { background: #16120c; border-left: 3px solid var(--tp-or); border-radius: 14px; padding: 1.3rem 1.5rem; }
-.tp-temoignage p { font-family: var(--font-serif, Georgia, serif); font-style: italic; color: #f2ebdd; font-size: 1.02rem; }
-.tp-temoignage strong { color: var(--tp-or); display: block; margin-top: .6rem; font-size: .85rem; font-family: var(--font-sans, system-ui); font-style: normal; }
-.tp-etoiles { color: var(--tp-or); letter-spacing: 2px; font-size: .85rem; }
-
-/* ---------- WhatsApp flottant ---------- */
-.tp-wa-flottant {
-  position: fixed; right: 18px; bottom: 18px; z-index: 90;
-  width: 58px; height: 58px; border-radius: 50%; background: var(--tp-wa);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 30px rgba(34,179,88,.45); transition: .2s;
-  animation: tpWaPulse 2.6s infinite;
-}
-@keyframes tpWaPulse { 0%,100% { box-shadow: 0 8px 30px rgba(34,179,88,.45); } 50% { box-shadow: 0 8px 30px rgba(34,179,88,.75), 0 0 0 12px rgba(34,179,88,.12); } }
-.tp-wa-flottant:hover { transform: scale(1.08); }
-.tp-wa-flottant svg { width: 30px; height: 30px; fill: #fff; }
-
-/* ---------- Pied de page ---------- */
-.tp-footer { border-top: 1px solid rgba(214,169,79,.25); padding: 3.2rem 0 2rem; background: #0a0805; margin-top: 2rem; }
-.tp-footer .colonnes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
-.tp-footer h4 { color: var(--tp-or); letter-spacing: 3px; font-size: .8rem; margin-bottom: .9rem; }
-.tp-footer p, .tp-footer a { color: #b3a78f; font-size: .9rem; }
-.tp-footer a:hover { color: var(--tp-or); text-decoration: none; }
-.tp-footer .signature { text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.07); color: #8a7b5e; font-size: .8rem; }
-.tp-footer .signature strong { color: var(--tp-or); }
-
-/* ---------- Formulaires ---------- */
-.form-tp { max-width: 540px; margin: 0 auto; }
-.form-tp input, .form-tp select, .form-tp textarea {
-  width: 100%; background: #16120c; border: 1px solid rgba(214,169,79,.3); border-radius: 12px;
-  color: #f5f2ea; padding: .85rem 1rem; margin-top: .4rem; transition: .2s;
-}
-.form-tp input:focus, .form-tp select:focus, .form-tp textarea:focus { outline: none; border-color: var(--tp-or); box-shadow: 0 0 0 3px rgba(214,169,79,.18); }
-.form-tp label { font-size: .85rem; color: #b3a78f; display: block; margin-top: 1rem; font-weight: 600; }
-.hp { position: absolute; left: -9999px; opacity: 0; }
-.alerte { padding: 1rem 1.2rem; border-radius: 14px; margin: 1rem 0; font-size: .92rem; }
-.alerte-ok { background: rgba(34,179,88,.12); border: 1px solid rgba(34,179,88,.45); color: #7ddf9f; }
-.alerte-err { background: rgba(208,80,80,.12); border: 1px solid rgba(208,80,80,.45); color: #f0a0a0; }
-
-/* ---------- Auth / tables ---------- */
-.auth-tabs { display: flex; gap: .5rem; justify-content: center; margin-bottom: 1.5rem; }
-.auth-tabs button { background: #16120c; color: #b3a78f; border: 1px solid rgba(214,169,79,.3); border-radius: 999px; padding: .5rem 1.4rem; cursor: pointer; font-weight: 700; }
-.auth-tabs button.actif { background: var(--tp-or); color: #171310; }
-.tp-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-.tp-table td, .tp-table th { padding: .65rem .5rem; border-bottom: 1px solid rgba(214,169,79,.15); text-align: left; }
-.tp-table th { color: var(--tp-or); font-size: .72rem; letter-spacing: 1.5px; }
-.statut { border-radius: 999px; padding: .18rem .7rem; font-size: .75rem; font-weight: 700; white-space: nowrap; }
-
-/* ---------- Filtres ---------- */
-.filtres { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2rem; }
-.filtres button { background: #16120c; color: #b3a78f; border: 1px solid rgba(214,169,79,.3); border-radius: 999px; padding: .5rem 1.2rem; cursor: pointer; font-weight: 700; transition: .2s; }
-.filtres button.actif { background: var(--tp-or); color: #171310; }
-
-/* ---------- Divers ---------- */
-.reveal { opacity: 0; transform: translateY(26px); transition: .75s cubic-bezier(.22,1,.36,1); }
-.reveal.visible { opacity: 1; transform: none; }
-.tp-badge { background: rgba(214,169,79,.14); color: var(--tp-or); border: 1px solid rgba(214,169,79,.4); border-radius: 999px; padding: .2rem .8rem; font-size: .75rem; font-weight: 700; }
-.tp-container, .wrap { width: min(1160px, 92%); margin: 0 auto; }
-
-/* ---------- Hero compact (pages internes) ---------- */
-.tp-hero.compact { min-height: 0; }
-.tp-hero.compact .wrap { padding: 4rem 0; }
-.tp-hero.compact h1 { font-size: clamp(1.9rem, 5vw, 3rem); max-width: none; }
-
-/* ---------- Typo héros pages internes ---------- */
-.tp-signature { letter-spacing: 4px; color: var(--tp-or); font-weight: 700; font-size: .78rem; }
-.tp-intro { color: #e9e0cd; max-width: 60ch; font-size: 1.05rem; }
-.tp-hero.compact .tp-intro { margin-top: .6rem; }
-
-/* ---------- Galerie photo accueil ---------- */
-.tp-galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; }
-.tp-galerie img { aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid rgba(214,169,79,.25); transition: .3s; }
-.tp-galerie a:hover img { transform: scale(1.04); border-color: var(--tp-or); }
-
-/* ---------- Menu déroulant Départements ---------- */
-.nav-deroulant { position: relative; }
-.nav-deroulant .sous-menu {
-  display: none; position: absolute; top: 100%; left: 0; min-width: 230px;
-  background: #14110c; border: 1px solid rgba(214,169,79,.35); border-radius: 12px; padding: .5rem; z-index: 60;
-}
-.nav-deroulant:hover .sous-menu, .nav-deroulant.ouvert .sous-menu { display: flex; flex-direction: column; }
-.nav-deroulant .sous-menu a { padding: .6rem .8rem; }
-@media (max-width: 920px) {
-  .nav-deroulant .sous-menu { position: static; border: none; background: transparent; padding-left: 1rem; }
-}
+  <script type="module" src="js/tp-boutique.js?v=18"></script>
+</body>
+</html>
