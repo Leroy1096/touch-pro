@@ -129,19 +129,24 @@ export function branchePanier(grille) {
   });
 }
 
-/* Charge les produits d'un département (ou tous) */
+/* Affiche le catalogue démo immédiatement, puis le remplace par la BDD si disponible */
 export async function chargeProduits(sel, departement = null) {
   const zone = document.querySelector(sel);
-  const sb = await getSupabase();
-  if (!sb) { zone.innerHTML = `<div class="tp-vide">Catalogue bientôt disponible.</div>`; return; }
+  const { PRODUITS_DEMO } = await import("./tp-data.js?v=17");
+  const demo = departement ? PRODUITS_DEMO.filter((p) => p.departement === departement) : PRODUITS_DEMO;
+  const rendu = (data) => {
+    zone.innerHTML = data.length ? data.map(carteProduit).join("") : `<div class="tp-vide">Les produits arrivent très vite !</div>`;
+    branchePanier(zone);
+  };
+  rendu(demo);
   try {
+    const sb = await getSupabase();
+    if (!sb) return;
     let q = sb.from("produits").select("*").eq("actif", true).order("id", { ascending: false });
     if (departement) q = q.eq("departement", departement);
-    const { data, error } = await q;
-    if (error) throw error;
-    zone.innerHTML = data?.length ? data.map(carteProduit).join("") : `<div class="tp-vide">Les produits arrivent très vite !</div>`;
-    branchePanier(zone);
-  } catch { zone.innerHTML = `<div class="tp-vide">Catalogue bientôt disponible.</div>`; }
+    const { data: d, error } = await q;
+    if (!error && d?.length) rendu(d);
+  } catch { /* démo conservée */ }
 }
 
 /* Anti-spam : délai mini de remplissage */

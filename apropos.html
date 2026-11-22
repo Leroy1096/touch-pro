@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>À propos — TOUCH PRO | Notre vision, nos engagements</title>
+  <meta name="description" content="TOUCH PRO : un espace multiservices moderne à Oupoyo réunissant beauté, technologie, mode et création digitale. Notre vision, nos engagements.">
+  <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
+  <meta name="theme-color" content="#0b0a08">
+  <link rel="stylesheet" href="css/style.css?v=16">
+  <link rel="stylesheet" href="css/touchpro.css?v=17">
+</head>
+<body>
+  <section class="tp-hero compact" style="--hero-img:url('images/tp/hero-tp.jpg')">
+    <div class="wrap">
+      <span class="kicker">NOTRE HISTOIRE</span>
+      <h1 style="font-family:var(--font-serif);color:#fdf9f1;margin:.8rem 0">À propos de <span style="color:var(--tp-or)">TOUCH PRO</span></h1>
+      <p class="tp-intro">« Tout ce dont vous avez besoin, au même endroit ! »</p>
+    </div>
+  </section>
+
+  <section class="tp-section">
+    <div class="wrap" style="max-width:820px">
+      <h2 style="font-family:var(--font-serif);color:var(--tp-or);margin-bottom:1rem">Bienvenue chez TOUCH PRO</h2>
+      <p>TOUCH PRO est un espace multiservices moderne qui rassemble plusieurs univers pour simplifier votre quotidien. Notre ambition est simple : vous offrir plusieurs solutions dans un seul endroit, avec professionnalisme, créativité et qualité.</p>
+
+      <div class="tp-cartes" style="margin:2rem 0" id="univers"></div>
+
+      <h2 style="font-family:var(--font-serif);color:var(--tp-or);margin:2.5rem 0 1rem">Notre vision</h2>
+      <p>Faire de TOUCH PRO une destination de référence où beauté, technologie, mode et créativité se rencontrent — et construire une marque assez forte pour ouvrir demain plusieurs établissements sous le même nom.</p>
+
+      <h2 style="font-family:var(--font-serif);color:var(--tp-or);margin:2.5rem 0 1rem">Nos engagements</h2>
+      <div class="tp-cartes">
+        <div class="tp-carte"><div class="corps"><h3>✨ Qualité</h3><p>Professionnalisme et exigence dans chaque service.</p></div></div>
+        <div class="tp-carte"><div class="corps"><h3>🤝 Accessibilité</h3><p>Des services accessibles à tous, au cœur d'Oupoyo.</p></div></div>
+        <div class="tp-carte"><div class="corps"><h3>💡 Innovation</h3><p>Créativité et modernité dans chaque univers.</p></div></div>
+        <div class="tp-carte"><div class="corps"><h3>😊 Satisfaction</h3><p>Accompagnement personnalisé de chaque client.</p></div></div>
+      </div>
+
+      <p style="text-align:center;margin-top:3rem;color:var(--tp-or);letter-spacing:3px;font-weight:700">BEAUTY • TECH • FASHION • DIGITAL</p>
+      <p style="text-align:center;color:#b3a78f">TOUCH PRO — Plus qu'une boutique, un univers de possibilités.<br><small>Conception et réalisation : <strong style="color:var(--tp-or)">Kouamelan</strong></small></p>
+    </div>
+  </section>
+  <script type="module">
+    import { injecteChrome, DEPARTEMENTS } from "./js/tp-config.js?v=17";
+    injecteChrome("apropos.html");
+    document.getElementById("univers").innerHTML = DEPARTEMENTS.map(d =>
+      `<div class="tp-carte"><div class="corps"><span class="cat">${d.icone} Département ${d.num}</span><h3>TOUCH PRO ${d.nom}</h3><p>${d.desc}</p></div></div>`).join("");
+  </script>
+</body>
+</html>

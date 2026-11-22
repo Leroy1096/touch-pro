@@ -225,3 +225,8 @@
 .tp-signature { letter-spacing: 4px; color: var(--tp-or); font-weight: 700; font-size: .78rem; }
 .tp-intro { color: #e9e0cd; max-width: 60ch; font-size: 1.05rem; }
 .tp-hero.compact .tp-intro { margin-top: .6rem; }
+
+/* ---------- Galerie photo accueil ---------- */
+.tp-galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; }
+.tp-galerie img { aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid rgba(214,169,79,.25); transition: .3s; }
+.tp-galerie a:hover img { transform: scale(1.04); border-color: var(--tp-or); }

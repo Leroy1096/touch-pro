@@ -83,8 +83,11 @@ export function injecteChrome(pageActive = "") {
       </div>
       <div>
         <h4>PRATIQUE</h4>
+        <p><a href="services.html">✂️ Nos services</a></p>
+        <p><a href="galerie.html">📷 Portfolio</a></p>
         <p><a href="boutique.html">🛍️ Boutique</a></p>
         <p><a href="carte.html">📇 Carte de visite</a></p>
+        <p><a href="apropos.html">ℹ️ À propos</a></p>
         <p><a href="compte.html">👤 Mon compte</a></p>
       </div>
     </div>
@@ -104,10 +107,14 @@ export function injecteChrome(pageActive = "") {
   animeReveals();
 }
 
-/* (Ré)active l'observation des éléments .reveal (appeler après tout rendu dynamique) */
+/* (Ré)active l'observation des éléments .reveal (appeler après tout rendu dynamique).
+   Filet de sécurité : tout devient visible après 1,2 s quoi qu'il arrive. */
 export function animeReveals() {
+  const cibles = document.querySelectorAll(".reveal:not(.visible)");
+  if (!("IntersectionObserver" in window)) { cibles.forEach(e => e.classList.add("visible")); return; }
   const obs = new IntersectionObserver((es) => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
-  }), { threshold: .1 });
-  document.querySelectorAll(".reveal:not(.visible)").forEach(elm => obs.observe(elm));
+  }), { threshold: .05, rootMargin: "0px 0px 40px 0px" });
+  cibles.forEach(elm => obs.observe(elm));
+  setTimeout(() => cibles.forEach(e => e.classList.add("visible")), 1200);
 }
