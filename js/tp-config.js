@@ -101,6 +101,13 @@ export function injecteChrome(pageActive = "") {
   document.body.append(wa);
 
   // Animations d'apparition
-  const obs = new IntersectionObserver((es) => es.forEach(e => e.isIntersecting && e.target.classList.add("visible")), { threshold: .1 });
-  document.querySelectorAll(".reveal").forEach(elm => obs.observe(elm));
+  animeReveals();
+}
+
+/* (Ré)active l'observation des éléments .reveal (appeler après tout rendu dynamique) */
+export function animeReveals() {
+  const obs = new IntersectionObserver((es) => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
+  }), { threshold: .1 });
+  document.querySelectorAll(".reveal:not(.visible)").forEach(elm => obs.observe(elm));
 }

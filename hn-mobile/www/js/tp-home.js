@@ -2,8 +2,9 @@
    TOUCH PRO — Accueil : départements, promos, produits, actus, témoignages
    ========================================================================== */
 
-import { TP, DEPARTEMENTS, injecteChrome, formatPrix } from "./tp-config.js?v=16";
+import { TP, DEPARTEMENTS, injecteChrome, animeReveals, formatPrix } from "./tp-config.js?v=16";
 import { getSupabase } from "./supabaseClient.js?v=16";
+
 
 injecteChrome("index.html");
 document.getElementById("btnItineraire").href = TP.itineraire;
@@ -25,6 +26,7 @@ grilleDepts.innerHTML = DEPARTEMENTS.map(d => `
       <span class="lien">Découvrir →</span>
     </div>
   </a>`).join("");
+animeReveals();
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const vide = (msg) => `<div class="tp-vide">${msg}</div>`;
