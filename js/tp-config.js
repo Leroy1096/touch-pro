@@ -43,6 +43,7 @@ export function injecteChrome(pageActive = "") {
     ["contact.html", "Contact"],
   ];
   const nav = liens.map(([u, l]) => `<a href="${u}" class="${pageActive === u ? "actif" : ""}">${l}</a>`).join("");
+  const menuDepts = DEPARTEMENTS.map(d => `<a href="${d.url}">${d.icone} ${d.nom}</a>`).join("");
   const header = document.createElement("header");
   header.className = "tp-header";
   header.innerHTML = `
@@ -52,7 +53,18 @@ export function injecteChrome(pageActive = "") {
         <span class="nom">TOUCH <span>PRO</span><small>${TP.signature}</small></span>
       </a>
       <button class="tp-burger" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
-      <nav>${nav}<a href="compte.html" class="nav-compte">👤 Mon compte</a></nav>
+      <nav>
+        <a href="index.html" class="${pageActive === "index.html" ? "actif" : ""}">Accueil</a>
+        <span class="nav-deroulant">
+          <a href="index.html#departements">Départements ▾</a>
+          <span class="sous-menu">${menuDepts}</span>
+        </span>
+        <a href="boutique.html" class="${pageActive === "boutique.html" ? "actif" : ""}">Boutique</a>
+        <a href="actualites.html" class="${pageActive === "actualites.html" ? "actif" : ""}">Actualités</a>
+        <a href="carte.html" class="${pageActive === "carte.html" ? "actif" : ""}">Carte de visite</a>
+        <a href="contact.html" class="${pageActive === "contact.html" ? "actif" : ""}">Contact</a>
+        <a href="compte.html" class="nav-compte">👤 Mon compte</a>
+      </nav>
     </div>`;
   document.body.prepend(header);
   const burger = header.querySelector(".tp-burger");
@@ -60,6 +72,13 @@ export function injecteChrome(pageActive = "") {
     const navEl = header.querySelector("nav");
     const ouvert = navEl.classList.toggle("ouvert");
     burger.setAttribute("aria-expanded", String(ouvert));
+  });
+  // Menu déroulant : tactile = tap pour ouvrir
+  const deroulant = header.querySelector(".nav-deroulant");
+  deroulant.firstElementChild.addEventListener("click", (e) => {
+    if (matchMedia("(max-width: 920px)").matches || "ontouchstart" in window) {
+      if (!deroulant.classList.contains("ouvert")) { e.preventDefault(); deroulant.classList.add("ouvert"); }
+    }
   });
 
   const footer = document.createElement("footer");

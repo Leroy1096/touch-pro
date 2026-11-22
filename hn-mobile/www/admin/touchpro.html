@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Admin TOUCH PRO — Tableau de bord</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" type="image/png" href="../images/tp/favicon-tp.png">
+  <link rel="stylesheet" href="../css/style.css?v=16">
+  <link rel="stylesheet" href="../css/touchpro.css?v=17">
+  <style>
+    .adm-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.6rem; }
+    .adm-tabs button { background: #16120c; color: #b3a78f; border: 1px solid rgba(214,169,79,.3); border-radius: 10px; padding: .55rem 1rem; cursor: pointer; font-weight: 700; font-size: .85rem; }
+    .adm-tabs button.actif { background: var(--tp-or); color: #171310; }
+    .kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .9rem; margin-bottom: 2rem; }
+    .kpi div { background: #16120c; border: 1px solid rgba(214,169,79,.25); border-radius: 14px; padding: 1.1rem; text-align: center; }
+    .kpi b { display: block; font-size: 1.7rem; color: var(--tp-or); font-family: var(--font-serif); }
+    .kpi span { color: #b3a78f; font-size: .78rem; }
+    .adm select, .adm input, .adm textarea { background: #16120c; border: 1px solid rgba(214,169,79,.3); border-radius: 10px; color: #f5f2ea; padding: .6rem .8rem; width: 100%; }
+    .adm table { width: 100%; }
+    .actions button { padding: .35rem .7rem; font-size: .78rem; margin: .1rem; }
+  </style>
+</head>
+<body class="adm">
+  <div class="wrap" style="padding:2rem 0 4rem">
+    <div id="zoneLogin">
+      <div class="tp-section-titre"><span class="kicker">TOUCH PRO</span><h2>🔐 Administration</h2></div>
+      <form id="formLogin" class="form-tp" novalidate>
+        <label>E-mail administrateur<input name="email" type="email" required autocomplete="username"></label>
+        <label>Mot de passe<input name="password" type="password" required autocomplete="current-password"></label>
+        <div id="alerteLogin"></div>
+        <button class="btn btn-or btn-bloc" type="submit" style="margin-top:1.2rem">Se connecter</button>
+      </form>
+      <p style="text-align:center;margin-top:1rem"><a href="../index.html">← Retour au site</a></p>
+    </div>
+
+    <div id="zoneAdmin" hidden>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem">
+        <h2 style="font-family:var(--font-serif)">👑 Tableau de bord <span style="color:var(--tp-or)">TOUCH PRO</span></h2>
+        <span style="flex:1"></span>
+        <a class="btn btn-contour" style="padding:.45rem 1rem;font-size:.82rem" href="index.html">Admin salon (RDV, galerie…)</a>
+        <button class="btn btn-contour" id="btnOut" style="padding:.45rem 1rem;font-size:.82rem">Déconnexion</button>
+      </div>
+      <div class="kpi" id="kpi"></div>
+      <div class="adm-tabs" id="tabs"></div>
+      <div id="contenuTab"></div>
+    </div>
+  </div>
+  <script type="module" src="../js/tp-admin.js?v=17"></script>
+</body>
+</html>

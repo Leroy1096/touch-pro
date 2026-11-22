@@ -230,3 +230,15 @@
 .tp-galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; }
 .tp-galerie img { aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid rgba(214,169,79,.25); transition: .3s; }
 .tp-galerie a:hover img { transform: scale(1.04); border-color: var(--tp-or); }
+
+/* ---------- Menu déroulant Départements ---------- */
+.nav-deroulant { position: relative; }
+.nav-deroulant .sous-menu {
+  display: none; position: absolute; top: 100%; left: 0; min-width: 230px;
+  background: #14110c; border: 1px solid rgba(214,169,79,.35); border-radius: 12px; padding: .5rem; z-index: 60;
+}
+.nav-deroulant:hover .sous-menu, .nav-deroulant.ouvert .sous-menu { display: flex; flex-direction: column; }
+.nav-deroulant .sous-menu a { padding: .6rem .8rem; }
+@media (max-width: 920px) {
+  .nav-deroulant .sous-menu { position: static; border: none; background: transparent; padding-left: 1rem; }
+}
