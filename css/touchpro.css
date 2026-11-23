@@ -595,3 +595,81 @@ body.tiroir-ouvert { overflow: hidden; }
   .flash-rail { grid-auto-columns: minmax(210px, 23%); }
   .coupons-rail { grid-auto-columns: minmax(280px, 32%); }
 }
+
+/* ==========================================================================
+   AFFICHES OFFICIELLES — vitrines animées (identité de marque)
+   ========================================================================== */
+.tp-showcase { display: grid; gap: 2.2rem; align-items: center; }
+@media (min-width: 860px) {
+  .tp-showcase { grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .tp-showcase.inverse .affiche-cadre { order: 2; }
+}
+.tp-showcase h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
+.tp-showcase h2 em { color: var(--tp-or); font-style: normal; }
+
+/* Cadre de l'affiche : flottement + lueur + balayage lumineux */
+.affiche-cadre {
+  position: relative; border-radius: 24px; overflow: hidden;
+  border: 1px solid rgba(214,169,79,.4);
+  box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 0 44px rgba(214,169,79,.12);
+  animation: tpFlotte 7s ease-in-out infinite;
+  transition: box-shadow .3s;
+  will-change: transform;
+}
+.affiche-cadre:hover { box-shadow: 0 30px 70px rgba(0,0,0,.6), 0 0 60px rgba(214,169,79,.22); }
+.affiche-cadre img { width: 100%; display: block; }
+.affiche-cadre::after {
+  content: ""; position: absolute; top: -10%; bottom: -10%; left: -80%; width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255,255,255,.13), transparent);
+  animation: tpBrillance 5.5s ease-in-out infinite; pointer-events: none;
+}
+@keyframes tpFlotte { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes tpBrillance { 0% { left: -80%; } 55%, 100% { left: 135%; } }
+
+/* Zoom lent façon cinéma sur le flyer */
+.affiche-cadre.kenburns img { animation: tpKenBurns 20s ease-in-out infinite alternate; }
+@keyframes tpKenBurns { from { transform: scale(1); } to { transform: scale(1.07); } }
+
+/* Garanties sous l'affiche */
+.tp-garanties { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin: 1.2rem 0; }
+.tp-garanties div {
+  display: flex; flex-direction: column; align-items: center; gap: .45rem; text-align: center;
+  background: #14110d; border: 1px solid rgba(214,169,79,.22); border-radius: 14px;
+  padding: .9rem .5rem; font-size: .78rem; color: #b3a78f; transition: transform .25s, border-color .25s;
+}
+.tp-garanties div:hover { transform: translateY(-4px); border-color: rgba(214,169,79,.5); }
+.tp-garanties div:first-letter { font-size: 1.35rem; }
+
+/* Citation dorée */
+.tp-citation {
+  font-family: var(--font-serif, Georgia, serif); font-style: italic;
+  color: var(--tp-or); font-size: 1.05rem; margin-top: 1.1rem;
+  border-left: 3px solid var(--tp-or); padding-left: .9rem;
+}
+
+/* Checklist solutions */
+.tp-checklist { list-style: none; padding: 0; margin: .9rem 0 0; }
+.tp-checklist li {
+  padding: .55rem 0 .55rem 1.6rem; position: relative; color: #cfc5ae; font-size: .95rem;
+  border-bottom: 1px dashed rgba(214,169,79,.15);
+}
+.tp-checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--tp-or); font-weight: 800; }
+.tp-checklist li strong { color: #f0e9da; }
+
+/* Variantes de reveal : depuis la gauche / la droite */
+.reveal.de-gauche { transform: translateX(-46px); }
+.reveal.de-droite { transform: translateX(46px); }
+.reveal.de-gauche.visible, .reveal.de-droite.visible { transform: translateX(0); }
+
+/* Respect du confort de lecture */
+@media (prefers-reduced-motion: reduce) {
+  .affiche-cadre, .affiche-cadre::after, .affiche-cadre.kenburns img { animation: none !important; }
+}
+
+/* Anti-débordement mobile des vitrines */
+.tp-showcase > * { min-width: 0; }
+.tp-garanties { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.affiche-cadre img { min-width: 0; }
+@media (max-width: 380px) {
+  .tp-garanties div { font-size: .7rem; padding: .7rem .3rem; }
+}
