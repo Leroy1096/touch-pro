@@ -11,8 +11,15 @@ injecteChrome("index.html");
 document.getElementById("btnItineraire").href = TP.itineraire;
 
 /* Service worker (PWA) */
+/* Service worker (PWA) — quand une nouvelle version prend le relais,
+   on recharge une fois pour afficher immédiatement le nouveau contenu */
 if ("serviceWorker" in navigator && !location.pathname.startsWith("/admin")) {
   navigator.serviceWorker.register("/sw.js").catch(() => {});
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (sessionStorage.getItem("tp_sw_recharge")) return;
+    sessionStorage.setItem("tp_sw_recharge", "1");
+    location.reload();
+  });
 }
 
 /* ---------- Départements ---------- */

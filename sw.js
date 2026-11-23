@@ -1,13 +1,15 @@
-/* Service Worker — Haut Niveau
-   Stratégie : coquille du site en cache-first, données Supabase toujours du réseau.
-   Ne casse ni la réservation ni l'admin : aucune interception des POST, du domaine
-   Supabase, ni des pages admin. */
-const VERSION = "hn-v2";
+/* Service Worker — TOUCH PRO
+   Stratégie : HTML et images TOUJOURS du réseau d'abord (le client voit
+   immédiatement les nouveautés), cache uniquement en secours hors-ligne.
+   CSS/JS versionnés (?v=) : cache rapide + mise à jour en arrière-plan.
+   Jamais d'interception : POST, Supabase (données vivantes), pages admin. */
+const VERSION = "tp-v3";
 const SHELL = [
   "/", "/index.html",
-  "/css/style.css?v=16",
-  "/js/main.js?v=16", "/js/config.js?v=16", "/js/data.js?v=16",
-  "/js/home.js?v=16", "/images/icon-192.png", "/manifest.webmanifest"
+  "/css/touchpro.css?v=19",
+  "/js/tp-config.js?v=19",
+  "/images/tp/logo-officiel.jpg",
+  "/manifest.webmanifest"
 ];
 
 self.addEventListener("install", (e) => {
@@ -30,12 +32,26 @@ self.addEventListener("fetch", (e) => {
   // Pages HTML : réseau d'abord, repli cache hors ligne
   if (e.request.mode === "navigate") {
     e.respondWith(
-      fetch(e.request).catch(() => caches.match(e.request).then((r) => r || caches.match("/index.html")))
+      fetch(e.request).then((resp) => {
+        if (resp.ok) { const copy = resp.clone(); caches.open(VERSION).then((c) => c.put(e.request, copy)); }
+        return resp;
+      }).catch(() => caches.match(e.request).then((r) => r || caches.match("/index.html")))
     );
     return;
   }
 
-  // Assets (css/js/images) : cache d'abord, mise à jour en arrière-plan
+  // Images : réseau d'abord (affiches/logo toujours à jour), repli cache hors ligne
+  if (e.request.destination === "image") {
+    e.respondWith(
+      fetch(e.request).then((resp) => {
+        if (resp.ok) { const copy = resp.clone(); caches.open(VERSION).then((c) => c.put(e.request, copy)); }
+        return resp;
+      }).catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // CSS/JS versionnés : cache d'abord, mise à jour en arrière-plan
   e.respondWith(
     caches.match(e.request).then((cached) => {
       const network = fetch(e.request).then((resp) => {
