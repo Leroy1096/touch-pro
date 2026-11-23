@@ -1,8 +1,20 @@
-/* TOUCH PRO DIGITAL — demande de devis */
-import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=16";
+/* TOUCH PRO DIGITAL — catalogue des services + demande de devis */
+import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=19";
+import { CATALOGUE, rendCatalogue } from "./tp-catalogue.js?v=19";
 
 initPage("digital.html");
 const form = document.getElementById("formDevis");
+
+/* Catalogue : un tap sélectionne la catégorie et pré-remplit le devis */
+rendCatalogue(document.getElementById("catalogueDigital"), CATALOGUE.digital, {
+  couleur: "#7a5ac0",
+  onChoix: (nom, cat) => {
+    form.service.value = [...form.service.options].some((o) => o.value === cat) ? cat : "Autre";
+    if (!form.description.value.trim()) form.description.value = `Bonjour, je souhaite : ${nom}. `;
+    form.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => form.nom.focus({ preventScroll: true }), 500);
+  },
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();

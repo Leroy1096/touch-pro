@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
   <link rel="stylesheet" href="css/style.css?v=17">
-  <link rel="stylesheet" href="css/touchpro.css?v=17">
+  <link rel="stylesheet" href="css/touchpro.css?v=19">
 </head>
 <body>
   <section class="tp-hero compact" style="--hero-img:url('images/tp/dept-digital.jpg')">
@@ -21,14 +21,10 @@
 
   <section class="tp-section">
     <div class="wrap">
-      <div class="tp-depts" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">📸</div><h3>Shooting photo</h3><p>Portraits, produits, événements</p></div>
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">✏️</div><h3>Logos & flyers</h3><p>Création graphique, affiches</p></div>
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🎬</div><h3>Vidéos pub</h3><p>Spots publicitaires percutants</p></div>
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🌐</div><h3>Sites web</h3><p>Votre présence en ligne</p></div>
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">📱</div><h3>Réseaux sociaux</h3><p>Contenus & gestion</p></div>
-        <div class="tp-dept" style="--dept-couleur:#7a5ac0"><div class="icone">🎵</div><h3>Musiques</h3><p>Compositions personnalisées</p></div>
+      <div class="tp-section-titre"><em>NOS EXPERTISES</em><h2>Création digitale & musique</h2>
+        <p style="color:var(--gris)">Touchez un service : le formulaire de devis se pré-remplit automatiquement.</p>
       </div>
+      <div class="catalogue-grille" id="catalogueDigital"></div>
 
       <div class="tp-section-titre" style="margin-top:4rem"><em>DEVIS GRATUIT</em><h2>Demande de devis</h2></div>
       <form id="formDevis" class="form-tp" novalidate>
@@ -38,9 +34,11 @@
         <label>E-mail (optionnel)<input name="email" type="email" maxlength="120"></label>
         <label>Service souhaité *
           <select name="service">
-            <option>Shooting photo</option><option>Création de logo</option><option>Flyers / affiches</option>
-            <option>Vidéo publicitaire</option><option>Création de site web</option><option>Contenus réseaux sociaux</option>
-            <option>Musique personnalisée</option><option>Autre</option>
+            <option>Design Graphique</option><option>Réseaux Sociaux</option>
+            <option>Photo / Vidéo</option><option>Web / Tech</option>
+            <option>Branding / Entreprise</option><option>Musique pour une personne</option>
+            <option>Musique Business / Marque</option><option>Musique pour Événement</option>
+            <option>Production / Studio</option><option>Autre</option>
           </select>
         </label>
         <label>Décrivez votre projet *<textarea name="description" required maxlength="800" rows="4"></textarea></label>
@@ -50,6 +48,6 @@
       </form>
     </div>
   </section>
-  <script type="module" src="js/tp-digital.js?v=17"></script>
+  <script type="module" src="js/tp-digital.js?v=19"></script>
 </body>
 </html>

@@ -1,27 +1,48 @@
-/* TOUCH PRO BEAUTY — prestations (table services du salon, conservée) */
-import { initPage, getSupabase, esc, formatPrix } from "./tp-pages.js?v=16";
+/* ==========================================================================
+   TOUCH PRO BEAUTY — catalogue officiel des prestations (coiffure mixte,
+   soin du visage, pédicure/manucure) + tarifs fusionnés depuis la BDD.
+   ========================================================================== */
+
+import { initPage, getSupabase, formatPrix } from "./tp-pages.js?v=19";
+import { CATALOGUE, rendCatalogue } from "./tp-catalogue.js?v=19";
 
 initPage("beauty.html");
-document.querySelectorAll('a[href="rendez-vous.html"]').forEach(a => a.id = "rdv");
+document.querySelectorAll('a[href="rendez-vous.html"]').forEach((a) => (a.id = "rdv"));
 
+const zone = document.getElementById("grilleServices");
+let servicesBdd = null;
+
+/* Correspondance souple catalogue ↔ table services (mots significatifs) */
+const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+function prixPour(nom) {
+  if (!servicesBdd) return null;
+  const mots = norm(nom).split(/[^a-z0-9]+/).filter((w) => w.length > 3);
+  let best = null, bestScore = 0;
+  for (const s of servicesBdd) {
+    const cible = norm(s.nom + " " + (s.description || ""));
+    const score = mots.reduce((acc, w) => acc + (cible.includes(w) ? 1 : 0), 0);
+    if (score > bestScore) { best = s; bestScore = score; }
+  }
+  if (!best || bestScore < 1) return null;
+  return best.prix_max && best.prix_max !== best.prix
+    ? `${formatPrix(best.prix)} – ${formatPrix(best.prix_max)}`
+    : formatPrix(best.prix);
+}
+
+function rend() {
+  rendCatalogue(zone, CATALOGUE.beauty, {
+    couleur: "#d6a94f",
+    prixDe: servicesBdd ? prixPour : null,
+    onChoix: () => { location.href = "rendez-vous.html"; },
+  });
+}
+
+rend();
 (async () => {
-  const zone = document.getElementById("grilleServices");
-  const sb = await getSupabase();
-  if (!sb) { zone.innerHTML = `<div class="tp-vide">Nos prestations s'affichent bientôt ici.</div>`; return; }
   try {
-    const { data, error } = await sb.from("services").select("*").order("nom").limit(40);
-    if (error) throw error;
-    if (!data?.length) { zone.innerHTML = `<div class="tp-vide">Nos prestations s'affichent bientôt ici.</div>`; return; }
-    zone.innerHTML = data.map((s) => {
-      const prix = s.prix_min != null
-        ? (s.prix_max && s.prix_max !== s.prix_min ? `${formatPrix(s.prix_min)} – ${formatPrix(s.prix_max)}` : formatPrix(s.prix_min))
-        : (s.prix != null ? formatPrix(s.prix) : "");
-      return `<article class="tp-carte"><div class="corps">
-        <h3>${esc(s.nom)}</h3>
-        ${s.description ? `<p>${esc(s.description)}</p>` : ""}
-        ${prix ? `<p class="tp-prix">${prix}</p>` : ""}
-        <a class="btn btn-or" href="rendez-vous.html" style="align-self:flex-start">Réserver</a>
-      </div></article>`;
-    }).join("");
-  } catch { zone.innerHTML = `<div class="tp-vide">Nos prestations s'affichent bientôt ici.</div>`; }
+    const sb = await getSupabase();
+    if (!sb) return;
+    const { data, error } = await sb.from("services").select("nom,description,prix,prix_max").eq("actif", true);
+    if (!error && data?.length) { servicesBdd = data; rend(); }
+  } catch { /* catalogue sans prix conservé */ }
 })();

@@ -673,3 +673,36 @@ body.tiroir-ouvert { overflow: hidden; }
 @media (max-width: 380px) {
   .tp-garanties div { font-size: .7rem; padding: .7rem .3rem; }
 }
+
+/* ==========================================================================
+   CATALOGUE DE SERVICES — cartes par catégorie (beauty / tech / digital)
+   ========================================================================== */
+.catalogue-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(272px, 1fr)); gap: 1.2rem; }
+.catalogue-cat {
+  background: #14110d; border: 1px solid rgba(214,169,79,.18);
+  border-top: 3px solid var(--cat-couleur, var(--tp-or));
+  border-radius: 16px; padding: 1.15rem 1.2rem;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+}
+.catalogue-cat:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.45); border-color: rgba(214,169,79,.35); border-top-color: var(--cat-couleur, var(--tp-or)); }
+.catalogue-cat h3 {
+  font-family: var(--font-serif, Georgia, serif); font-size: 1.08rem; color: #fdf9f1;
+  display: flex; align-items: center; gap: .55rem; margin-bottom: .4rem;
+}
+.catalogue-cat .cat-icone { font-size: 1.25rem; }
+.catalogue-cat ul { list-style: none; padding: 0; margin: 0; }
+.catalogue-cat li {
+  padding: .55rem .55rem; border-bottom: 1px dashed rgba(214,169,79,.14);
+  border-radius: 8px;
+}
+.catalogue-cat li:last-child { border-bottom: none; }
+.catalogue-cat li[role="button"] { cursor: pointer; transition: background .18s, padding-left .18s; }
+.catalogue-cat li[role="button"]:hover, .catalogue-cat li[role="button"]:focus-visible { background: rgba(214,169,79,.09); padding-left: .8rem; outline: none; }
+.catalogue-cat .s-nom { font-weight: 600; color: #f0e9da; font-size: .92rem; display: block; }
+.catalogue-cat li small { color: #8a7b5e; font-size: .78rem; display: block; margin-top: .1rem; }
+.catalogue-cat .s-prix { color: var(--tp-or); font-weight: 800; font-size: .84rem; display: inline-block; margin-top: .2rem; }
+.tag-pop {
+  font-style: normal; font-size: .64rem; color: var(--tp-or); font-weight: 800;
+  border: 1px solid rgba(214,169,79,.45); border-radius: 999px; padding: .08rem .45rem;
+  white-space: nowrap; vertical-align: middle; margin-left: .3rem;
+}

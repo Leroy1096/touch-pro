@@ -1,8 +1,19 @@
-/* TOUCH PRO TECH — formulaire de réparation */
-import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=16";
+/* TOUCH PRO TECH — catalogue des pannes + formulaire de réparation */
+import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=19";
+import { CATALOGUE, rendCatalogue } from "./tp-catalogue.js?v=19";
 
 initPage("tech.html");
 const form = document.getElementById("formRepa");
+
+/* Catalogue des pannes : un tap pré-remplit le formulaire de dépôt */
+rendCatalogue(document.getElementById("catalogueTech"), CATALOGUE.tech, {
+  couleur: "#2ea8ff",
+  onChoix: (nom, cat) => {
+    form.panne.value = `${cat} — ${nom}`;
+    form.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => form.appareil.focus({ preventScroll: true }), 500);
+  },
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
