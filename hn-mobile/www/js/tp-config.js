@@ -5,7 +5,7 @@
 export const TP = {
   nom: "TOUCH PRO",
   slogan: "Tout ce dont vous avez besoin, au même endroit !",
-  signature: "BEAUTY • TECH • ACCESS • DIGITAL",
+  signature: "BEAUTY • TECH • DIGITAL",
   whatsapp: "2250140810415",
   telephone: "01 40 81 04 15",
   telephoneLien: "+2250140810415",
