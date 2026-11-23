@@ -3,7 +3,8 @@
    accessible au clavier (Échap, flèches, retour du focus).
    ========================================================================== */
 
-import { loadGalerie, CATEGORIES_GALERIE, el, skeletons, imgFallback } from "./data.js";
+import { loadGalerie, CATEGORIES_GALERIE, el, skeletons, imgFallback, FALLBACK } from "./data.js";
+import { animeReveals } from "./tp-config.js?v=19";
 
 let items = [];
 let currentIndex = 0;
@@ -117,29 +118,36 @@ function renderFilters(categories) {
 async function renderGalerie() {
   const grid = document.getElementById("galleryGrid");
   if (!grid) return;
-  grid.replaceChildren(...skeletons(6));
 
-  items = await loadGalerie();
-  const cats = [...new Set(items.map((g) => g.categorie))];
-  renderFilters(CATEGORIES_GALERIE.filter((c) => cats.includes(c)));
+  const affiche = (liste) => {
+    items = liste;
+    const cats = [...new Set(items.map((g) => g.categorie))];
+    renderFilters(CATEGORIES_GALERIE.filter((c) => cats.includes(c)));
 
-  grid.replaceChildren(
-    ...items.map((item) => {
-      const btn = el("button", {
-        class: "gallery-item reveal",
-        type: "button",
-        "data-categorie": item.categorie,
-        "aria-label": `Agrandir : ${item.alt}`,
-      });
-      const img = el("img", { src: item.image_url, alt: item.alt, loading: "lazy", decoding: "async" });
-      imgFallback(img, btn);
-      btn.append(img);
-      btn.addEventListener("click", () => openLightbox(item));
-      return btn;
-    })
-  );
-  applyFilter();
-  if (typeof window.__initReveal === "function") window.__initReveal();
+    grid.replaceChildren(
+      ...items.map((item) => {
+        const btn = el("button", {
+          class: "gallery-item reveal",
+          type: "button",
+          "data-categorie": item.categorie,
+          "aria-label": `Agrandir : ${item.alt}`,
+        });
+        const img = el("img", { src: item.image_url, alt: item.alt, loading: "lazy", decoding: "async" });
+        imgFallback(img, btn);
+        btn.append(img);
+        btn.addEventListener("click", () => openLightbox(item));
+        return btn;
+      })
+    );
+    applyFilter();
+    animeReveals();
+  };
+
+  /* Démo immédiate (le site n'est jamais vide), puis la BDD remplace si elle répond */
+  affiche(FALLBACK.galerie);
+  loadGalerie().then((d) => {
+    if (d && d.length && d !== FALLBACK.galerie) affiche(d);
+  }).catch(() => { /* démo conservée */ });
 }
 
 document.addEventListener("DOMContentLoaded", renderGalerie);

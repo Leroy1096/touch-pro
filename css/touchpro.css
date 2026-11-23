@@ -711,3 +711,22 @@ body.tiroir-ouvert { overflow: hidden; }
 .tp-panier-tete { position: relative; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; font-size: 1.25rem; margin-left: auto; margin-right: .5rem; text-decoration: none; background: rgba(214,169,79,.12); border: 1px solid rgba(214,169,79,.3); }
 .tp-panier-tete span { position: absolute; top: -4px; right: -4px; background: var(--tp-or, #d6a94f); color: #14110d; font-size: .66rem; font-weight: 800; min-width: 19px; height: 19px; border-radius: 999px; display: grid; place-items: center; padding: 0 4px; }
 @media (min-width: 921px) { .tp-panier-tete { margin-right: 0; } }
+
+/* ---------- Correctif pages converties (ex-salon) ---------- */
+/* Les champs des anciens formulaires ne doivent jamais dépasser leur conteneur */
+.field, .field label, .field input, .field select, .field textarea, .field .hint {
+  max-width: 100%; box-sizing: border-box;
+}
+.field input, .field select, .field textarea { width: 100%; }
+
+/* Grilles des anciens formulaires : minmax(0,…) pour éviter le débordement
+   (1fr = min-content minimum → les champs date/select forçaient 407px) */
+.form-grid { grid-template-columns: minmax(0, 1fr); }
+.form-grid > * { min-width: 0; }
+@media (min-width: 640px) {
+  .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+input[type="date"], input[type="time"], select { min-width: 0; max-width: 100%; }
+
+/* Garde-fou anti-débordement horizontal (barre de défilement verticale comprise) */
+html, body { overflow-x: clip; }

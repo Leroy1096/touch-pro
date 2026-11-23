@@ -6,6 +6,22 @@
 
 import { getSupabase } from "./supabaseClient.js";
 
+
+/* ---------- Garde-fou réseau : si la base ne répond pas vite, on garde la démo ---------- */
+function avecTimeout(promesse, secours, ms = 3500) {
+  return Promise.race([
+    Promise.resolve(promesse)
+      .then(({ data, error } = {}) => (error || !data?.length ? secours : data))
+      .catch(() => secours),
+    new Promise((res) => setTimeout(() => res(secours), ms)),
+  ]);
+}
+async function supabaseRapide() {
+  try {
+    return await Promise.race([getSupabase(), new Promise((r) => setTimeout(() => r(null), 2500))]);
+  } catch { return null; }
+}
+
 /* ---------- Données de démonstration (mode hors-ligne / sans config) ---------- */
 export const FALLBACK = {
   services: [
@@ -134,31 +150,26 @@ export function imgFallback(img, holder) {
 
 /* ---------- Chargeurs (Supabase → repli local) ---------- */
 export async function loadServices() {
-  const sb = await getSupabase();
+  const sb = await supabaseRapide();
   if (!sb) return FALLBACK.services;
-  const { data, error } = await sb.from("services").select("*").eq("actif", true).order("ordre").order("prix");
-  return error || !data?.length ? FALLBACK.services : data;
+  return avecTimeout(sb.from("services").select("*").eq("actif", true).order("ordre").order("prix"), FALLBACK.services);
 }
 
 export async function loadCoiffeurs() {
-  const sb = await getSupabase();
+  const sb = await supabaseRapide();
   if (!sb) return FALLBACK.coiffeurs;
-  const { data, error } = await sb.from("coiffeurs").select("*").eq("actif", true).order("ordre");
-  return error || !data?.length ? FALLBACK.coiffeurs : data;
+  return avecTimeout(sb.from("coiffeurs").select("*").eq("actif", true).order("ordre"), FALLBACK.coiffeurs);
 }
 
 export async function loadAvis(limit = 12) {
-  const sb = await getSupabase();
-  if (!sb) return FALLBACK.avis.slice(0, limit);
-  const { data, error } = await sb
-    .from("avis").select("*").eq("approuve", true)
-    .order("created_at", { ascending: false }).limit(limit);
-  return error || !data?.length ? FALLBACK.avis.slice(0, limit) : data;
+  const secours = FALLBACK.avis.slice(0, limit);
+  const sb = await supabaseRapide();
+  if (!sb) return secours;
+  return avecTimeout(sb.from("avis").select("*").eq("approuve", true).order("created_at", { ascending: false }).limit(limit), secours);
 }
 
 export async function loadGalerie() {
-  const sb = await getSupabase();
+  const sb = await supabaseRapide();
   if (!sb) return FALLBACK.galerie;
-  const { data, error } = await sb.from("galerie").select("*").order("ordre");
-  return error || !data?.length ? FALLBACK.galerie : data;
+  return avecTimeout(sb.from("galerie").select("*").order("ordre"), FALLBACK.galerie);
 }
