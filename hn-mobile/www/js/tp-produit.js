@@ -6,6 +6,7 @@
 import {
   initPage, formatPrix, esc, ajoutePanier, waLien, getSupabase, majBadgePanier,
 } from "./tp-pages.js?v=19";
+import { majBadgeGlobal } from "./tp-config.js?v=19";
 
 initPage("boutique.html");
 
@@ -46,7 +47,7 @@ function rend(tous) {
   const tailles = p.tailles ? p.tailles.split(",").map((t) => t.trim()).filter(Boolean) : [];
   tailleChoisie = tailles[0] || null;
   const rupture = Number(p.stock) <= 0;
-  let similaires = tous.filter((x) => String(x.id) !== String(p.id) && x.departement === p.departement).slice(0, 4);
+  let similaires = tous.filter((x) => String(x.id) !== String(p.id) && (x.categorie || x.departement) === (p.categorie || p.departement)).slice(0, 4);
   if (similaires.length < 4) {
     const autres = tous.filter((x) => String(x.id) !== String(p.id) && !similaires.includes(x))
       .sort((a, b) => (b.ventes || 0) - (a.ventes || 0));
@@ -121,14 +122,19 @@ function rend(tous) {
 }
 
 document.getElementById("btnAjouter").addEventListener("click", () => {
+  if (Number(produit.stock) <= 0) { alert("⚠️ Cet article est épuisé."); return; }
   ajoutePanier({ id: String(produit.id), nom: produit.nom, prix: prixUnit(), taille: tailleChoisie, qte });
   majBadgePanier();
+  majBadgeGlobal();
 });
 
 document.getElementById("btnAcheter").addEventListener("click", () => {
+  if (Number(produit.stock) <= 0) { alert("⚠️ Cet article est épuisé."); return; }
   ajoutePanier({ id: String(produit.id), nom: produit.nom, prix: prixUnit(), taille: tailleChoisie, qte });
+  majBadgeGlobal();
   location.href = "boutique.html";
 });
 
 charge();
 majBadgePanier();
+majBadgeGlobal();

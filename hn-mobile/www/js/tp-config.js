@@ -5,7 +5,7 @@
 export const TP = {
   nom: "TOUCH PRO",
   slogan: "Tout ce dont vous avez besoin, au même endroit !",
-  signature: "BEAUTY • TECH • FASHION • DIGITAL",
+  signature: "BEAUTY • TECH • ACCESS • DIGITAL",
   whatsapp: "2250140810415",
   telephone: "01 40 81 04 15",
   telephoneLien: "+2250140810415",
@@ -19,9 +19,19 @@ export const TP = {
 export const DEPARTEMENTS = [
   { num: "01", code: "beauty", nom: "BEAUTY", icone: "💇", couleur: "#d6a94f", url: "beauty.html", img: "images/salon.jpg", desc: "Coiffure homme & femme, barber shop, soins capillaires, mise en beauté, RDV en ligne." },
   { num: "02", code: "tech", nom: "TECH", icone: "📱", couleur: "#2ea8ff", url: "tech.html", img: "images/tp/dept-tech.jpg", desc: "Réparation de téléphones toutes marques, écrans, logiciel, diagnostic et suivi." },
-  { num: "03", code: "access", nom: "ACCESS", icone: "🎧", couleur: "#a99e88", url: "access.html", img: "images/tp/dept-access.jpg", desc: "Coques, écouteurs, chargeurs, montres connectées, protections, gadgets." },
-  { num: "04", code: "fashion", nom: "FASHION", icone: "👕", couleur: "#c05a7a", url: "fashion.html", img: "images/tp/dept-fashion.jpg", desc: "Vêtements homme & femme, chaussures, sacs, accessoires, nouveautés." },
-  { num: "05", code: "digital", nom: "DIGITAL", icone: "🎨", couleur: "#7a5ac0", url: "digital.html", img: "images/tp/dept-digital.jpg", desc: "Shooting photo, logos, flyers, vidéos pub, sites web, contenus, musiques." },
+  { num: "03", code: "digital", nom: "DIGITAL", icone: "🎨", couleur: "#7a5ac0", url: "digital.html", img: "images/tp/dept-digital.jpg", desc: "Shooting photo, logos, flyers, vidéos pub, sites web, contenus, musiques." },
+];
+
+/* Catégories de la boutique — la vente (mode, accessoires, tech) vit ici,
+   pas dans les départements. FASHION et ACCESS sont devenus des rayons. */
+export const CATEGORIES_BOUTIQUE = [
+  { code: "", nom: "Tout", icone: "🛍️" },
+  { code: "accessoires", nom: "Téléphones & Accessoires", icone: "📱" },
+  { code: "homme", nom: "Mode Homme", icone: "👔" },
+  { code: "femme", nom: "Mode Femme", icone: "👗" },
+  { code: "chaussures", nom: "Chaussures", icone: "👟" },
+  { code: "sacs", nom: "Sacs & Maroquinerie", icone: "👜" },
+  { code: "beaute", nom: "Beauté & Soins", icone: "✨" },
 ];
 
 export function waLien(message) {
@@ -52,6 +62,7 @@ export function injecteChrome(pageActive = "") {
         <img src="images/tp/icon-192.png" alt="Logo TOUCH PRO">
         <span class="nom">TOUCH <span>PRO</span><small>${TP.signature}</small></span>
       </a>
+      <a href="boutique.html" class="tp-panier-tete" aria-label="Mon panier">🛒<span id="badgePanierGlobal">0</span></a>
       <button class="tp-burger" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <nav>
         <a href="index.html" class="${pageActive === "index.html" ? "actif" : ""}">Accueil</a>
@@ -122,8 +133,22 @@ export function injecteChrome(pageActive = "") {
   wa.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 .5C5.7.5.6 5.6.6 11.8c0 2 .5 3.9 1.5 5.6L.5 23.5l6.3-1.6c1.6.9 3.4 1.3 5.2 1.3 6.3 0 11.4-5.1 11.4-11.4S18.3.5 12 .5zm0 20.9c-1.6 0-3.2-.4-4.6-1.2l-.3-.2-3.7 1 1-3.6-.2-.4c-1-1.5-1.5-3.3-1.5-5.2C3.4 6.6 7.3 2.7 12 2.7s8.7 3.9 8.7 8.7-3.9 10-8.7 10zm4.8-7.2c-.3-.1-1.6-.8-1.8-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.6-1.4-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.8-2c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.2s.9 2.6 1.1 2.8c.1.2 1.9 2.9 4.6 4 .6.3 1.1.4 1.5.6.6.2 1.2.2 1.7.1.5-.1 1.6-.7 1.8-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/></svg>`;
   document.body.append(wa);
 
+  // Badge panier global (synchronisé avec localStorage)
+  majBadgeGlobal();
+
   // Animations d'apparition
   animeReveals();
+}
+
+/* Badge 🛒 de l'en-tête : nombre d'articles dans le panier (toutes pages) */
+export function majBadgeGlobal() {
+  const el = document.getElementById("badgePanierGlobal");
+  if (!el) return;
+  try {
+    const n = (JSON.parse(localStorage.getItem("tp_panier")) || []).reduce((s, i) => s + (i.qte || 1), 0);
+    el.textContent = n;
+    el.style.display = n > 0 ? "grid" : "none";
+  } catch { el.style.display = "none"; }
 }
 
 /* (Ré)active l'observation des éléments .reveal (appeler après tout rendu dynamique).

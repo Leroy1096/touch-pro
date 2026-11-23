@@ -42,7 +42,7 @@ export function majBadgePanier() {
   if (!b) {
     b = document.createElement("a");
     b.id = "badgePanier";
-    b.href = "boutique.html#panier";
+    b.href = "boutique.html";
     b.style.cssText = "position:fixed;left:18px;bottom:18px;z-index:90;background:var(--or);color:#171310;border-radius:999px;padding:.6rem 1.1rem;font-weight:800;box-shadow:0 8px 30px rgba(214,169,79,.4);display:none";
     document.body.append(b);
   }
@@ -104,7 +104,7 @@ export function carteProduit(p) {
   const rupture = p.stock <= 0;
   const tailles = p.tailles ? p.tailles.split(",").map((t) => t.trim()).filter(Boolean) : [];
   return `
-  <article class="tp-carte" data-produit='${esc(JSON.stringify({ id: p.id, nom: p.nom, prix: p.prix_promo || p.prix }))}'>
+  <article class="tp-carte" data-id="${esc(String(p.id))}" data-nom="${esc(p.nom)}" data-prix="${p.prix_promo || p.prix}" data-stock="${Number(p.stock) || 0}">
     ${p.image_url ? `<img class="visuel" src="${esc(p.image_url)}" alt="${esc(p.nom)}" loading="lazy">` : `<div class="visuel" style="display:flex;align-items:center;justify-content:center;font-size:3rem">🛍️</div>`}
     <div class="corps">
       <h3>${esc(p.nom)}</h3>
@@ -122,9 +122,10 @@ export function branchePanier(grille) {
     const btn = carte.querySelector(".btn-ajouter");
     if (!btn || btn.disabled) return;
     btn.addEventListener("click", () => {
-      const p = JSON.parse(carte.dataset.produit);
+      const { id, nom, prix, stock } = carte.dataset;
+      if (Number(stock) <= 0) return;
       const taille = carte.querySelector(".sel-taille")?.value || null;
-      ajoutePanier({ id: p.id, nom: p.nom, prix: p.prix, taille });
+      ajoutePanier({ id, nom, prix: Number(prix), taille });
     });
   });
 }

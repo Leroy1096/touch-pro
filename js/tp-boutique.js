@@ -8,6 +8,15 @@ import {
   formatPrix, esc, nettoie, alerte, boutonChargement, montreWA,
   clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase,
 } from "./tp-pages.js?v=19";
+import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=19";
+
+/* Zones de livraison avec tarifs indicatifs (FCFA) */
+const ZONES_LIVRAISON = [
+  { code: "boutique", nom: "🏬 Retrait en boutique (gratuit)", frais: 0 },
+  { code: "oupoyo", nom: "📍 Oupoyo & alentours", frais: 500 },
+  { code: "agboville", nom: "📍 Agboville centre", frais: 1000 },
+  { code: "abidjan", nom: "📍 Abidjan", frais: 2000 },
+];
 
 initPage("boutique.html");
 
@@ -15,14 +24,23 @@ const grille = document.getElementById("grille");
 const chips = document.getElementById("chips");
 const recherche = document.getElementById("recherche");
 
+/* Chips catégories produit (rayons de la boutique) */
+chips.innerHTML = CATEGORIES_BOUTIQUE.map((c, i) =>
+  `<button data-dep="${c.code}" class="${i === 0 ? "actif" : ""}">${c.icone} ${c.nom}</button>`).join("");
+
 document.getElementById("waShop").href = waLien("Bonjour TOUCH PRO ! J'ai une question sur un article de la boutique.");
 
 let tous = [];
 let coupons = [];
 let livraisonOfferte = 50000;
-let depActif = "";
+let depActif = new URLSearchParams(location.search).get("cat") || "";
 let favActif = false;
 let triActif = "populaires";
+
+/* Active la chip correspondant au rayon demandé dans l'URL */
+if (depActif) {
+  chips.querySelectorAll("button").forEach((b) => b.classList.toggle("actif", b.dataset.dep === depActif));
+}
 
 /* ---------- Favoris (localStorage) ---------- */
 const CLE_FAV = "tp_favoris";
@@ -55,7 +73,7 @@ function carte(p, compacte = false) {
   const fav = getFavs().includes(String(p.id));
   const pctVendu = Math.min(96, Math.round(((p.ventes || 0) / ((p.ventes || 0) + Math.max(p.stock || 0, 1))) * 100));
   return `
-  <article class="shop-carte ${rupture ? "rupture" : ""}" data-id="${esc(String(p.id))}" data-produit='${esc(JSON.stringify({ id: String(p.id), nom: p.nom, prix }))}'>
+  <article class="shop-carte ${rupture ? "rupture" : ""}" data-id="${esc(String(p.id))}" data-nom="${esc(p.nom)}" data-prix="${prix}" data-stock="${Number(p.stock) || 0}">
     <div class="visuel" role="link" tabindex="0" aria-label="Voir ${esc(p.nom)}">
       ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.nom)}" loading="lazy">` : `<span class="emoji">🛍️</span>`}
       ${reduc ? `<span class="promo">-${reduc}%</span>` : ""}
@@ -80,7 +98,7 @@ function filtreCourant() {
   const q = nettoie(recherche.value, 60).toLowerCase();
   const favs = getFavs();
   let liste = tous.filter((p) =>
-    (!depActif || p.departement === depActif) &&
+    (!depActif || (p.categorie || p.departement) === depActif) &&
     (!favActif || favs.includes(String(p.id))) &&
     (!q || (p.nom + " " + (p.description || "")).toLowerCase().includes(q)));
   const prixDe = (p) => p.prix_promo || p.prix;
@@ -192,13 +210,7 @@ function brancheCartes(conteneur) {
       rendGrille(); rendFlash();
       return;
     }
-    if (e.target.closest(".ajout-rapide")) {
-      const p = JSON.parse(carteEl.dataset.produit);
-      const taille = carteEl.querySelector(".sel-taille")?.value || null;
-      ajoutePanier({ id: p.id, nom: p.nom, prix: p.prix, taille });
-      rendBarre();
-      return;
-    }
+    if (e.target.closest(".ajout-rapide")) { ajoutRapide(carteEl); return; }
     if (e.target.closest("select")) return;
     /* Clic ailleurs sur la carte → fiche produit */
     location.href = "produit.html?id=" + encodeURIComponent(carteEl.dataset.id);
@@ -220,6 +232,23 @@ const contenu = document.getElementById("contenuPanier");
 const form = document.getElementById("formCommande");
 const couponZone = document.getElementById("couponZone");
 
+/* Remplit le select livraison depuis les zones */
+const selLiv = document.getElementById("selLivraison");
+selLiv.innerHTML = ZONES_LIVRAISON.map((z) =>
+  `<option value="${z.code}" data-frais="${z.frais}">${z.nom}${z.frais ? ` (+${formatPrix(z.frais)})` : ""}</option>`).join("");
+const fraisLivraison = () => Number(selLiv.selectedOptions[0]?.dataset.frais || 0);
+
+/* Pré-remplit nom/téléphone si le client est connecté */
+(async () => {
+  try {
+    const { user } = await clientCourant();
+    if (user) {
+      if (!form.nom.value) form.nom.value = user.user_metadata?.nom || user.user_metadata?.full_name || "";
+      if (!form.telephone.value) form.telephone.value = user.user_metadata?.telephone || user.user_metadata?.phone || "";
+    }
+  } catch { /* invité */ }
+})();
+
 function rendBarre() {
   const p = getPanier();
   const n = p.reduce((s, i) => s + i.qte, 0);
@@ -239,7 +268,9 @@ function rendPanier() {
   }
   const sousTotal = totalPanier();
   const remise = calcRemise(sousTotal);
-  const total = sousTotal - remise;
+  const frais = fraisLivraison();
+  const livOfferte = (sousTotal - remise) >= livraisonOfferte;
+  const total = sousTotal - remise + (livOfferte ? 0 : frais);
   contenu.innerHTML = p.map((i) => `
     <div class="ligne">
       <div class="infos">
@@ -257,7 +288,7 @@ function rendPanier() {
     + `<div class="tiroir-recap">
         <p><span>Sous-total</span><span>${formatPrix(sousTotal)}</span></p>
         ${remise ? `<p class="remise"><span>🎁 Coupon ${esc(getCoupon().code)}</span><span>−${formatPrix(remise)}</span></p>` : ""}
-        <p><span>Livraison</span><span>${total >= livraisonOfferte ? "🎉 Offerte" : "à convenir"}</span></p>
+        <p><span>Livraison</span><span>${livOfferte ? "🎉 Offerte" : (frais ? formatPrix(frais) : "Gratuite")}</span></p>
         <p class="tiroir-total"><span>Total</span><strong>${formatPrix(total)}</strong></p>
       </div>`;
   form.hidden = false;
@@ -309,13 +340,25 @@ contenu.addEventListener("click", (e) => {
   if (a === "x") retireDuPanier(k);
   if (a === "+") changeQte(k, 1);
   if (a === "-") changeQte(k, -1);
-  rendPanier(); majMsgCoupon();
+  rendPanier(); majMsgCoupon(); majBadgeGlobal();
   if (!getPanier().length) fermeTiroir();
 });
 
 form.livraison.addEventListener("change", () => {
-  document.getElementById("zoneAdresse").hidden = form.livraison.value !== "livraison";
+  const besoinAdresse = selLiv.value !== "boutique";
+  document.getElementById("zoneAdresse").hidden = !besoinAdresse;
+  rendPanier(); /* recalculer avec les frais */
 });
+
+/* ---------- Ajout rapide : bloque si rupture + maj badge global ---------- */
+function ajoutRapide(carteEl) {
+  const { id, nom, prix, stock } = carteEl.dataset;
+  if (Number(stock) <= 0) { alert("⚠️ Cet article est épuisé."); return; }
+  const taille = carteEl.querySelector(".sel-taille")?.value || null;
+  ajoutePanier({ id, nom, prix: Number(prix), taille });
+  rendBarre();
+  majBadgeGlobal();
+}
 
 /* ---------- Validation de commande ---------- */
 form.addEventListener("submit", async (e) => {
@@ -338,16 +381,28 @@ form.addEventListener("submit", async (e) => {
   const sousTotal = totalPanier();
   const remise = calcRemise(sousTotal);
   const coupon = getCoupon();
-  const total = sousTotal - remise;
+  const frais = fraisLivraison();
+  const livOfferte = (sousTotal - remise) >= livraisonOfferte;
+  const fraisReels = livOfferte ? 0 : frais;
+  const total = sousTotal - remise + fraisReels;
+  const zoneTxt = ZONES_LIVRAISON.find((z) => z.code === selLiv.value)?.nom || selLiv.value;
+
+  /* Revalider le stock avant d'enregistrer */
+  const rupture = panier.find((i) => {
+    const prod = tous.find((x) => String(x.id) === String(i.id));
+    return prod && Number(prod.stock) <= 0;
+  });
+  if (rupture) { boutonChargement(btn, false); alerte("alerteCmd", "err", `⚠️ « ${rupture.nom} » est épuisé. Retirez-le du panier.`); return; }
+
   const { data: cmd, error } = await sb.from("commandes").insert({
     client_id: user?.id || null,
     client_nom: nom,
     client_telephone: tel,
-    livraison: form.livraison.value,
-    adresse_livraison: form.livraison.value === "livraison" ? nettoie(form.adresse.value, 200) : null,
-    paiement: form.livraison.value === "livraison" ? "a_la_livraison" : "en_boutique",
+    livraison: selLiv.value,
+    adresse_livraison: selLiv.value !== "boutique" ? nettoie(form.adresse.value, 200) : null,
+    paiement: selLiv.value !== "boutique" ? "a_la_livraison" : "en_boutique",
     total,
-    note: [nettoie(form.note.value, 300), coupon ? `Coupon: ${coupon.code} (−${formatPrix(remise)})` : ""].filter(Boolean).join(" | ") || null,
+    note: [nettoie(form.note.value, 300), coupon ? `Coupon: ${coupon.code} (−${formatPrix(remise)})` : "", fraisReels ? `Livraison: ${formatPrix(fraisReels)}` : ""].filter(Boolean).join(" | ") || null,
   }).select("id").single();
 
   if (error || !cmd) { boutonChargement(btn, false); alerte("alerteCmd", "err", "L'envoi a échoué. Réessayez ou commandez sur WhatsApp."); return; }
@@ -365,13 +420,15 @@ form.addEventListener("submit", async (e) => {
   localStorage.removeItem(CLE_COUPON);
   rendPanier();
   rendBarre();
+  majBadgeGlobal();
   form.reset();
   alerte("alerteCmd", "ok", `✅ Commande n°${cmd.id} enregistrée ! Total : ${formatPrix(total)}. Nous vous contactons très vite.`);
   montreWA(form,
-    `Bonjour TOUCH PRO ! Je viens de passer la commande n°${cmd.id} :\n${lignes.join("\n")}${coupon ? `\nCoupon : ${coupon.code}` : ""}\nTotal : ${formatPrix(total)}\nNom : ${nom}\nTél : ${tel}`,
+    `Bonjour TOUCH PRO ! Je viens de passer la commande n°${cmd.id} :\n${lignes.join("\n")}${coupon ? `\nCoupon : ${coupon.code}` : ""}\n📦 ${zoneTxt}${fraisReels ? ` (+${formatPrix(fraisReels)})` : ""}\nTotal : ${formatPrix(total)}\nNom : ${nom}\nTél : ${tel}`,
     "💬 Confirmer ma commande par WhatsApp");
   form.hidden = false; /* laisser le bouton WhatsApp visible */
 });
 
 charge();
 rendBarre();
+majBadgeGlobal();
