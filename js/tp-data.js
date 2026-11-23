@@ -4,18 +4,69 @@
    ========================================================================== */
 
 export const PRODUITS_DEMO = [
-  { id: "d1", departement: "access", nom: "Coque premium iPhone / Samsung", prix: 3500, prix_promo: 2500, stock: 24, image_url: "images/tp/dept-access.jpg", description: "Protection renforcée, plusieurs coloris." },
-  { id: "d2", departement: "access", nom: "Écouteurs Bluetooth", prix: 8000, prix_promo: null, stock: 15, image_url: "images/tp/dept-access.jpg", description: "Son clair, boîtier de charge." },
-  { id: "d3", departement: "access", nom: "Chargeur rapide 25W", prix: 5000, prix_promo: null, stock: 20, image_url: "images/tp/dept-access.jpg", description: "Charge ultra-rapide, câble inclus." },
-  { id: "d4", departement: "access", nom: "Montre connectée", prix: 15000, prix_promo: 12500, stock: 8, image_url: "images/tp/dept-access.jpg", description: "Appels, sport, notifications." },
-  { id: "d5", departement: "fashion", nom: "T-shirt TOUCH PRO", prix: 6000, prix_promo: null, stock: 30, tailles: "S,M,L,XL", image_url: "images/tp/dept-fashion.jpg", description: "Coton premium, logo brodé." },
-  { id: "d6", departement: "fashion", nom: "Ensemble tendance homme", prix: 18000, prix_promo: null, stock: 10, tailles: "M,L,XL", image_url: "images/tp/dept-fashion.jpg", description: "Look complet, qualité supérieure." },
-  { id: "d7", departement: "fashion", nom: "Sac à main élégant", prix: 12000, prix_promo: 9900, stock: 6, image_url: "images/tp/dept-fashion.jpg", description: "Cuir synthétique haut de gamme." },
-  { id: "d8", departement: "tech", nom: "Protection d'écran trempée", prix: 1500, prix_promo: null, stock: 50, image_url: "images/tp/dept-tech.jpg", description: "Pose offerte en boutique." },
+  /* ---------- ACCESS / TECH ---------- */
+  { id: "d1", departement: "access", nom: "Écouteurs sans fil Pro ANC", prix: 32000, prix_promo: 24900, stock: 14, ventes: 1300, note: 4.8, badge: "★ Best-seller", flash: true,
+    image_url: "images/tp/prod-ecouteurs.jpg",
+    description: "Réduction de bruit active, 30 h d'autonomie, boîtier de charge.",
+    points: ["Réduction de bruit active", "30 h d'autonomie totale", "Bluetooth 5.3 stable", "Garantie boutique 3 mois"] },
+  { id: "d2", departement: "access", nom: "Montre Connectée Sport+", prix: 39000, prix_promo: 29900, stock: 9, ventes: 1100, note: 4.7, badge: "Nouveau", flash: true,
+    image_url: "images/tp/prod-montre.jpg",
+    description: "Appels, sport, notifications, étanche IP68.",
+    points: ["Appels & notifications", "Suivi sport et sommeil", "Étanche IP68", "Bracelet ajustable offert"] },
+  { id: "d3", departement: "access", nom: "Coque premium iPhone / Samsung", prix: 3500, prix_promo: 2500, stock: 24, ventes: 850, note: 4.6,
+    image_url: "images/tp/prod-coque.jpg",
+    description: "Protection renforcée, plusieurs coloris.",
+    points: ["Coins renforcés anti-choc", "Finition mate premium", "Tous modèles iPhone & Samsung"] },
+  { id: "d4", departement: "access", nom: "Batterie externe 20 000 mAh", prix: 18500, prix_promo: 15000, stock: 11, ventes: 900, note: 4.7, flash: true,
+    image_url: "images/tp/dept-access.jpg",
+    description: "Charge rapide 22,5 W — 4 recharges complètes.",
+    points: ["20 000 mAh réels", "Charge rapide 22,5 W", "2 ports USB + USB-C"] },
+  { id: "d5", departement: "access", nom: "Chargeur rapide 25W + câble", prix: 5000, prix_promo: null, stock: 20, ventes: 620, note: 4.5,
+    image_url: "images/tp/dept-access.jpg",
+    description: "Charge ultra-rapide, câble USB-C inclus.",
+    points: ["25 W de puissance", "Câble USB-C 1 m inclus", "Protection surchauffe"] },
+  { id: "d6", departement: "tech", nom: "Protection d'écran trempée", prix: 1500, prix_promo: null, stock: 50, ventes: 2100, note: 4.9, badge: "★ Best-seller",
+    image_url: "images/tp/dept-tech.jpg",
+    description: "Pose offerte en boutique.",
+    points: ["Verre trempé 9H", "Pose offerte en boutique", "Tous modèles disponibles"] },
+
+  /* ---------- FASHION ---------- */
+  { id: "d7", departement: "fashion", nom: "Sneakers Montantes Noir & Or", prix: 45000, prix_promo: 34900, stock: 7, ventes: 950, note: 4.8, badge: "Édition limitée", flash: true,
+    image_url: "images/tp/prod-sneakers.jpg",
+    description: "Édition limitée noir & or, cuir premium.", tailles: "40,41,42,43,44,45",
+    points: ["Cuir premium", "Semelle confort+", "Édition limitée numérotée"] },
+  { id: "d8", departement: "fashion", nom: "Robe Longue Wax « Soleil »", prix: 19900, prix_promo: null, stock: 12, ventes: 480, note: 4.9, badge: "Nouveau",
+    image_url: "images/tp/prod-robe.jpg", tailles: "S,M,L,XL",
+    description: "Wax authentique, coupe élégante.",
+    points: ["Tissu wax 100 % coton", "Coupe longue élégante", "Fabriquée en Côte d'Ivoire"] },
+  { id: "d9", departement: "fashion", nom: "T-shirt Oversize Blanc Premium", prix: 9500, prix_promo: 7500, stock: 30, ventes: 720, note: 4.6, flash: true,
+    image_url: "images/tp/prod-tshirt.jpg", tailles: "S,M,L,XL,XXL",
+    description: "Coton lourd 240 g/m², coupe oversize.",
+    points: ["Coton épais 240 g/m²", "Coupe oversize tendance", "Logo brodé discret"] },
+  { id: "d10", departement: "fashion", nom: "T-shirt TOUCH PRO", prix: 6000, prix_promo: null, stock: 30, ventes: 350, note: 4.5,
+    image_url: "images/tp/dept-fashion.jpg", tailles: "S,M,L,XL",
+    description: "Coton premium, logo brodé.",
+    points: ["Coton premium", "Logo TOUCH PRO brodé", "Noir ou blanc"] },
+  { id: "d11", departement: "fashion", nom: "Ensemble tendance homme", prix: 18000, prix_promo: null, stock: 10, ventes: 290, note: 4.4,
+    image_url: "images/tp/dept-fashion.jpg", tailles: "M,L,XL",
+    description: "Look complet, qualité supérieure.",
+    points: ["Haut + bas assortis", "Tissu respirant", "Coupe moderne"] },
+  { id: "d12", departement: "fashion", nom: "Sac à main élégant", prix: 12000, prix_promo: 9900, stock: 6, ventes: 410, note: 4.7, badge: "★ Best-seller",
+    image_url: "images/tp/dept-fashion.jpg",
+    description: "Cuir synthétique haut de gamme.",
+    points: ["Cuir synthétique premium", "Bandoulière ajustable", "Plusieurs coloris"] },
 ];
 
+export const COUPONS = [
+  { code: "BIENVENUE", type: "fixe", montant: 2000, min: 15000, titre: "-2 000 F", sous: "Nouveaux clients", cond: "dès 15 000 FCFA d'achat" },
+  { code: "TOUCH10", type: "pct", taux: 0.10, min: 0, titre: "-10 %", sous: "Tout le monde", cond: "sur toute la commande" },
+];
+
+/* Livraison offerte à partir de ce montant */
+export const LIVRAISON_OFFERTE = 50000;
+
 export const PROMOS_DEMO = [
-  { titre: "−20% sur les coques premium", description: "Cette semaine seulement, sur tout le rayon accessoires.", image_url: "images/tp/dept-access.jpg" },
+  { titre: "−20% sur les coques premium", description: "Cette semaine seulement, sur tout le rayon accessoires.", image_url: "images/tp/prod-coque.jpg" },
   { titre: "Diagnostic téléphone GRATUIT", description: "Pour toute réparation confiée à TOUCH PRO TECH.", image_url: "images/tp/dept-tech.jpg" },
   { titre: "Coiffure + soin = −1 000 F", description: "Le duo beauté du mois au département BEAUTY.", image_url: "images/salon.jpg" },
 ];

@@ -7,30 +7,31 @@
   <meta name="description" content="Boutique TOUCH PRO : accessoires téléphone, gadgets, mode. Commandez en ligne, payez à la livraison ou en boutique.">
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
-  <link rel="stylesheet" href="css/style.css?v=18">
-  <link rel="stylesheet" href="css/touchpro.css?v=18">
+  <link rel="stylesheet" href="css/style.css?v=19">
+  <link rel="stylesheet" href="css/touchpro.css?v=19">
   <style>
     .hp { position:absolute; left:-9999px; opacity:0 }
-    #badgePanier { display:none !important } /* remplacé par la barre panier SHEIN */
+    #badgePanier { display:none !important } /* remplacé par la barre panier façon Yves Store */
   </style>
 </head>
 <body>
   <div class="shop-page">
 
-    <!-- Barre recherche + compte (sticky, façon SHEIN) -->
+    <!-- Bandeau promo (façon Yves Store) -->
+    <div class="shop-promobar">
+      <span>🚚 Livraison offerte dès 50 000 FCFA</span><i>•</i>
+      <span>💵 Paiement à la livraison</span><i>•</i>
+      <span>↩️ Retours 7 jours</span>
+      <a href="compte.html" class="coupon-lien">🎁 −2 000 F sur votre 1ʳᵉ commande ›</a>
+    </div>
+
+    <!-- Barre recherche + compte (sticky) -->
     <div class="shop-topbar">
       <div class="shop-recherche">
         <span aria-hidden="true">🔍</span>
         <input id="recherche" type="search" placeholder="Rechercher un article…" autocomplete="off" enterkeyhint="search">
       </div>
       <a class="shop-compte" href="compte.html" aria-label="Mon compte">👤</a>
-    </div>
-
-    <!-- Bandeau avantages -->
-    <div class="shop-avantages">
-      <span>🛵 Livraison disponible</span><i>•</i>
-      <span>💵 Paiement à la livraison</span><i>•</i>
-      <span>🏬 Retrait boutique gratuit</span>
     </div>
 
     <!-- Chips catégories (scroll horizontal, sticky) -->
@@ -42,13 +43,40 @@
       <button data-dep="digital">🎨 Digital</button>
     </nav>
 
+    <!-- Ventes flash -->
+    <section class="shop-flash" id="sectionFlash" hidden>
+      <div class="flash-tete">
+        <h2>⚡ VENTES FLASH</h2>
+        <span class="flash-timer">Se termine dans <strong id="compteRebours">--:--:--</strong></span>
+      </div>
+      <div class="flash-rail" id="railFlash"></div>
+    </section>
+
+    <!-- Coupons du jour -->
+    <section class="shop-coupons">
+      <div class="flash-tete"><h2>🎁 Coupons du jour</h2></div>
+      <div class="coupons-rail" id="railCoupons"></div>
+    </section>
+
+    <!-- Barre de tri -->
+    <div class="shop-tri" id="barreTri">
+      <span id="compteurProd"></span>
+      <select id="tri" aria-label="Trier">
+        <option value="populaires">🔥 Populaires</option>
+        <option value="nouveautes">✨ Nouveautés</option>
+        <option value="prix-asc">Prix ↑</option>
+        <option value="prix-desc">Prix ↓</option>
+        <option value="promos">% Promos</option>
+      </select>
+    </div>
+
     <!-- Grille produits -->
     <main class="shop-grille" id="grille"><div class="tp-vide">Chargement…</div></main>
 
     <p class="shop-note">💬 Une question sur un article ? <a id="waShop" href="#" target="_blank" rel="noopener">Écrivez-nous sur WhatsApp</a></p>
   </div>
 
-  <!-- Barre panier fixe en bas (façon SHEIN) -->
+  <!-- Barre panier fixe en bas -->
   <div class="shop-barre-panier" id="barrePanier" hidden>
     <div class="total">
       <small id="nbArticles">0 article</small>
@@ -67,6 +95,14 @@
     </div>
     <div class="tiroir-corps">
       <div id="contenuPanier"></div>
+      <div class="coupon-zone" id="couponZone" hidden>
+        <label for="champCoupon">🎁 Code promo</label>
+        <div class="coupon-ligne">
+          <input id="champCoupon" placeholder="Ex. TOUCH10" maxlength="20" autocomplete="off">
+          <button type="button" id="btnCoupon">Appliquer</button>
+        </div>
+        <p id="msgCoupon" class="coupon-msg"></p>
+      </div>
       <form id="formCommande" class="form-tp" novalidate hidden>
         <h4>📦 Finaliser la commande</h4>
         <div class="hp"><label>Ne pas remplir<input name="entreprise" tabindex="-1" autocomplete="off"></label></div>
@@ -87,6 +123,6 @@
     </div>
   </aside>
 
-  <script type="module" src="js/tp-boutique.js?v=18"></script>
+  <script type="module" src="js/tp-boutique.js?v=19"></script>
 </body>
 </html>
