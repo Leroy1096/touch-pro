@@ -1,6 +1,7 @@
--- TOUCH PRO — ÉTAPE 3/4 — notifications e-mail & sécurité (exécutez les étapes dans l'ordre 1→2→3→4, bouton Run)
+-- TOUCH PRO — ÉTAPE 3/4 — notifications e-mail & sécurité
+-- Exécutez les 4 étapes DANS L'ORDRE (1, 2, 3 puis 4) : coller → Run → suivant.
 
----------- Sécurité anti-CSRF/anti-spam sur les nouveaux formulaires ----------
+-- ---------- Sécurité anti-CSRF/anti-spam sur les nouveaux formulaires ----------
 drop trigger if exists trg_securite_insertion on public.commandes;
 create trigger trg_securite_insertion before insert on public.commandes
   for each row execute function public.securise_insertion_publique();
@@ -62,8 +63,7 @@ create trigger trg_mail_devis after insert on public.devis
   for each row execute function public.notifie_demande_http();
 -- ⚠ rdv/messages_contact : leurs triggers e-mail existants (trg_mail_rdv / trg_mail_msg) restent inchangés.
 
--- 
----------- Décrément de stock automatique à la commande ----------
+-- ---------- Décrément de stock automatique à la commande ----------
 create or replace function public.decremente_stock() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin

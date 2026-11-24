@@ -1,6 +1,7 @@
--- TOUCH PRO — ÉTAPE 1/4 — tables boutique & contenus (exécutez les étapes dans l'ordre 1→2→3→4, bouton Run)
+-- TOUCH PRO — ÉTAPE 1/4 — tables boutique & contenus
+-- Exécutez les 4 étapes DANS L'ORDRE (1, 2, 3 puis 4) : coller → Run → suivant.
 
----------- Départements ----------
+-- ---------- Départements ----------
 create table if not exists public.departements (
   code text primary key,                  -- beauty | tech | access | fashion | digital
   nom text not null,
@@ -70,5 +71,3 @@ alter table public.produits add column if not exists points jsonb default '[]';
 alter table public.produits enable row level security;
 create policy produits_lecture_publique on public.produits for select using (actif);
 create policy produits_admin on public.produits for all using (public.is_admin()) with check (public.is_admin());
-
---

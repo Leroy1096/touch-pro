@@ -1,6 +1,7 @@
--- TOUCH PRO — ÉTAPE 2/4 — commandes, réparations, devis, profils (exécutez les étapes dans l'ordre 1→2→3→4, bouton Run)
+-- TOUCH PRO — ÉTAPE 2/4 — commandes, réparations, devis, profils
+-- Exécutez les 4 étapes DANS L'ORDRE (1, 2, 3 puis 4) : coller → Run → suivant.
 
----------- Commandes ----------
+-- ---------- Commandes ----------
 create table if not exists public.commandes (
   id bigint generated always as identity primary key,
   client_id uuid references auth.users(id) on delete set null,
@@ -128,5 +129,3 @@ end $$;
 drop trigger if exists trg_profil_client on auth.users;
 create trigger trg_profil_client after insert on auth.users
   for each row execute function public.cree_profil_client();
-
---

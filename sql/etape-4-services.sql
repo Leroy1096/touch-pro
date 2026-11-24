@@ -1,5 +1,7 @@
--- TOUCH PRO — ÉTAPE 4/4 — catalogue services BEAUTY (exécutez les étapes dans l'ordre 1→2→3→4, bouton Run)
+-- TOUCH PRO — ÉTAPE 4/4 — catalogue services BEAUTY
+-- Exécutez les 4 étapes DANS L'ORDRE (1, 2, 3 puis 4) : coller → Run → suivant.
 
+-- ============================================================================
 -- TOUCH PRO — Extension du catalogue BEAUTY (coiffure mixte + soins)
 -- À exécuter APRÈS touchpro-migration.sql. Idempotent (on conflict do nothing).
 -- ============================================================================
