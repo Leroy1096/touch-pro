@@ -3,39 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Mon compte — TOUCH PRO</title>
-  <meta name="description" content="Espace client TOUCH PRO : suivez vos commandes, réparations et devis.">
+  <title>Mon compte — TOUCH PRO | Espace membre</title>
+  <meta name="description" content="Espace membre TOUCH PRO : créez votre compte par e-mail pour accéder à la boutique, suivre vos commandes, réparations et devis.">
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
-  <link rel="stylesheet" href="css/style.css?v=17">
-  <link rel="stylesheet" href="css/touchpro.css?v=17">
+  <link rel="stylesheet" href="css/style.css?v=19">
+  <link rel="stylesheet" href="css/touchpro.css?v=21">
+  <style>
+    .compte-grille { display: grid; grid-template-columns: 1.05fr .95fr; gap: 2.4rem; align-items: start; }
+    @media (max-width: 900px) { .compte-grille { grid-template-columns: 1fr; gap: 1.8rem; } }
+    .compte-avantages .kicker { color: var(--tp-or); letter-spacing: 3px; font-size: .72rem; font-weight: 800; }
+    .compte-avantages h1 { font-family: var(--font-serif); font-size: clamp(1.7rem, 4.5vw, 2.5rem); margin: .5rem 0 .3rem; }
+    .compte-avantages h1 span { color: var(--tp-or); }
+    .compte-avantages .slogan-cpt { color: var(--gris); font-style: italic; margin-bottom: .4rem; }
+    .avantages { list-style: none; display: flex; flex-direction: column; gap: .85rem; margin-top: 1.4rem; padding: 0; }
+    .avantages li { background: #16120c; border: 1px solid rgba(214,169,79,.22); border-radius: 14px; padding: .85rem 1.05rem; display: flex; flex-direction: column; gap: .1rem; }
+    .avantages b { color: var(--blanc); font-size: .93rem; }
+    .avantages span { color: var(--gris); font-size: .8rem; }
+    .confiance { margin-top: 1.3rem; color: var(--gris); font-size: .8rem; }
+    .compte-carte { background: #14110c; border: 1px solid rgba(214,169,79,.32); border-radius: 20px; padding: 1.5rem 1.4rem; box-shadow: 0 24px 70px rgba(0,0,0,.5); }
+    .compte-carte h2 { font-family: var(--font-serif); text-align: center; font-size: 1.35rem; margin-bottom: 1rem; }
+    .compte-carte .bascule { text-align: center; margin-top: 1rem; color: var(--gris); font-size: .88rem; }
+    .compte-carte .bascule button { background: none; border: none; color: var(--tp-or); font-weight: 700; cursor: pointer; font-size: .88rem; text-decoration: underline; }
+    .compte-carte .mini { text-align: center; color: #7d7462; font-size: .72rem; margin-top: .9rem; }
+    .compte-carte .form-tp { max-width: none; }
+    .auth-tabs button { flex: 1; }
+    .entete-compte { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .entete-compte .actions-compte { display: flex; gap: .6rem; flex-wrap: wrap; margin-left: auto; }
+  </style>
 </head>
 <body>
-  <section class="tp-section" style="padding-top:3rem;min-height:70vh">
+  <section class="tp-section" style="padding-top:2.5rem;min-height:70vh">
     <div class="wrap">
 
-      <!-- Connexion / inscription -->
+      <!-- ===== Connexion / inscription (membre requis pour la boutique) ===== -->
       <div id="zoneAuth">
-        <div class="tp-section-titre"><em>ESPACE CLIENT</em><h2>👤 Mon compte</h2>
-          <p style="color:var(--gris)">Suivez vos commandes, réparations et devis en un coup d'œil.</p></div>
-        <div class="auth-tabs">
-          <button id="tabConnexion" class="actif">Connexion</button>
-          <button id="tabInscription">Inscription</button>
+        <div class="compte-grille">
+
+          <aside class="compte-avantages">
+            <p class="kicker">ESPACE MEMBRE</p>
+            <h1>Bienvenue dans <span>l'univers TOUCH&nbsp;PRO</span></h1>
+            <p class="slogan-cpt">Tout ce dont vous avez besoin, au même endroit !</p>
+            <ul class="avantages">
+              <li><b>🛒 Suivi de vos commandes</b><span>Historique et statut en temps réel</span></li>
+              <li><b>⚡ Commande express</b><span>Adresse et coordonnées pré-remplies</span></li>
+              <li><b>🎁 −2 000 F offerts</b><span>Code BIENVENUE sur votre 1ʳᵉ commande</span></li>
+              <li><b>📱 Réparations &amp; devis</b><span>Suivez vos appareils TECH et demandes DIGITAL</span></li>
+              <li><b>⭐ Offres membres</b><span>Promotions et nouveautés en avant-première</span></li>
+            </ul>
+            <p class="confiance">🔒 Connexion chiffrée · Vos données ne sont jamais revendues.</p>
+          </aside>
+
+          <div class="compte-carte">
+            <h2 id="titreAuth">👤 Mon compte</h2>
+            <div class="auth-tabs">
+              <button id="tabConnexion" class="actif" type="button">Se connecter</button>
+              <button id="tabInscription" type="button">S'inscrire</button>
+            </div>
+            <form id="formAuth" class="form-tp" novalidate>
+              <div id="champsInscription" hidden>
+                <div class="form-grid">
+                  <label>Prénom *<input name="prenom" maxlength="40" autocomplete="given-name" placeholder="Awa"></label>
+                  <label>Nom *<input name="nom" maxlength="40" autocomplete="family-name" placeholder="Koné"></label>
+                </div>
+                <label>Téléphone (WhatsApp) *<input name="telephone" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="01 02 03 04 05"></label>
+              </div>
+              <label>E-mail *<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="vous@exemple.com"></label>
+              <label>Mot de passe *<input name="motdepasse" type="password" required minlength="6" autocomplete="current-password" placeholder="6 caractères minimum"></label>
+              <div id="champMdp2" hidden>
+                <label>Répétez le mot de passe *<input name="motdepasse2" type="password" minlength="6" autocomplete="new-password" placeholder="••••••••"></label>
+              </div>
+              <div id="alerteAuth"></div>
+              <button class="btn btn-or btn-bloc" type="submit" id="btnAuth" style="margin-top:1.2rem">Se connecter</button>
+            </form>
+            <p class="bascule"><span id="txtBascule">Pas encore membre ?</span> <button type="button" id="btnBascule">Créer un compte</button></p>
+            <p class="mini">Inscription par e-mail uniquement · vos informations restent privées</p>
+          </div>
+
         </div>
-        <form id="formAuth" class="form-tp" novalidate>
-          <div id="champNom" hidden><label>Votre nom *<input name="nom" maxlength="80"></label></div>
-          <div id="champTel" hidden><label>Téléphone *<input name="telephone" maxlength="20" placeholder="01 02 03 04 05"></label></div>
-          <label>E-mail *<input name="email" type="email" required maxlength="120"></label>
-          <label>Mot de passe *<input name="motdepasse" type="password" required minlength="6" autocomplete="current-password"></label>
-          <div id="alerteAuth"></div>
-          <button class="btn btn-or btn-bloc" type="submit" id="btnAuth" style="margin-top:1.2rem">Se connecter</button>
-        </form>
       </div>
 
-      <!-- Tableau client -->
+      <!-- ===== Tableau de bord membre ===== -->
       <div id="zoneCompte" hidden>
-        <div class="tp-section-titre"><em>BONJOUR</em><h2 id="nomClient">👤</h2>
-          <p><button class="btn btn-contour" id="btnLogout" style="padding:.5rem 1.3rem">Se déconnecter</button></p></div>
+        <div class="entete-compte">
+          <div class="tp-section-titre" style="margin:0;text-align:left"><em>BONJOUR</em><h2 id="nomClient">👤</h2></div>
+          <div class="actions-compte">
+            <a class="btn btn-or" id="btnAdmin" href="admin/touchpro.html" hidden>👑 Administration</a>
+            <a class="btn btn-bleu" href="boutique.html">🛍️ Continuer mes achats</a>
+            <button class="btn btn-contour" id="btnLogout" style="padding:.5rem 1.3rem">Se déconnecter</button>
+          </div>
+        </div>
 
         <div class="tp-section-titre" style="margin-top:2rem"><em>SUIVI</em><h2>🛒 Mes commandes</h2></div>
         <div id="mesCommandes"><div class="tp-vide">Chargement…</div></div>
@@ -49,6 +106,6 @@
 
     </div>
   </section>
-  <script type="module" src="js/tp-compte.js?v=17"></script>
+  <script type="module" src="js/tp-compte.js?v=21"></script>
 </body>
 </html>

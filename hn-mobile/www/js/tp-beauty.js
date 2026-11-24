@@ -3,7 +3,7 @@
    soin du visage, pédicure/manucure) + tarifs fusionnés depuis la BDD.
    ========================================================================== */
 
-import { initPage, getSupabase, formatPrix } from "./tp-pages.js?v=19";
+import { initPage, getSupabase, formatPrix } from "./tp-pages.js?v=21";
 import { CATALOGUE, rendCatalogue } from "./tp-catalogue.js?v=19";
 
 initPage("beauty.html");

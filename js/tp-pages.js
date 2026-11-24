@@ -50,6 +50,23 @@ export function majBadgePanier() {
   b.style.display = n > 0 ? "block" : "none";
 }
 
+/* ============================ ACCÈS MEMBRE ============================ */
+/* La boutique est réservée aux membres : sans session, redirection vers
+   l'inscription/connexion avec retour automatique après connexion.
+   Base injoignable → navigation libre : jamais de page bloquée. */
+export async function exigeCompte(retour) {
+  let sb = null;
+  try { sb = await Promise.race([getSupabase(), new Promise((_, r) => setTimeout(() => r(new Error("delai")), 3000))]); } catch { sb = null; }
+  if (!sb) return true;
+  try {
+    const { data } = await Promise.race([sb.auth.getUser(), new Promise((_, r) => setTimeout(() => r(new Error("delai")), 3000))]);
+    if (data?.user) return true;
+  } catch { return true; }
+  const page = (retour || location.pathname.split("/").pop() || "boutique.html") + location.search;
+  location.replace("compte.html?mode=inscription&retour=" + encodeURIComponent(page));
+  return false;
+}
+
 /* ============================ TOAST ============================ */
 export function toast(msg) {
   const t = document.createElement("div");

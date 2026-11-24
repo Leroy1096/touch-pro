@@ -5,7 +5,7 @@
 
 import { getSupabase } from "../js/supabaseClient.js?v=16";
 import { DEPARTEMENTS, TP } from "../js/tp-config.js?v=17";
-import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=17";
+import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=21";
 
 let sb = null;
 

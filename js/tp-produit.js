@@ -4,11 +4,14 @@
    ========================================================================== */
 
 import {
-  initPage, formatPrix, esc, ajoutePanier, waLien, getSupabase, majBadgePanier,
-} from "./tp-pages.js?v=19";
+  initPage, formatPrix, esc, ajoutePanier, waLien, getSupabase, majBadgePanier, exigeCompte,
+} from "./tp-pages.js?v=21";
 import { majBadgeGlobal } from "./tp-config.js?v=19";
 
 initPage("boutique.html");
+
+/* 🛡️ La boutique (fiches produits comprises) est réservée aux membres. */
+if (!(await exigeCompte("produit.html"))) await new Promise(() => {}); // redirection en cours
 
 const zone = document.getElementById("pageProduit");
 const barre = document.getElementById("barreAchat");

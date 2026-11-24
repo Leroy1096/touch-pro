@@ -1,5 +1,5 @@
 /* TOUCH PRO TECH — catalogue des pannes + formulaire de réparation */
-import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=19";
+import { initPage, nettoie, alerte, boutonChargement, montreWA, clientCourant, envoiTropRapide } from "./tp-pages.js?v=21";
 import { CATALOGUE, rendCatalogue } from "./tp-catalogue.js?v=19";
 
 initPage("tech.html");

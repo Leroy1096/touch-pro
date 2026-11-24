@@ -3,7 +3,7 @@
    Stratégie « jamais vide » : les publications de démonstration s'affichent
    immédiatement, puis sont remplacées par les vraies si la base répond.
    ========================================================================== */
-import { initPage, getSupabase, esc, waLien, toast } from "./tp-pages.js?v=16";
+import { initPage, getSupabase, esc, waLien, toast } from "./tp-pages.js?v=21";
 import { ACTUS_DEMO } from "./tp-data.js?v=20";
 import { animeReveals } from "./tp-config.js?v=16";
 

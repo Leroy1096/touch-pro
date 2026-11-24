@@ -6,9 +6,15 @@
 import {
   initPage, getPanier, retireDuPanier, changeQte, videPanier, totalPanier,
   formatPrix, esc, nettoie, alerte, boutonChargement, montreWA,
-  clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase,
-} from "./tp-pages.js?v=19";
+  clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase, exigeCompte,
+} from "./tp-pages.js?v=21";
 import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=19";
+
+initPage("boutique.html");
+
+/* 🛡️ La boutique est réservée aux membres : inscription ou connexion obligatoire.
+   (Base injoignable → navigation libre en mode démo, jamais de blocage.) */
+if (!(await exigeCompte("boutique.html"))) await new Promise(() => {}); // redirection en cours
 
 /* Zones de livraison avec tarifs indicatifs (FCFA) */
 const ZONES_LIVRAISON = [
@@ -17,8 +23,6 @@ const ZONES_LIVRAISON = [
   { code: "agboville", nom: "📍 Agboville centre", frais: 1000 },
   { code: "abidjan", nom: "📍 Abidjan", frais: 2000 },
 ];
-
-initPage("boutique.html");
 
 const grille = document.getElementById("grille");
 const chips = document.getElementById("chips");
