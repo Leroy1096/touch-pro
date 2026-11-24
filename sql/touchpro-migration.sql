@@ -65,6 +65,7 @@ create table if not exists public.produits (
   created_at timestamptz default now()
 );
 -- Colonnes ajoutées après coup si la table existait déjà
+alter table public.produits add column if not exists categorie text; -- rayon boutique (accessoires|homme|femme|chaussures|sacs|beaute)
 alter table public.produits add column if not exists ventes integer not null default 0;
 alter table public.produits add column if not exists note numeric(2,1);
 alter table public.produits add column if not exists badge text;

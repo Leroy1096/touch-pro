@@ -56,9 +56,21 @@ create table if not exists public.produits (
   stock integer not null default 0 check (stock >= 0),
   tailles text,                       -- ex. « S,M,L,XL » (fashion)
   image_url text,
+  ventes integer not null default 0,  -- compteur « X vendus » (boutique façon Yves Store)
+  note numeric(2,1),                  -- note moyenne affichée (ex. 4.8)
+  badge text,                         -- « ★ Best-seller », « Nouveau », « Édition limitée »…
+  flash boolean not null default false, -- apparaît dans les Ventes flash
+  points jsonb default '[]',          -- points forts affichés sur la fiche produit
   actif boolean default true,
   created_at timestamptz default now()
 );
+-- Colonnes ajoutées après coup si la table existait déjà
+alter table public.produits add column if not exists categorie text; -- rayon boutique (accessoires|homme|femme|chaussures|sacs|beaute)
+alter table public.produits add column if not exists ventes integer not null default 0;
+alter table public.produits add column if not exists note numeric(2,1);
+alter table public.produits add column if not exists badge text;
+alter table public.produits add column if not exists flash boolean not null default false;
+alter table public.produits add column if not exists points jsonb default '[]';
 alter table public.produits enable row level security;
 create policy produits_lecture_publique on public.produits for select using (actif);
 create policy produits_admin on public.produits for all using (public.is_admin()) with check (public.is_admin());

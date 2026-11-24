@@ -59,8 +59,11 @@ export async function exigeCompte(retour) {
   try { sb = await Promise.race([getSupabase(), new Promise((_, r) => setTimeout(() => r(new Error("delai")), 3000))]); } catch { sb = null; }
   if (!sb) return true;
   try {
-    const { data } = await Promise.race([sb.auth.getUser(), new Promise((_, r) => setTimeout(() => r(new Error("delai")), 3000))]);
-    if (data?.user) return true;
+    /* getSession = lecture LOCALE (pas de réseau) : la présence d'une session
+       prouve que le client s'est connecté — la sécurité réelle reste côté RLS.
+       Ainsi un membre connecté n'est jamais bloqué si la base est en pause. */
+    const { data } = await Promise.race([sb.auth.getSession(), new Promise((_, r) => setTimeout(() => r(new Error("delai")), 3000))]);
+    if (data?.session?.user) return true;
   } catch { return true; }
   const page = (retour || location.pathname.split("/").pop() || "boutique.html") + location.search;
   location.replace("compte.html?mode=inscription&retour=" + encodeURIComponent(page));

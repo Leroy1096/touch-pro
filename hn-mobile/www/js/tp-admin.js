@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import { getSupabase } from "../js/supabaseClient.js?v=16";
-import { DEPARTEMENTS, TP } from "../js/tp-config.js?v=17";
+import { DEPARTEMENTS, CATEGORIES_BOUTIQUE, TP } from "../js/tp-config.js?v=17";
 import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=21";
 
 let sb = null;
@@ -91,6 +91,14 @@ const STATUTS_DEVIS = ["en_attente", "envoye", "accepte", "refuse"];
 const STATUTS_PUB = ["brouillon", "publie", "programme", "archive"];
 const CATEGORIES_PUB = ["Actualités de l'entreprise", "Promotions et offres spéciales", "Nouveautés", "Produits disponibles", "Réalisations", "Coiffure et beauté", "Réparation de téléphones", "Accessoires", "Mode et vêtements", "Création digitale", "Annonces importantes"];
 
+/* Libellé d'un rayon boutique ou d'un département à partir de son code */
+const nomRayon = (code) => {
+  const r = CATEGORIES_BOUTIQUE.find((c) => c.code === code);
+  if (r) return `${r.icone} ${r.nom}`;
+  const d = DEPARTEMENTS.find((x) => x.code === code);
+  return d ? `${d.icone} ${d.nom}` : (code || "—");
+};
+
 async function montreTab(id) {
   tabs.querySelectorAll("button").forEach(b => b.classList.toggle("actif", b.dataset.tab === id));
   const zone = document.getElementById("contenuTab");
@@ -166,7 +174,8 @@ async function produits() {
       <h3 style="color:var(--tp-or);margin-bottom:.6rem">➕ Nouveau produit</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem">
         <input name="nom" placeholder="Nom *" required>
-        <select name="departement">${DEPARTEMENTS.map(d => `<option value="${d.code}">${d.icone} ${d.nom}</option>`).join("")}</select>
+        <select name="categorie" title="Rayon de la boutique">${CATEGORIES_BOUTIQUE.filter(c => c.code).map(c => `<option value="${c.code}">${c.icone} ${c.nom}</option>`).join("")}</select>
+        <select name="departement"><option value="">— Aucun département —</option>${DEPARTEMENTS.map(d => `<option value="${d.code}">${d.icone} ${d.nom}</option>`).join("")}</select>
         <input name="prix" type="number" min="0" placeholder="Prix FCFA *" required>
         <input name="prix_promo" type="number" min="0" placeholder="Prix promo">
         <input name="stock" type="number" min="0" placeholder="Stock *" required>
@@ -177,9 +186,9 @@ async function produits() {
       <button class="btn btn-or" style="margin-top:.9rem">Enregistrer le produit</button>
     </form>
     <div style="overflow-x:auto"><table class="tp-table">
-      <tr><th>Produit</th><th>Dép.</th><th>Prix</th><th>Stock</th><th>Visible</th><th></th></tr>
+      <tr><th>Produit</th><th>Rayon</th><th>Prix</th><th>Stock</th><th>Visible</th><th></th></tr>
       ${(data || []).map(p => `<tr>
-        <td><strong>${esc(p.nom)}</strong></td><td>${esc(p.departement || "")}</td>
+        <td><strong>${esc(p.nom)}</strong></td><td><small>${esc(nomRayon(p.categorie || p.departement))}</small></td>
         <td>${formatPrix(p.prix)}${p.prix_promo ? ` → <b style="color:var(--tp-or)">${formatPrix(p.prix_promo)}</b>` : ""}</td>
         <td><input type="number" min="0" value="${p.stock}" data-id="${p.id}" class="inp-stock" style="width:80px"></td>
         <td><input type="checkbox" ${p.actif ? "checked" : ""} data-id="${p.id}" class="chk-actif"></td>
@@ -191,7 +200,9 @@ async function produits() {
     e.preventDefault();
     const f = e.target;
     const { error } = await sb.from("produits").insert({
-      nom: nettoie(f.nom.value, 100), departement: f.departement.value,
+      nom: nettoie(f.nom.value, 100),
+      categorie: f.categorie.value || null,
+      departement: f.departement.value || null,
       prix: parseInt(f.prix.value, 10) || 0,
       prix_promo: f.prix_promo.value ? parseInt(f.prix_promo.value, 10) : null,
       stock: parseInt(f.stock.value, 10) || 0,
