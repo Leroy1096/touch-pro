@@ -2,7 +2,8 @@
    Page « Notre équipe & le salon » : fiches des coiffeurs.
    ========================================================================== */
 
-import { loadCoiffeurs, el, skeletons, imgFallback } from "./data.js";
+import { loadCoiffeurs, FALLBACK, el, imgFallback } from "./data.js";
+import { animeReveals } from "./tp-config.js?v=19";
 
 function teamCard(c) {
   const card = el("article", { class: "card team-card reveal" });
@@ -24,13 +25,19 @@ function teamCard(c) {
   return card;
 }
 
-async function renderEquipe() {
+/* Stratégie « jamais vide » : l'équipe de démonstration s'affiche
+   immédiatement, puis est remplacée par la vraie si la base répond. */
+function affiche(coiffeurs) {
   const zone = document.getElementById("teamList");
   if (!zone) return;
-  zone.replaceChildren(...skeletons(3));
-  const coiffeurs = await loadCoiffeurs();
   zone.replaceChildren(...coiffeurs.map(teamCard));
-  if (typeof window.__initReveal === "function") window.__initReveal();
+  animeReveals();
 }
 
-document.addEventListener("DOMContentLoaded", renderEquipe);
+function renderEquipe() {
+  if (!document.getElementById("teamList")) return;
+  affiche(FALLBACK.coiffeurs); // immédiat — jamais de trou noir
+  loadCoiffeurs().then((c) => { if (c !== FALLBACK.coiffeurs) affiche(c); }); // remplace si la base répond
+}
+
+renderEquipe();

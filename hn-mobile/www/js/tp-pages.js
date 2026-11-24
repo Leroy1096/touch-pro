@@ -133,7 +133,7 @@ export function branchePanier(grille) {
 /* Affiche le catalogue démo immédiatement, puis le remplace par la BDD si disponible */
 export async function chargeProduits(sel, departement = null) {
   const zone = document.querySelector(sel);
-  const { PRODUITS_DEMO } = await import("./tp-data.js?v=17");
+  const { PRODUITS_DEMO } = await import("./tp-data.js?v=20");
   const demo = departement ? PRODUITS_DEMO.filter((p) => p.departement === departement) : PRODUITS_DEMO;
   const rendu = (data) => {
     zone.innerHTML = data.length ? data.map(carteProduit).join("") : `<div class="tp-vide">Les produits arrivent très vite !</div>`;

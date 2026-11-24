@@ -1,18 +1,18 @@
 /* ==========================================================================
    Page « Services & Tarifs » : liste complète regroupée par catégorie.
+   Stratégie « jamais vide » : les tarifs de démonstration s'affichent
+   immédiatement, puis sont remplacés par les vrais si la base répond.
    ========================================================================== */
 
-import { loadServices, el, skeletons } from "./data.js";
+import { loadServices, FALLBACK, el } from "./data.js";
 import { serviceCard } from "./home.js";
+import { animeReveals } from "./tp-config.js?v=19";
 
 const ORDRE_CATEGORIES = ["Homme", "Femme"];
 
-async function renderServices() {
+function affiche(services) {
   const zone = document.getElementById("servicesList");
   if (!zone) return;
-  zone.replaceChildren(el("div", { class: "grid grid-3" }, skeletons(6)));
-
-  const services = await loadServices();
   const parCategorie = new Map();
   for (const s of services) {
     if (!parCategorie.has(s.categorie)) parCategorie.set(s.categorie, []);
@@ -37,7 +37,13 @@ async function renderServices() {
   }
 
   zone.replaceChildren(...fragments);
-  if (typeof window.__initReveal === "function") window.__initReveal();
+  animeReveals();
 }
 
-document.addEventListener("DOMContentLoaded", renderServices);
+function renderServices() {
+  if (!document.getElementById("servicesList")) return;
+  affiche(FALLBACK.services); // immédiat — jamais de trou noir
+  loadServices().then((s) => { if (s !== FALLBACK.services) affiche(s); }); // remplace si la base répond
+}
+
+renderServices();
