@@ -3,7 +3,7 @@
    Auth Supabase (compte présent dans table `admin`) + RLS côté base.
    ========================================================================== */
 
-import { getSupabase } from "../js/supabaseClient.js?v=16";
+import { getSupabase } from "../js/supabaseClient.js?v=24";
 import { DEPARTEMENTS, CATEGORIES_BOUTIQUE, TP } from "../js/tp-config.js?v=17";
 import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=21";
 

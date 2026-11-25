@@ -3,7 +3,7 @@
    Tableau de bord, commandes, clients, produits & prix, stock, avis.
    ========================================================================== */
 
-import { getSupabase } from "../js/supabaseClient.js?v=16";
+import { getSupabase } from "../js/supabaseClient.js?v=24";
 import { CATEGORIES_BOUTIQUE } from "../js/tp-config.js?v=19";
 import { esc, formatPrix, alerte, boutonChargement } from "../js/tp-pages.js?v=21";
 

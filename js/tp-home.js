@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import { TP, DEPARTEMENTS, injecteChrome, animeReveals, formatPrix } from "./tp-config.js?v=17";
-import { getSupabase } from "./supabaseClient.js?v=16";
+import { getSupabase } from "./supabaseClient.js?v=24";
 import { PRODUITS_DEMO, PROMOS_DEMO, ACTUS_DEMO, AVIS_DEMO, SERVICES_DEMO } from "./tp-data.js?v=20";
 
 injecteChrome("index.html");

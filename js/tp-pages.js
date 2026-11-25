@@ -3,7 +3,7 @@
    ========================================================================== */
 
 import { TP, waLien, formatPrix, injecteChrome } from "./tp-config.js?v=16";
-import { getSupabase } from "./supabaseClient.js?v=16";
+import { getSupabase } from "./supabaseClient.js?v=24";
 
 export { TP, waLien, formatPrix, getSupabase };
 

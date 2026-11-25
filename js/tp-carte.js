@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import { TP, waLien } from "./tp-config.js?v=16";
-import { getSupabase } from "./supabaseClient.js?v=16";
+import { getSupabase } from "./supabaseClient.js?v=24";
 
 let infos = { ...TP, horaires: { "Lun-Sam": "08:00 – 20:00", "Dimanche": "Fermé" } };
 
