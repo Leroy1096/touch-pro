@@ -7,6 +7,19 @@
    ========================================================================== */
 import { initPage, getSupabase, esc, formatPrix, alerte, boutonChargement, nettoie, toast } from "./tp-pages.js?v=21";
 
+/* ==========================================================================
+   v2.19 — Œil mot de passe : afficher/masquer la saisie (mobile-friendly)
+   ========================================================================== */
+document.querySelectorAll(".mdp-wrap .oeil").forEach((b) => b.addEventListener("click", () => {
+  const inp = b.parentElement.querySelector("input");
+  const voir = inp.type === "password";
+  inp.type = voir ? "text" : "password";
+  b.classList.toggle("ouvert", voir);
+  b.setAttribute("aria-label", voir ? "Masquer le mot de passe" : "Afficher le mot de passe");
+  b.setAttribute("title", voir ? "Masquer le mot de passe" : "Afficher le mot de passe");
+  inp.focus({ preventScroll: true });
+}));
+
 initPage("compte.html");
 
 const params = new URLSearchParams(location.search);
@@ -64,7 +77,7 @@ function redirigeRetour() {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = nettoie(form.email.value, 120).toLowerCase();
-  const mdp = form.motdepasse.value;
+  const mdp = form.motdepasse.value.trim();
   const sb = await sbRapide();
   if (!sb) { alerte("alerteAuth", "err", "Connexion au serveur impossible pour le moment — réessayez dans quelques minutes."); return; }
   boutonChargement(btnAuth, true);
@@ -76,7 +89,7 @@ form.addEventListener("submit", async (e) => {
       if (prenom.length < 2 || nom.length < 2) { alerte("alerteAuth", "err", "Prénom et nom requis."); boutonChargement(btnAuth, false); return; }
       if (!/^\+?\d{8,15}$/.test(tel)) { alerte("alerteAuth", "err", "Numéro de téléphone invalide (8 chiffres minimum)."); boutonChargement(btnAuth, false); return; }
       if (mdp.length < 6) { alerte("alerteAuth", "err", "Mot de passe : 6 caractères minimum."); boutonChargement(btnAuth, false); return; }
-      if (form.motdepasse2.value !== mdp) { alerte("alerteAuth", "err", "Les deux mots de passe ne correspondent pas."); boutonChargement(btnAuth, false); return; }
+      if (form.motdepasse2.value.trim() !== mdp) { alerte("alerteAuth", "err", "Les deux mots de passe ne correspondent pas."); boutonChargement(btnAuth, false); return; }
       const { data, error } = await sb.auth.signUp({
         email, password: mdp,
         options: { data: { nom: `${prenom} ${nom}`, prenom, nom_famille: nom, telephone: tel } },

@@ -7,8 +7,8 @@
   <meta name="description" content="Espace membre TOUCH PRO : créez votre compte par e-mail pour accéder à la boutique, suivre vos commandes, réparations et devis.">
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
-  <link rel="stylesheet" href="css/style.css?v=19">
-  <link rel="stylesheet" href="css/touchpro.css?v=21">
+  <link rel="stylesheet" href="css/style.css?v=23">
+  <link rel="stylesheet" href="css/touchpro.css?v=23">
   <style>
     .compte-grille { display: grid; grid-template-columns: 1.05fr .95fr; gap: 2.4rem; align-items: start; }
     @media (max-width: 900px) { .compte-grille { grid-template-columns: 1fr; gap: 1.8rem; } }
@@ -68,10 +68,26 @@
                 </div>
                 <label>Téléphone (WhatsApp) *<input name="telephone" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="01 02 03 04 05"></label>
               </div>
-              <label>E-mail *<input name="email" type="email" required maxlength="120" autocomplete="email" placeholder="vous@exemple.com"></label>
-              <label>Mot de passe *<input name="motdepasse" type="password" required minlength="6" autocomplete="current-password" placeholder="6 caractères minimum"></label>
+              <label>E-mail *<input name="email" type="email" required maxlength="120" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="vous@exemple.com"></label>
+              <label>Mot de passe *
+                <span class="mdp-wrap">
+                  <input name="motdepasse" type="password" required minlength="6" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="6 caractères minimum">
+                  <button type="button" class="oeil" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-on"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-off"><path d="M2 12s3.5-7 10-7c2 0 3.7.6 5 1.5"/><path d="M22 12s-3.5 7-10 7c-2 0-3.7-.6-5-1.5"/><path d="M3 3l18 18"/><path d="M10.6 10.9a3 3 0 0 0 4 4"/></svg>
+                  </button>
+                </span>
+              </label>
               <div id="champMdp2" hidden>
-                <label>Répétez le mot de passe *<input name="motdepasse2" type="password" minlength="6" autocomplete="new-password" placeholder="••••••••"></label>
+                <label>Répétez le mot de passe *
+                  <span class="mdp-wrap">
+                    <input name="motdepasse2" type="password" minlength="6" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="••••••••">
+                    <button type="button" class="oeil" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-on"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-off"><path d="M2 12s3.5-7 10-7c2 0 3.7.6 5 1.5"/><path d="M22 12s-3.5 7-10 7c-2 0-3.7-.6-5-1.5"/><path d="M3 3l18 18"/><path d="M10.6 10.9a3 3 0 0 0 4 4"/></svg>
+                    </button>
+                  </span>
+                </label>
               </div>
               <div id="alerteAuth"></div>
               <button class="btn btn-or btn-bloc" type="submit" id="btnAuth" style="margin-top:1.2rem">Se connecter</button>
@@ -106,6 +122,6 @@
 
     </div>
   </section>
-  <script type="module" src="js/tp-compte.js?v=21"></script>
+  <script type="module" src="js/tp-compte.js?v=23"></script>
 </body>
 </html>

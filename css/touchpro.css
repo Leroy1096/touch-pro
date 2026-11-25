@@ -730,3 +730,30 @@ input[type="date"], input[type="time"], select { min-width: 0; max-width: 100%; 
 
 /* Garde-fou anti-débordement horizontal (barre de défilement verticale comprise) */
 html, body { overflow-x: clip; }
+
+/* ==========================================================================
+   v2.19 — Champs mot de passe avec œil + confort saisie mobile
+   ========================================================================== */
+.mdp-wrap { position: relative; display: block; }
+.mdp-wrap input { padding-right: 3.1rem !important; }
+.mdp-wrap .oeil {
+  position: absolute; right: .25rem; top: 50%; transform: translateY(-50%);
+  width: 46px; height: 46px; border: 0; background: transparent; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--or, #d6a94f); padding: 0;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.mdp-wrap .oeil svg { width: 22px; height: 22px; pointer-events: none; }
+.mdp-wrap .oeil .oeil-off { display: none; }
+.mdp-wrap .oeil.ouvert .oeil-on { display: none; }
+.mdp-wrap .oeil.ouvert .oeil-off { display: block; }
+.mdp-wrap .oeil:active { transform: translateY(-50%) scale(.9); }
+
+/* Confort mobile : texte 16px minimum (évite le zoom automatique Chrome/Safari)
+   et grandes zones tactiles sur les formulaires */
+.form-tp input, .form-tp select, .form-tp textarea,
+.form-ajout input, .form-ajout select, .form-ajout textarea,
+.zone-photos input {
+  font-size: 16px !important;
+  min-height: 48px;
+}

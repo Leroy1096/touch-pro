@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="../images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
-  <link rel="stylesheet" href="../css/style.css?v=22">
-  <link rel="stylesheet" href="../css/touchpro.css?v=22">
+  <link rel="stylesheet" href="../css/style.css?v=23">
+  <link rel="stylesheet" href="../css/touchpro.css?v=23">
   <style>
     /* ---------- Panneau Gérant — style tableau de bord pro ---------- */
     body { background: #0b0a08; }
@@ -139,9 +139,15 @@
       <p class="note">Réservé à l'administration TOUCH PRO.</p>
       <form id="formLogin" class="form-ajout" novalidate>
         <label>E-MAIL</label>
-        <input name="email" type="email" required autocomplete="email" placeholder="vous@exemple.com">
+        <input name="email" type="email" required autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="vous@exemple.com">
         <label>MOT DE PASSE</label>
-        <input name="motdepasse" type="password" required minlength="6" placeholder="••••••••">
+        <span class="mdp-wrap">
+          <input name="motdepasse" type="password" required minlength="6" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="••••••••">
+          <button type="button" class="oeil" aria-label="Afficher le mot de passe" title="Afficher le mot de passe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-on"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oeil-off"><path d="M2 12s3.5-7 10-7c2 0 3.7.6 5 1.5"/><path d="M22 12s-3.5 7-10 7c-2 0-3.7-.6-5-1.5"/><path d="M3 3l18 18"/><path d="M10.6 10.9a3 3 0 0 0 4 4"/></svg>
+          </button>
+        </span>
         <div id="alerteLogin" style="margin:.7rem 0"></div>
         <button class="btn btn-or btn-bloc" type="submit" style="min-height:48px">Se connecter</button>
       </form>
@@ -307,6 +313,6 @@
     </section>
   </div>
 
-  <script type="module" src="../js/tp-gerant.js?v=22"></script>
+  <script type="module" src="../js/tp-gerant.js?v=23"></script>
 </body>
 </html>

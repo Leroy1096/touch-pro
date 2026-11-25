@@ -67,6 +67,19 @@ function graphBarres(el, detailEl, series) {
   }));
 }
 
+/* ==========================================================================
+   v2.19 — Œil mot de passe (partagé compte + gérant)
+   ========================================================================== */
+document.querySelectorAll(".mdp-wrap .oeil").forEach((b) => b.addEventListener("click", () => {
+  const inp = b.parentElement.querySelector("input");
+  const voir = inp.type === "password";
+  inp.type = voir ? "text" : "password";
+  b.classList.toggle("ouvert", voir);
+  b.setAttribute("aria-label", voir ? "Masquer le mot de passe" : "Afficher le mot de passe");
+  b.setAttribute("title", voir ? "Masquer le mot de passe" : "Afficher le mot de passe");
+  inp.focus({ preventScroll: true });
+}));
+
 /* ============================ CONNEXION ============================ */
 async function demarrage() {
   sb = await getSupabase();
@@ -81,10 +94,17 @@ $("formLogin").addEventListener("submit", async (e) => {
   const btn = e.target.querySelector("button");
   boutonChargement(btn, true);
   const { error } = await sb.auth.signInWithPassword({
-    email: e.target.email.value.trim(), password: e.target.motdepasse.value,
+    email: e.target.email.value.trim().toLowerCase(),
+    password: e.target.motdepasse.value.trim(),
   });
   boutonChargement(btn, false);
-  if (error) { alerte("alerteLogin", "err", "Identifiants incorrects."); return; }
+  if (error) {
+    const msg = /invalid|credentials/i.test(error.message) ? "E-mail ou mot de passe incorrect — touchez l'œil 👁 pour vérifier votre saisie."
+      : /fetch|network|failed/i.test(error.message) ? "Connexion impossible — vérifiez votre réseau et réessayez."
+      : "Erreur : " + error.message;
+    alerte("alerteLogin", "err", msg);
+    return;
+  }
   verifieAdmin();
 });
 
