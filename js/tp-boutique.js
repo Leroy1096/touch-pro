@@ -16,12 +16,12 @@ initPage("boutique.html");
    (Base injoignable → navigation libre en mode démo, jamais de blocage.) */
 if (!(await exigeCompte("boutique.html"))) await new Promise(() => {}); // redirection en cours
 
-/* Zones de livraison avec tarifs indicatifs (FCFA) */
+/* Zones de livraison — règles officielles TOUCH PRO :
+   retrait boutique GRATUIT · Oupoyo 500 F · ailleurs aux frais du client */
 const ZONES_LIVRAISON = [
-  { code: "boutique", nom: "🏬 Retrait en boutique (gratuit)", frais: 0 },
-  { code: "oupoyo", nom: "📍 Oupoyo & alentours", frais: 500 },
-  { code: "agboville", nom: "📍 Agboville centre", frais: 1000 },
-  { code: "abidjan", nom: "📍 Abidjan", frais: 2000 },
+  { code: "boutique", nom: "🏬 Retrait en boutique", frais: 0, info: "Gratuit" },
+  { code: "oupoyo", nom: "🚚 Livraison à Oupoyo", frais: 500, info: "500 F" },
+  { code: "autre", nom: "🌍 Autre localité", frais: null, info: "frais à votre charge (confirmés par téléphone)" },
 ];
 
 const grille = document.getElementById("grille");
@@ -238,9 +238,12 @@ const couponZone = document.getElementById("couponZone");
 
 /* Remplit le select livraison depuis les zones */
 const selLiv = document.getElementById("selLivraison");
+const tiroirPied = document.getElementById("tiroirPied");
 selLiv.innerHTML = ZONES_LIVRAISON.map((z) =>
-  `<option value="${z.code}" data-frais="${z.frais}">${z.nom}${z.frais ? ` (+${formatPrix(z.frais)})` : ""}</option>`).join("");
-const fraisLivraison = () => Number(selLiv.selectedOptions[0]?.dataset.frais || 0);
+  `<option value="${z.code}">${z.nom} — ${z.frais ? formatPrix(z.frais) : z.info}</option>`).join("");
+const zoneChoisie = () => ZONES_LIVRAISON.find((z) => z.code === selLiv.value) || ZONES_LIVRAISON[0];
+/* null = frais à définir avec le client (autre localité) */
+const fraisLivraison = () => zoneChoisie().frais;
 
 /* Pré-remplit nom/téléphone si le client est connecté */
 (async () => {
@@ -268,13 +271,19 @@ function rendPanier() {
   if (!p.length) {
     contenu.innerHTML = `<div class="tp-vide">Votre panier est vide.<br><small>Explorez la boutique et touchez ＋ pour ajouter un article.</small></div>`;
     form.hidden = true;
+    tiroirPied.hidden = true;
     return;
   }
   const sousTotal = totalPanier();
   const remise = calcRemise(sousTotal);
-  const frais = fraisLivraison();
-  const livOfferte = (sousTotal - remise) >= livraisonOfferte;
-  const total = sousTotal - remise + (livOfferte ? 0 : frais);
+  const zone = zoneChoisie();
+  const livOfferte = zone.code === "oupoyo" && (sousTotal - remise) >= livraisonOfferte;
+  const frais = livOfferte ? 0 : zone.frais; /* null = à définir (autre localité) */
+  const total = sousTotal - remise + (frais || 0);
+  const txtLivraison = zone.code === "boutique" ? "🎉 Gratuite (retrait boutique)"
+    : livOfferte ? "🎉 Offerte (dès " + formatPrix(livraisonOfferte) + ")"
+    : frais === null ? "À votre charge (confirmée par téléphone)"
+    : formatPrix(frais);
   contenu.innerHTML = p.map((i) => `
     <div class="ligne">
       <div class="infos">
@@ -292,10 +301,11 @@ function rendPanier() {
     + `<div class="tiroir-recap">
         <p><span>Sous-total</span><span>${formatPrix(sousTotal)}</span></p>
         ${remise ? `<p class="remise"><span>🎁 Coupon ${esc(getCoupon().code)}</span><span>−${formatPrix(remise)}</span></p>` : ""}
-        <p><span>Livraison</span><span>${livOfferte ? "🎉 Offerte" : (frais ? formatPrix(frais) : "Gratuite")}</span></p>
-        <p class="tiroir-total"><span>Total</span><strong>${formatPrix(total)}</strong></p>
+        <p><span>Livraison</span><span>${txtLivraison}</span></p>
+        <p class="tiroir-total"><span>Total</span><strong>${formatPrix(total)}${frais === null ? " <small>+ livraison</small>" : ""}</strong></p>
       </div>`;
   form.hidden = false;
+  tiroirPied.hidden = false;
 }
 
 /* ---------- Coupon dans le tiroir ---------- */
@@ -385,11 +395,12 @@ form.addEventListener("submit", async (e) => {
   const sousTotal = totalPanier();
   const remise = calcRemise(sousTotal);
   const coupon = getCoupon();
-  const frais = fraisLivraison();
-  const livOfferte = (sousTotal - remise) >= livraisonOfferte;
-  const fraisReels = livOfferte ? 0 : frais;
+  const zone = zoneChoisie();
+  const livOfferte = zone.code === "oupoyo" && (sousTotal - remise) >= livraisonOfferte;
+  const fraisReels = livOfferte ? 0 : (zone.frais || 0);
+  const aDefinir = zone.frais === null; /* autre localité : frais confirmés par téléphone */
   const total = sousTotal - remise + fraisReels;
-  const zoneTxt = ZONES_LIVRAISON.find((z) => z.code === selLiv.value)?.nom || selLiv.value;
+  const zoneTxt = `${zone.nom} — ${livOfferte ? "offerte" : aDefinir ? zone.info : formatPrix(zone.frais)}`;
 
   /* Revalider le stock avant d'enregistrer */
   const rupture = panier.find((i) => {
@@ -406,7 +417,7 @@ form.addEventListener("submit", async (e) => {
     adresse_livraison: selLiv.value !== "boutique" ? nettoie(form.adresse.value, 200) : null,
     paiement: selLiv.value !== "boutique" ? "a_la_livraison" : "en_boutique",
     total,
-    note: [nettoie(form.note.value, 300), coupon ? `Coupon: ${coupon.code} (−${formatPrix(remise)})` : "", fraisReels ? `Livraison: ${formatPrix(fraisReels)}` : ""].filter(Boolean).join(" | ") || null,
+    note: [nettoie(form.note.value, 300), coupon ? `Coupon: ${coupon.code} (−${formatPrix(remise)})` : "", aDefinir ? "Frais de livraison à définir avec le client" : fraisReels ? `Livraison: ${formatPrix(fraisReels)}` : ""].filter(Boolean).join(" | ") || null,
   }).select("id").single();
 
   if (error || !cmd) { boutonChargement(btn, false); alerte("alerteCmd", "err", "L'envoi a échoué. Réessayez ou commandez sur WhatsApp."); return; }
@@ -426,11 +437,13 @@ form.addEventListener("submit", async (e) => {
   rendBarre();
   majBadgeGlobal();
   form.reset();
-  alerte("alerteCmd", "ok", `✅ Commande n°${cmd.id} enregistrée ! Total : ${formatPrix(total)}. Nous vous contactons très vite.`);
+  const txtTotal = `Total : ${formatPrix(total)}${aDefinir ? " (+ livraison à définir)" : ""}`;
+  alerte("alerteCmd", "ok", `✅ Commande n°${cmd.id} enregistrée ! ${txtTotal}. Nous vous contactons très vite.`);
   montreWA(form,
-    `Bonjour TOUCH PRO ! Je viens de passer la commande n°${cmd.id} :\n${lignes.join("\n")}${coupon ? `\nCoupon : ${coupon.code}` : ""}\n📦 ${zoneTxt}${fraisReels ? ` (+${formatPrix(fraisReels)})` : ""}\nTotal : ${formatPrix(total)}\nNom : ${nom}\nTél : ${tel}`,
+    `Bonjour TOUCH PRO ! Je viens de passer la commande n°${cmd.id} :\n${lignes.join("\n")}${coupon ? `\nCoupon : ${coupon.code}` : ""}\n📦 ${zoneTxt}\n${txtTotal}\nNom : ${nom}\nTél : ${tel}`,
     "💬 Confirmer ma commande par WhatsApp");
   form.hidden = false; /* laisser le bouton WhatsApp visible */
+  tiroirPied.hidden = true; /* commande envoyée : masquer « Valider » */
 });
 
 charge();

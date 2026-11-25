@@ -757,3 +757,30 @@ html, body { overflow-x: clip; }
   font-size: 16px !important;
   min-height: 48px;
 }
+
+/* ==========================================================================
+   v2.21 — Tiroir panier : bouton « Valider » TOUJOURS visible + livraison
+   ========================================================================== */
+.shop-tiroir { max-height: 92vh; max-height: 92dvh; }
+.tiroir-pied {
+  flex-shrink: 0;
+  padding: .7rem 1.1rem calc(.9rem + env(safe-area-inset-bottom));
+  background: #14110d;
+  border-top: 1px solid rgba(214,169,79,.35);
+  box-shadow: 0 -8px 24px rgba(0,0,0,.45);
+}
+.tiroir-pied .btn-bloc { margin-top: 0; min-height: 52px; font-size: 1rem; }
+.tiroir-corps { flex: 1 1 auto; min-height: 0; }
+
+/* Formulaire de commande : confort mobile */
+.tiroir-corps .form-tp input, .tiroir-corps .form-tp select, .tiroir-corps .form-tp textarea {
+  font-size: 16px !important; /* pas de zoom auto Chrome/Safari */
+  min-height: 48px;
+  width: 100%;
+}
+.tiroir-corps .form-tp select { padding: .7rem .8rem; }
+
+/* Récap : lignes aérées et lisibles */
+.tiroir-recap p { display: flex; justify-content: space-between; gap: 1rem; margin: .25rem 0; font-size: .9rem; }
+.tiroir-recap .tiroir-total { margin-top: .5rem; padding-top: .5rem; border-top: 1px dashed rgba(214,169,79,.25); }
+.tiroir-total small { font-size: .7rem; color: #b3a78f; font-weight: 400; }
