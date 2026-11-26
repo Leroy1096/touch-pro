@@ -5,7 +5,7 @@
    - Compte administrateur ≠ compte client : le bouton Administration
      n'apparaît que si le serveur confirme le rôle (is_admin côté BDD).
    ========================================================================== */
-import { initPage, getSupabase, esc, formatPrix, alerte, boutonChargement, nettoie, toast } from "./tp-pages.js?v=21";
+import { initPage, getSupabase, esc, formatPrix, alerte, boutonChargement, nettoie, toast } from "./tp-pages.js?v=23";
 
 /* ==========================================================================
    v2.19 — Œil mot de passe : afficher/masquer la saisie (mobile-friendly)
@@ -43,6 +43,29 @@ const STATUTS = {
 };
 const badge = (s) => { const [l, c] = STATUTS[s] || [s, "#a99e88"]; return `<span class="statut" style="background:${c}22;color:${c};border:1px solid ${c}66">${esc(l)}</span>`; };
 const d8 = (d) => new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
+
+/* ---------- Suivi de colis (v2.25) ---------- */
+const ETAPES_CMD = [
+  ["en_attente", "📥", "Reçue"],
+  ["confirmee", "✅", "Confirmée"],
+  ["prete", "📦", "Prête"],
+  ["livree", "🎉", "Livrée"],
+];
+const TXT_LIVRAISON = { boutique: "🏬 Retrait en boutique", oupoyo: "🚚 Livraison Oupoyo", autre: "🌍 Livraison autre localité", livraison: "🚚 Livraison" };
+function suiviColis(c) {
+  if (c.statut === "annulee") return `<p class="suivi-annule">❌ Commande annulée — contactez-nous sur WhatsApp si besoin.</p>`;
+  const idx = Math.max(0, ETAPES_CMD.findIndex(([k]) => k === c.statut));
+  return `<div class="suivi" role="img" aria-label="Suivi : ${ETAPES_CMD[idx][2]}">` + ETAPES_CMD.map(([k, ic, nom], i) =>
+    `<div class="etape ${i < idx ? "faite" : i === idx ? "faite encours" : ""}"><i>${i < idx ? "✓" : ic}</i>${nom}</div>`).join("") + `</div>
+    <p class="suivi-note">📲 Le salon vous informe de l'avancement par WhatsApp.</p>`;
+}
+function carteCommande(c) {
+  return `<div class="cmd-carte">
+    <div class="cmd-tete"><b>Commande n°${c.id}</b><span class="cmd-total">${formatPrix(c.total)}</span></div>
+    <div class="cmd-tete"><small>${d8(c.created_at)}</small><small>${TXT_LIVRAISON[c.livraison] || "🏬 Retrait boutique"}</small></div>
+    ${suiviColis(c)}
+  </div>`;
+}
 
 const form = document.getElementById("formAuth");
 const btnAuth = document.getElementById("btnAuth");
@@ -147,10 +170,10 @@ async function rafraichitVue() {
       ? `<div style="overflow-x:auto"><table class="tp-table"><tr>${cols.map((c) => `<th>${c}</th>`).join("")}</tr>${rows.map(rendu).join("")}</table></div>`
       : `<div class="tp-vide">${msgVide}</div>`;
 
-  const { data: cmds } = await sb.from("commandes").select("id,total,statut,created_at").eq("client_id", user.id).order("id", { ascending: false });
-  document.getElementById("mesCommandes").innerHTML = tableau(cmds, ["N°", "Total", "Statut", "Date"],
-    (c) => `<tr><td>#${c.id}</td><td>${formatPrix(c.total)}</td><td>${badge(c.statut)}</td><td>${d8(c.created_at)}</td></tr>`,
-    "Aucune commande pour le moment — visitez la boutique !");
+  const { data: cmds } = await sb.from("commandes").select("id,total,statut,livraison,created_at").eq("client_id", user.id).order("id", { ascending: false });
+  document.getElementById("mesCommandes").innerHTML = cmds?.length
+    ? cmds.map(carteCommande).join("")
+    : `<div class="tp-vide">Aucune commande pour le moment — visitez la boutique !</div>`;
 
   const { data: reps } = await sb.from("reparations").select("id,appareil,panne,statut,devis_montant,created_at").eq("client_id", user.id).order("id", { ascending: false });
   document.getElementById("mesReparations").innerHTML = tableau(reps, ["Suivi", "Appareil", "Statut", "Devis", "Date"],

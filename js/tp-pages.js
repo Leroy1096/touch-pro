@@ -115,8 +115,16 @@ export function montreWA(zone, message, libelle = "💬 Confirmer par WhatsApp")
 export async function clientCourant() {
   const sb = await getSupabase();
   if (!sb) return { sb: null, user: null };
-  const { data } = await sb.auth.getUser();
-  return { sb, user: data?.user || null };
+  try {
+    const { data } = await sb.auth.getUser();
+    if (data?.user) return { sb, user: data.user };
+  } catch { /* réseau lent : repli sur la session locale */ }
+  try {
+    /* getSession = lecture LOCALE (aucun réseau) : le client connecté
+       n'est jamais bloqué par une 3G capricieuse au moment de commander. */
+    const { data } = await sb.auth.getSession();
+    return { sb, user: data?.session?.user || null };
+  } catch { return { sb, user: null }; }
 }
 
 /* ============================ RENDUS ============================ */

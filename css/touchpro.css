@@ -1046,3 +1046,44 @@ html, body { overflow-x: clip; }
 [data-theme="light"] .kpi div { background: #ffffff; border-color: rgba(154,116,24,.28); }
 [data-theme="light"] .kpi span { color: #5f5748; }
 [data-theme="light"] .adm select, [data-theme="light"] .adm input, [data-theme="light"] .adm textarea { background: #ffffff; color: #171310; }
+
+/* ==========================================================================
+   v2.25 — SUIVI DE COMMANDE (timeline colis) dans l'espace client
+   ========================================================================== */
+.cmd-carte {
+  background: #16120c; border: 1px solid rgba(214,169,79,.22);
+  border-radius: 16px; padding: 1rem 1.1rem; margin-bottom: .9rem;
+}
+.cmd-carte .cmd-tete { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+.cmd-carte .cmd-tete b { color: #fdf9f1; font-size: .98rem; }
+.cmd-carte .cmd-tete small { color: #8a7b5e; font-size: .75rem; }
+.cmd-carte .cmd-total { color: var(--tp-or); font-weight: 800; }
+.cmd-carte .cmd-livraison { color: #b3a78f; font-size: .78rem; margin-top: .2rem; }
+
+.suivi { display: flex; align-items: flex-start; margin-top: .9rem; }
+.suivi .etape { flex: 1; text-align: center; position: relative; font-size: .64rem; line-height: 1.25; color: #8a7b5e; }
+.suivi .etape i {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  margin: 0 auto .3rem; border-radius: 50%; font-style: normal; font-size: .8rem;
+  background: #1d1913; border: 1px solid rgba(214,169,79,.3);
+  position: relative; z-index: 1; transition: .3s;
+}
+.suivi .etape::before {
+  content: ""; position: absolute; top: 15px; left: -50%; width: 100%; height: 2px;
+  background: rgba(214,169,79,.18);
+}
+.suivi .etape:first-child::before { display: none; }
+.suivi .etape.faite { color: var(--tp-or); font-weight: 700; }
+.suivi .etape.faite i { background: var(--tp-or); color: #171310; border-color: var(--tp-or); }
+.suivi .etape.faite::before { background: var(--tp-or); }
+.suivi .etape.encours i { box-shadow: 0 0 0 5px rgba(214,169,79,.18); animation: tpWaPulse 2.4s infinite; }
+.suivi-annule { color: #ef8585; font-size: .85rem; font-weight: 600; margin-top: .7rem; }
+.suivi-note { color: #8a7b5e; font-size: .72rem; margin-top: .6rem; }
+
+[data-theme="light"] .cmd-carte { background: #ffffff; border-color: rgba(154,116,24,.25); box-shadow: 0 2px 10px rgba(27,23,18,.05); }
+[data-theme="light"] .cmd-carte .cmd-tete b { color: #171310; }
+[data-theme="light"] .cmd-carte .cmd-livraison { color: #5f5748; }
+[data-theme="light"] .suivi .etape i { background: #f1ead9; border-color: rgba(154,116,24,.3); }
+[data-theme="light"] .suivi .etape.faite i { background: var(--tp-or); color: #ffffff; border-color: var(--tp-or); }
+[data-theme="light"] .suivi .etape.faite { color: var(--tp-or); }
+[data-theme="light"] .suivi-annule { color: #a03020; }

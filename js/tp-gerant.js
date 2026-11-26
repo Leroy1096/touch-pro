@@ -4,8 +4,8 @@
    ========================================================================== */
 
 import { getSupabase } from "../js/supabaseClient.js?v=24";
-import { CATEGORIES_BOUTIQUE, initBasculeTheme } from "../js/tp-config.js?v=20";
-import { esc, formatPrix, alerte, boutonChargement } from "../js/tp-pages.js?v=21";
+import { CATEGORIES_BOUTIQUE, initBasculeTheme } from "../js/tp-config.js?v=21";
+import { esc, formatPrix, alerte, boutonChargement } from "../js/tp-pages.js?v=23";
 
 const $ = (id) => document.getElementById(id);
 
@@ -15,6 +15,25 @@ const RAYONS = CATEGORIES_BOUTIQUE.filter((c) => c.code);
 const nomRayon = (code) => CATEGORIES_BOUTIQUE.find((c) => c.code === code)?.nom || code || "—";
 const STATUTS_CMD = { en_attente: "Nouvelle", confirmee: "En préparation", prete: "Prête", livree: "Livrée", annulee: "Annulée" };
 const ETAG_STATUT = { en_attente: "bleu", confirmee: "or", prete: "or", livree: "vert", annulee: "rouge" };
+
+/* ---------- Suivi colis : notification WhatsApp du client (v2.25) ---------- */
+const telInternational = (t) => {
+  let d = String(t || "").replace(/\D/g, "");
+  if (d.startsWith("00225")) d = d.slice(2);
+  if (d.startsWith("0") && d.length === 10) d = "225" + d.slice(1);
+  return d;
+};
+const MSG_STATUT_CMD = {
+  en_attente: (c) => `Bonjour ${c.client_nom || ""} ! Nous avons bien reçu votre commande n°${c.id} 📥 (${formatPrix(c.total)}). Nous vous confirmons très vite. — TOUCH PRO, Oupoyo`,
+  confirmee: (c) => `Bonjour ${c.client_nom || ""} ! Votre commande n°${c.id} est CONFIRMÉE ✅ (${formatPrix(c.total)}). Nous la préparons tout de suite. — TOUCH PRO, Oupoyo`,
+  prete: (c) => c.livraison === "boutique"
+    ? `Bonjour ${c.client_nom || ""} ! Votre commande n°${c.id} est PRÊTE 🎉 Retirez-la en boutique : Oupoyo, derrière le marché, Carrefour Boutique de Malick (Lun–Sam 08h–20h). — TOUCH PRO`
+    : `Bonjour ${c.client_nom || ""} ! Votre commande n°${c.id} est PRÊTE 🎉 et part en livraison. Nous vous appelons pour la remise. — TOUCH PRO, Oupoyo`,
+  livree: (c) => `Bonjour ${c.client_nom || ""} ! Votre commande n°${c.id} a été LIVRÉE 🚚 Merci de votre confiance 🙏 Une note sur le site nous aide beaucoup ! — TOUCH PRO, Oupoyo`,
+  annulee: (c) => `Bonjour ${c.client_nom || ""}. Votre commande n°${c.id} a été annulée. Pour toute question, répondez à ce message ou appelez le 01 40 81 04 15. — TOUCH PRO, Oupoyo`,
+};
+const lienNotifClient = (c) =>
+  `https://wa.me/${telInternational(c.client_telephone)}?text=${encodeURIComponent(MSG_STATUT_CMD[c.statut](c))}`;
 
 let sb = null;
 const cache = { commandes: null, items: null, clients: null, produits: null, avis: null, admins: null };
@@ -307,7 +326,7 @@ function rendCommandes() {
         <div>
           <h4>#${c.id} — ${esc(c.client_nom || "Client")}</h4>
           <p class="meta">📞 ${esc(c.client_telephone || "—")} · ${fmtDate(c.created_at)}<br>
-          🚚 ${c.livraison === "livraison" ? "Livraison" : "Retrait boutique"}${c.adresse_livraison ? " — " + esc(c.adresse_livraison) : ""} · 💳 ${c.paiement === "livraison" ? "À la livraison" : "À la boutique"}</p>
+          🚚 ${{ boutique: "Retrait boutique", oupoyo: "Livraison Oupoyo", autre: "Livraison autre localité", livraison: "Livraison" }[c.livraison] || "Retrait boutique"}${c.adresse_livraison ? " — " + esc(c.adresse_livraison) : ""} · 💳 ${c.paiement === "a_la_livraison" || c.paiement === "livraison" ? "À la livraison" : "À la boutique"}</p>
         </div>
         <div style="text-align:right">
           <div class="total">${formatPrix(c.total)}</div>
@@ -320,7 +339,8 @@ function rendCommandes() {
         <select data-cmd="${c.id}" class="sel-statut">
           ${Object.entries(STATUTS_CMD).map(([v, n]) => `<option value="${v}" ${c.statut === v ? "selected" : ""}>${n}</option>`).join("")}
         </select>
-        <a class="btn btn-wa" href="https://wa.me/${String(c.client_telephone || "").replace(/\D/g, "")}" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="btn btn-wa" href="https://wa.me/${telInternational(c.client_telephone)}" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a class="btn btn-or btn-notifier" href="${lienNotifClient(c)}" target="_blank" rel="noopener" title="Envoyer au client le message correspondant au statut actuel">📲 Notifier</a>
       </div>
     </div>`;
   }).join("");
@@ -328,7 +348,15 @@ function rendCommandes() {
     const id = +e.target.dataset.cmd;
     const { error } = await sb.from("commandes").update({ statut: e.target.value }).eq("id", id);
     if (error) alert("Erreur : " + error.message);
-    else { cache.commandes.find((c) => c.id === id).statut = e.target.value; rendCommandes(); }
+    else {
+      const cmd = cache.commandes.find((c) => c.id === id);
+      cmd.statut = e.target.value;
+      rendCommandes();
+      /* Suivi colis : proposer d'envoyer le message de statut au client */
+      if (cmd.client_telephone && confirm(`Statut mis à jour : « ${STATUTS_CMD[cmd.statut]} ».\n\n📲 Envoyer le message de suivi WhatsApp à ${cmd.client_nom || "ce client"} ?`)) {
+        window.open(lienNotifClient(cmd), "_blank", "noopener");
+      }
+    }
   }));
 }
 

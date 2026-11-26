@@ -7,7 +7,7 @@ import {
   initPage, getPanier, retireDuPanier, changeQte, videPanier, totalPanier,
   formatPrix, esc, nettoie, alerte, boutonChargement, montreWA,
   clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase, exigeCompte,
-} from "./tp-pages.js?v=22";
+} from "./tp-pages.js?v=23";
 import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=21";
 
 initPage("boutique.html");
@@ -443,7 +443,13 @@ form.addEventListener("submit", async (e) => {
     note: [nettoie(form.note.value, 300), coupon ? `Coupon: ${coupon.code} (−${formatPrix(remise)})` : "", aDefinir ? "Frais de livraison à définir avec le client" : fraisReels ? `Livraison: ${formatPrix(fraisReels)}` : ""].filter(Boolean).join(" | ") || null,
   }).select("id").single();
 
-  if (error || !cmd) { boutonChargement(btn, false); alerte("alerteCmd", "err", "L'envoi a échoué. Réessayez ou commandez sur WhatsApp."); return; }
+  if (error || !cmd) {
+    boutonChargement(btn, false);
+    /* Montre la vraie raison (ex. anti-spam) plutôt qu'un message générique */
+    const msgSql = error?.message && !/fetch|network|failed|timeout/i.test(error.message) ? error.message : "";
+    alerte("alerteCmd", "err", msgSql ? `⚠️ ${msgSql}` : "L'envoi a échoué. Réessayez ou commandez sur WhatsApp : wa.me/2250140810415");
+    return;
+  }
 
   const items = panier.map((i) => ({
     commande_id: cmd.id, produit_id: /^\d+$/.test(String(i.id)) ? Number(i.id) : null, nom_produit: i.nom,
