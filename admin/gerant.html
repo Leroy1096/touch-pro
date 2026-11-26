@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(){try{var t=localStorage.getItem("theme")||(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="light"?"#ffffff":"#0b0a08")}catch(e){document.documentElement.dataset.theme="dark"}})();</script>
   <title>Espace Gérant — TOUCH PRO</title>
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="../images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
   <link rel="stylesheet" href="../css/style.css?v=23">
-  <link rel="stylesheet" href="../css/touchpro.css?v=23">
+  <link rel="stylesheet" href="../css/touchpro.css?v=26">
   <style>
     /* ---------- Panneau Gérant — style tableau de bord pro ---------- */
     body { background: #0b0a08; }
@@ -126,7 +127,7 @@
     .ligne textarea { width: 100%; background: #0b0a08; border: 1px solid rgba(214,169,79,.25); color: var(--blanc); border-radius: 10px; padding: .6rem .8rem; font-size: .85rem; min-height: 64px; margin-top: .6rem; }
   </style>
 </head>
-<body>
+<body class="gerant-body">
 
   <!-- Connexion -->
   <div class="gerant" id="zoneLogin">
@@ -165,6 +166,7 @@
       </div>
       <div class="top-actions">
         <a class="btn btn-contour" href="touchpro.html" title="Réparations, devis, publications, promotions">🛠️ Classique</a>
+        <button class="tp-theme-toggle" id="btnTheme" type="button" aria-label="Basculer entre le thème sombre et le thème clair" title="Changer de thème" style="width:40px;height:40px"></button>
         <button class="btn btn-contour" id="btnOut">⏻</button>
       </div>
     </div>
@@ -313,6 +315,6 @@
     </section>
   </div>
 
-  <script type="module" src="../js/tp-gerant.js?v=23"></script>
+  <script type="module" src="../js/tp-gerant.js?v=24"></script>
 </body>
 </html>

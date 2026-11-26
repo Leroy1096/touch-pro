@@ -9,6 +9,11 @@
   --tp-bleu-fonce: #1b7fd0;
   --tp-or: #d6a94f;
   --tp-wa: #22b358;
+  /* Alias historiques utilisés par le panneau Gérant et divers composants */
+  --or: #d6a94f;
+  --or-clair: #e9cd93;
+  --blanc: #f5f2ea;
+  --gris: #b3a78f;
 }
 
 /* ---------- En-tête TOUCH PRO ---------- */
@@ -784,3 +789,260 @@ html, body { overflow-x: clip; }
 .tiroir-recap p { display: flex; justify-content: space-between; gap: 1rem; margin: .25rem 0; font-size: .9rem; }
 .tiroir-recap .tiroir-total { margin-top: .5rem; padding-top: .5rem; border-top: 1px dashed rgba(214,169,79,.25); }
 .tiroir-total small { font-size: .7rem; color: #b3a78f; font-weight: 400; }
+
+/* ==========================================================================
+   v2.22 — THÈME CLAIR (fond blanc, écriture noire) + bouton de bascule
+   Le thème noir/or reste l'identité d'origine ; le visiteur peut basculer.
+   ========================================================================== */
+
+/* --- Transition douce lors de la bascule --- */
+.tp-transit, .tp-transit::before, .tp-transit::after,
+.tp-transit *, .tp-transit *::before, .tp-transit *::after {
+  transition: background-color .5s ease, color .5s ease,
+              border-color .5s ease, box-shadow .5s ease !important;
+}
+
+/* --- Bouton soleil/lune dans la barre de navigation --- */
+.tp-theme-toggle {
+  display: grid; place-items: center;
+  width: 42px; height: 42px; flex: none;
+  border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(214,169,79,.4);
+  background: rgba(214,169,79,.12);
+  color: var(--tp-or);
+  margin-right: .5rem; padding: 0;
+  transition: transform .25s, border-color .25s, background-color .25s;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.tp-theme-toggle:hover { transform: rotate(18deg) scale(1.06); border-color: var(--tp-or); }
+.tp-theme-toggle:active { transform: scale(.92); }
+.tp-theme-toggle svg { width: 20px; height: 20px; pointer-events: none; }
+
+/* --- Jetons du thème clair : fond blanc, encre noire, or assombri --- */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-alt: #f6f1e7;
+  --surface: #ffffff;
+  --text: #171310;
+  --heading: #0f0d0a;
+  --muted: #5f5748;
+  --border: #e5dcc8;
+  --tp-or: #9a7418;          /* or assombri : lisible sur fond blanc */
+  --tp-bleu: #1274c4;
+  --tp-bleu-fonce: #0e5ea0;
+  --or: #9a7418;
+  --or-clair: #8a6a1f;
+  --blanc: #171310;
+  --gris: #5f5748;
+  --shadow-sm: 0 2px 10px rgba(27, 23, 18, 0.06);
+  --shadow: 0 12px 34px rgba(27, 23, 18, 0.1);
+  --shadow-lg: 0 24px 60px rgba(27, 23, 18, 0.16);
+}
+
+/* --- En-tête --- */
+[data-theme="light"] .tp-header { background: rgba(255,255,255,.92); border-bottom-color: rgba(154,116,24,.35); }
+[data-theme="light"] .tp-logo .nom { color: #171310; }
+[data-theme="light"] .tp-nav nav a { color: #5f5748; }
+[data-theme="light"] .tp-nav nav a:hover { color: var(--tp-or); }
+[data-theme="light"] .tp-nav nav a.actif { color: #171310; background: #e9cd93; }
+[data-theme="light"] .tp-nav .nav-compte { color: var(--tp-or); border-color: var(--tp-or); }
+[data-theme="light"] .tp-nav .nav-compte:hover { background: var(--tp-or); color: #ffffff; }
+[data-theme="light"] .tp-burger { color: var(--tp-or); border-color: rgba(154,116,24,.45); background: #ffffff; }
+@media (max-width: 920px) {
+  [data-theme="light"] .tp-nav nav { background: rgba(255,255,255,.98); border-bottom-color: rgba(154,116,24,.3); }
+}
+[data-theme="light"] .tp-panier-tete { background: rgba(154,116,24,.1); border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .tp-panier-tete span { background: var(--tp-or); color: #ffffff; }
+[data-theme="light"] .tp-theme-toggle { background: rgba(154,116,24,.1); border-color: rgba(154,116,24,.4); }
+
+/* --- Hero : voile blanc sur la photo, encre noire --- */
+[data-theme="light"] .tp-hero::after {
+  background: linear-gradient(100deg, rgba(255,255,255,.95) 20%, rgba(255,255,255,.78) 60%, rgba(255,255,255,.55)),
+              radial-gradient(800px 300px at 80% 100%, rgba(18,116,196,.1), transparent 60%);
+}
+[data-theme="light"] .tp-hero .kicker { color: var(--tp-or); border-color: rgba(154,116,24,.5); background: rgba(255,255,255,.6); }
+[data-theme="light"] .tp-hero h1 { color: #171310; }
+[data-theme="light"] .tp-hero h1 span, [data-theme="light"] .tp-hero h1 em {
+  background: linear-gradient(120deg, #b98c2a, #9a7418 55%, #6f5410);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+[data-theme="light"] .tp-hero .lead { color: #3d372c; }
+[data-theme="light"] .tp-hero .hero-rating { color: #3d372c; }
+[data-theme="light"] .tp-hero .hero-rating strong { color: #171310; }
+[data-theme="light"] .btn-contour { background: rgba(255,255,255,.55); color: var(--tp-or); border-color: var(--tp-or); }
+[data-theme="light"] .btn-contour:hover { background: var(--tp-or); color: #ffffff; }
+
+/* --- Sections & titres --- */
+[data-theme="light"] .tp-section.alt { background: #f6f1e7; }
+[data-theme="light"] .tp-section-titre h2 { color: #171310; }
+[data-theme="light"] .tp-section-titre p { color: #5f5748; }
+
+/* --- Bandeau stats --- */
+[data-theme="light"] .tp-stats { background: linear-gradient(135deg, #faf5ea, #f1e8d4); border-block-color: rgba(154,116,24,.3); }
+[data-theme="light"] .tp-stat + .tp-stat { border-left-color: rgba(154,116,24,.22); }
+[data-theme="light"] .tp-stat span { color: #5f5748; }
+
+/* --- Cartes départements : texte sur photo, inchangé (toujours lisible) --- */
+[data-theme="light"] .tp-dept { border-color: rgba(154,116,24,.4); box-shadow: 0 10px 30px rgba(27,23,18,.12); }
+[data-theme="light"] .tp-dept:hover { box-shadow: 0 24px 60px rgba(27,23,18,.25); }
+
+/* --- Cartes produits / actus / promos --- */
+[data-theme="light"] .tp-carte { background: #ffffff; border-color: rgba(154,116,24,.25); box-shadow: 0 2px 12px rgba(27,23,18,.05); }
+[data-theme="light"] .tp-carte:hover { box-shadow: 0 20px 50px rgba(27,23,18,.16); border-color: rgba(154,116,24,.5); }
+[data-theme="light"] .tp-carte .visuel { background: #f1ead9; }
+[data-theme="light"] .tp-carte h3 { color: #171310; }
+[data-theme="light"] .tp-carte p { color: #5f5748; }
+[data-theme="light"] .tp-vide { color: #5f5748; border-color: rgba(154,116,24,.4); }
+
+/* --- Témoignages --- */
+[data-theme="light"] .tp-temoignage { background: #ffffff; border-left-color: var(--tp-or); box-shadow: 0 2px 12px rgba(27,23,18,.06); }
+[data-theme="light"] .tp-temoignage p { color: #3d372c; }
+
+/* --- Pied de page --- */
+[data-theme="light"] .tp-footer { background: #f6f1e7; border-top-color: rgba(154,116,24,.3); }
+[data-theme="light"] .tp-footer p, [data-theme="light"] .tp-footer a { color: #5f5748; }
+[data-theme="light"] .tp-footer a:hover { color: var(--tp-or); }
+[data-theme="light"] .tp-footer .signature { border-top-color: rgba(27,23,18,.1); color: #8a7b5e; }
+
+/* --- Formulaires --- */
+[data-theme="light"] .form-tp input, [data-theme="light"] .form-tp select, [data-theme="light"] .form-tp textarea {
+  background: #ffffff; color: #171310; border-color: rgba(154,116,24,.4);
+}
+[data-theme="light"] .form-tp input:focus, [data-theme="light"] .form-tp select:focus, [data-theme="light"] .form-tp textarea:focus {
+  border-color: var(--tp-or); box-shadow: 0 0 0 3px rgba(154,116,24,.16);
+}
+[data-theme="light"] .form-tp label { color: #5f5748; }
+[data-theme="light"] .alerte-ok { background: rgba(34,140,80,.1); border-color: rgba(34,140,80,.4); color: #1c6b3c; }
+[data-theme="light"] .alerte-err { background: rgba(190,50,40,.08); border-color: rgba(190,50,40,.4); color: #a03020; }
+
+/* --- Auth / tables / filtres --- */
+[data-theme="light"] .auth-tabs button, [data-theme="light"] .filtres button {
+  background: #ffffff; color: #5f5748; border-color: rgba(154,116,24,.35);
+}
+[data-theme="light"] .auth-tabs button.actif, [data-theme="light"] .filtres button.actif { background: var(--tp-or); color: #ffffff; }
+[data-theme="light"] .tp-table td, [data-theme="light"] .tp-table th { border-bottom-color: rgba(154,116,24,.2); }
+[data-theme="light"] .tp-badge { background: rgba(154,116,24,.12); border-color: rgba(154,116,24,.45); }
+[data-theme="light"] .tp-intro { color: #3d372c; }
+
+/* --- Menu déroulant Départements --- */
+[data-theme="light"] .nav-deroulant .sous-menu { background: #ffffff; border-color: rgba(154,116,24,.4); box-shadow: 0 18px 40px rgba(27,23,18,.14); }
+@media (max-width: 920px) {
+  [data-theme="light"] .nav-deroulant .sous-menu { background: transparent; box-shadow: none; }
+}
+
+/* --- Galerie --- */
+[data-theme="light"] .tp-galerie img { border-color: rgba(154,116,24,.3); }
+
+/* ============ BOUTIQUE (version claire) ============ */
+[data-theme="light"] .shop-topbar { background: linear-gradient(#ffffff 82%, transparent); }
+[data-theme="light"] .shop-recherche { background: #ffffff; border-color: rgba(154,116,24,.4); }
+[data-theme="light"] .shop-recherche input { color: #171310; }
+[data-theme="light"] .shop-compte { background: #ffffff; border-color: rgba(154,116,24,.4); }
+[data-theme="light"] .shop-promobar { color: #5f5748; border-bottom-color: rgba(154,116,24,.25); }
+[data-theme="light"] .shop-chips { background: linear-gradient(#ffffff 85%, transparent); }
+[data-theme="light"] .shop-chips button { background: #ffffff; color: #5f5748; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .shop-chips button.actif { background: var(--tp-or); color: #ffffff; border-color: var(--tp-or); }
+[data-theme="light"] .shop-carte { background: #ffffff; border-color: rgba(154,116,24,.22); box-shadow: 0 2px 10px rgba(27,23,18,.05); }
+[data-theme="light"] .shop-carte:hover { border-color: rgba(154,116,24,.5); box-shadow: 0 14px 34px rgba(27,23,18,.14); }
+[data-theme="light"] .shop-carte .visuel { background: #f1ead9; }
+[data-theme="light"] .shop-carte .badge-rupture { background: rgba(255,255,255,.88); color: #a03020; }
+[data-theme="light"] .shop-carte .fav { background: rgba(255,255,255,.85); }
+[data-theme="light"] .shop-carte .infos h3 { color: #241f16; }
+[data-theme="light"] .shop-carte .sel-taille { background: #ffffff; color: #171310; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .shop-carte .jauge { background: rgba(154,116,24,.18); }
+[data-theme="light"] .shop-carte .jauge-txt { color: #8a6f2e; }
+[data-theme="light"] .shop-carte .stock-bas { color: #b36a1a; }
+[data-theme="light"] .shop-carte .meta { color: #8a7b5e; }
+[data-theme="light"] .shop-carte .badge-art { background: rgba(255,255,255,.88); }
+[data-theme="light"] .shop-note { color: #5f5748; }
+[data-theme="light"] .flash-tete h2 { color: #171310; }
+[data-theme="light"] .flash-timer { color: #5f5748; }
+[data-theme="light"] .coupon { background: linear-gradient(120deg, rgba(154,116,24,.1), rgba(154,116,24,.03)); border-color: rgba(154,116,24,.5); }
+[data-theme="light"] .coupon-gauche { border-right-color: rgba(154,116,24,.4); }
+[data-theme="light"] .coupon-gauche small { color: #5f5748; }
+[data-theme="light"] .coupon-droite code { color: #171310; }
+[data-theme="light"] .coupon-droite small { color: #8a7b5e; }
+[data-theme="light"] .coupon-droite button { background: var(--tp-or); color: #ffffff; }
+[data-theme="light"] .shop-tri span { color: #8a7b5e; }
+[data-theme="light"] .shop-tri select { background: #ffffff; color: #171310; border-color: rgba(154,116,24,.4); }
+
+/* --- Barre panier + tiroir (clair) --- */
+[data-theme="light"] .shop-barre-panier { background: rgba(255,255,255,.97); border-top-color: rgba(154,116,24,.4); box-shadow: 0 -8px 30px rgba(27,23,18,.14); }
+[data-theme="light"] .shop-barre-panier .total small { color: #5f5748; }
+[data-theme="light"] .shop-tiroir { background: #ffffff; border-top-color: rgba(154,116,24,.45); }
+[data-theme="light"] .tiroir-tete h3 { color: #171310; }
+[data-theme="light"] .tiroir-tete button { background: #ffffff; color: #5f5748; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .tiroir-tete { border-bottom-color: rgba(154,116,24,.3); }
+[data-theme="light"] #contenuPanier .ligne { border-bottom-color: rgba(154,116,24,.2); }
+[data-theme="light"] #contenuPanier .ligne .infos small { color: #8a7b5e; }
+[data-theme="light"] #contenuPanier .ligne .qte button { background: #ffffff; }
+[data-theme="light"] #contenuPanier .ligne .suppr { color: #a03020; }
+[data-theme="light"] .tiroir-corps .form-tp h4 { color: #171310; }
+[data-theme="light"] .tiroir-corps .form-tp label { color: #5f5748; }
+[data-theme="light"] .tiroir-corps .form-tp input, [data-theme="light"] .tiroir-corps .form-tp select, [data-theme="light"] .tiroir-corps .form-tp textarea {
+  background: #ffffff; color: #171310; border-color: rgba(154,116,24,.4);
+}
+[data-theme="light"] .tiroir-paiement { color: #5f5748; }
+[data-theme="light"] .tiroir-pied { background: #ffffff; border-top-color: rgba(154,116,24,.4); box-shadow: 0 -8px 24px rgba(27,23,18,.14); }
+[data-theme="light"] .tiroir-recap { border-top-color: rgba(154,116,24,.3); }
+[data-theme="light"] .tiroir-recap p { color: #5f5748; }
+[data-theme="light"] .tiroir-recap .remise span:last-child { color: #1c6b3c; }
+[data-theme="light"] .tiroir-recap .tiroir-total { color: #171310; }
+[data-theme="light"] .tiroir-total small { color: #8a7b5e; }
+[data-theme="light"] .coupon-zone { border-color: rgba(154,116,24,.4); }
+[data-theme="light"] .coupon-zone label { color: #5f5748; }
+[data-theme="light"] .coupon-ligne input { background: #ffffff; color: #171310; border-color: rgba(154,116,24,.4); }
+[data-theme="light"] .coupon-ligne button { background: var(--tp-or); color: #ffffff; }
+
+/* --- Fiche produit (clair) --- */
+[data-theme="light"] .produit-visuel { background: #f1ead9; border-color: rgba(154,116,24,.25); }
+[data-theme="light"] .produit-visuel .badge-art { background: rgba(255,255,255,.88); }
+[data-theme="light"] .produit-corps h1 { color: #171310; }
+[data-theme="light"] .produit-corps .meta { color: #8a6f2e; }
+[data-theme="light"] .produit-corps .promo-txt { color: #1c6b3c; }
+[data-theme="light"] .produit-corps .stock-bas { color: #b36a1a; }
+[data-theme="light"] .bloc-tailles h4, [data-theme="light"] .bloc-qte h4 { color: #5f5748; }
+[data-theme="light"] .tailles button { background: #ffffff; color: #171310; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .tailles button.actif { background: var(--tp-or); color: #ffffff; border-color: var(--tp-or); }
+[data-theme="light"] .qte-grand button { background: #ffffff; }
+[data-theme="light"] .produit-corps .desc { color: #3d372c; }
+[data-theme="light"] .produit-corps .points li { color: #5f5748; }
+[data-theme="light"] .garanties div { background: #ffffff; color: #5f5748; border-color: rgba(154,116,24,.22); }
+[data-theme="light"] .titre-sim { color: #171310; }
+[data-theme="light"] .sim { background: #ffffff; border-color: rgba(154,116,24,.22); }
+[data-theme="light"] .sim .emoji { background: #f1ead9; }
+[data-theme="light"] .sim strong { color: #241f16; }
+
+/* --- Vitrines affiches & checklist (clair) --- */
+[data-theme="light"] .affiche-cadre { box-shadow: 0 24px 60px rgba(27,23,18,.18), 0 0 44px rgba(154,116,24,.1); }
+[data-theme="light"] .tp-garanties div { background: #ffffff; color: #5f5748; border-color: rgba(154,116,24,.25); }
+[data-theme="light"] .tp-checklist li { color: #3d372c; border-bottom-color: rgba(154,116,24,.18); }
+[data-theme="light"] .tp-checklist li strong { color: #171310; }
+
+/* --- Catalogue de services (clair) --- */
+[data-theme="light"] .catalogue-cat { background: #ffffff; border-color: rgba(154,116,24,.22); box-shadow: 0 2px 12px rgba(27,23,18,.05); }
+[data-theme="light"] .catalogue-cat:hover { box-shadow: 0 16px 40px rgba(27,23,18,.14); border-color: rgba(154,116,24,.4); }
+[data-theme="light"] .catalogue-cat h3 { color: #171310; }
+[data-theme="light"] .catalogue-cat li { border-bottom-color: rgba(154,116,24,.16); }
+[data-theme="light"] .catalogue-cat li[role="button"]:hover, [data-theme="light"] .catalogue-cat li[role="button"]:focus-visible { background: rgba(154,116,24,.08); }
+[data-theme="light"] .catalogue-cat .s-nom { color: #241f16; }
+[data-theme="light"] .catalogue-cat li small { color: #8a7b5e; }
+
+/* ============ PANNEAU GÉRANT & ADMIN (clair) ============ */
+[data-theme="light"] body.gerant-body, [data-theme="light"] .adm-body { background: #f6f1e7; }
+[data-theme="light"] .gtabs { background: #f6f1e7; }
+[data-theme="light"] .gtabs button, [data-theme="light"] .pilules button { background: #ffffff; color: #8a6f2e; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .gtabs button.actif, [data-theme="light"] .pilules button.actif { background: var(--tp-or); color: #ffffff; border-color: var(--tp-or); }
+[data-theme="light"] .carte-stat, [data-theme="light"] .panneau, [data-theme="light"] .ligne { background: #ffffff; border-color: rgba(154,116,24,.22); box-shadow: 0 2px 10px rgba(27,23,18,.05); }
+[data-theme="light"] .carte-stat .val { color: #171310; }
+[data-theme="light"] .recherche input, [data-theme="light"] .form-ajout input, [data-theme="light"] .form-ajout select, [data-theme="light"] .form-ajout textarea, [data-theme="light"] .ligne textarea { background: #ffffff; color: #171310; border-color: rgba(154,116,24,.3); }
+[data-theme="light"] .ligne select, [data-theme="light"] .champ-prix input { background: #ffffff; color: #171310; }
+[data-theme="light"] .thumb { background: #eee7d6; }
+[data-theme="light"] .vide { color: #5f5748; border-color: rgba(154,116,24,.35); }
+[data-theme="light"] .reponse-gerant { background: rgba(154,116,24,.08); }
+[data-theme="light"] .etag.gris { background: rgba(27,23,18,.07); }
+[data-theme="light"] .adm-tabs button { background: #ffffff; color: #5f5748; }
+[data-theme="light"] .adm-tabs button.actif { background: var(--tp-or); color: #ffffff; }
+[data-theme="light"] .kpi div { background: #ffffff; border-color: rgba(154,116,24,.28); }
+[data-theme="light"] .kpi span { color: #5f5748; }
+[data-theme="light"] .adm select, [data-theme="light"] .adm input, [data-theme="light"] .adm textarea { background: #ffffff; color: #171310; }

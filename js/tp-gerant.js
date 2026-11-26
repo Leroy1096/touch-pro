@@ -4,10 +4,13 @@
    ========================================================================== */
 
 import { getSupabase } from "../js/supabaseClient.js?v=24";
-import { CATEGORIES_BOUTIQUE } from "../js/tp-config.js?v=19";
+import { CATEGORIES_BOUTIQUE, initBasculeTheme } from "../js/tp-config.js?v=20";
 import { esc, formatPrix, alerte, boutonChargement } from "../js/tp-pages.js?v=21";
 
 const $ = (id) => document.getElementById(id);
+
+/* Bascule thème sombre/clair du panneau (v2.22) */
+initBasculeTheme($("btnTheme"));
 const RAYONS = CATEGORIES_BOUTIQUE.filter((c) => c.code);
 const nomRayon = (code) => CATEGORIES_BOUTIQUE.find((c) => c.code === code)?.nom || code || "—";
 const STATUTS_CMD = { en_attente: "Nouvelle", confirmee: "En préparation", prete: "Prête", livree: "Livrée", annulee: "Annulée" };

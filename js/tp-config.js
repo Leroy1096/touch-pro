@@ -42,6 +42,45 @@ export function formatPrix(n) {
   return new Intl.NumberFormat("fr-CI").format(n) + " FCFA";
 }
 
+/* ==================== THÈME NOIR/OR ↔ BLANC (v2.22) ==================== */
+const SVG_SOLEIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>';
+const SVG_LUNE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 14.2A8.5 8.5 0 1 1 9.8 3.6a7 7 0 1 0 10.6 10.6z"/></svg>';
+
+export function themeCourant() {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+function majIconeTheme(btn) {
+  if (!btn) return;
+  /* En mode sombre on montre le soleil (vers le clair), et inversement */
+  btn.innerHTML = themeCourant() === "dark" ? SVG_SOLEIL : SVG_LUNE;
+}
+
+function majMetaTheme() {
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute("content", themeCourant() === "light" ? "#ffffff" : "#0b0a08");
+}
+
+export function basculeTheme() {
+  const html = document.documentElement;
+  const nv = themeCourant() === "light" ? "dark" : "light";
+  html.classList.add("tp-transit");           /* transition douce des couleurs */
+  html.dataset.theme = nv;
+  try { localStorage.setItem("theme", nv); } catch (e) { /* navigation privée */ }
+  majMetaTheme();
+  document.querySelectorAll(".tp-theme-toggle").forEach(majIconeTheme);
+  setTimeout(() => html.classList.remove("tp-transit"), 650);
+}
+
+/* Branche un bouton de bascule (icône + clic). Appelé par injecteChrome
+   et utilisable sur n'importe quelle page (ex. panneau Gérant). */
+export function initBasculeTheme(btn) {
+  if (!btn) return;
+  majIconeTheme(btn);
+  majMetaTheme();
+  btn.addEventListener("click", basculeTheme);
+}
+
 /* En-tête + pied de page partagés (injection) */
 export function injecteChrome(pageActive = "") {
   const liens = [
@@ -63,6 +102,7 @@ export function injecteChrome(pageActive = "") {
         <span class="nom">TOUCH <span>PRO</span><small>${TP.signature}</small></span>
       </a>
       <a href="boutique.html" class="tp-panier-tete" aria-label="Mon panier">🛒<span id="badgePanierGlobal">0</span></a>
+      <button class="tp-theme-toggle" id="btnTheme" type="button" aria-label="Basculer entre le thème sombre et le thème clair" title="Changer de thème"></button>
       <button class="tp-burger" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <nav>
         <a href="index.html" class="${pageActive === "index.html" ? "actif" : ""}">Accueil</a>
@@ -78,6 +118,10 @@ export function injecteChrome(pageActive = "") {
       </nav>
     </div>`;
   document.body.prepend(header);
+
+  /* --- Bascule de thème noir/or ↔ blanc (v2.22) --- */
+  initBasculeTheme(header.querySelector("#btnTheme"));
+
   const burger = header.querySelector(".tp-burger");
   burger.addEventListener("click", () => {
     const navEl = header.querySelector("nav");
