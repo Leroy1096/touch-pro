@@ -47,7 +47,7 @@
     </div>
   </section>
   <script type="module">
-    import { injecteChrome, DEPARTEMENTS } from "./js/tp-config.js?v=20";
+    import { injecteChrome, DEPARTEMENTS } from "./js/tp-config.js?v=21";
     injecteChrome("apropos.html");
     document.getElementById("univers").innerHTML = DEPARTEMENTS.map(d =>
       `<div class="tp-carte"><div class="corps"><span class="cat">${d.icone} Département ${d.num}</span><h3>TOUCH PRO ${d.nom}</h3><p>${d.desc}</p></div></div>`).join("");

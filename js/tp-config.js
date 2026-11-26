@@ -101,7 +101,7 @@ export function injecteChrome(pageActive = "") {
         <img src="images/tp/icon-192.png" alt="Logo TOUCH PRO">
         <span class="nom">TOUCH <span>PRO</span><small>${TP.signature}</small></span>
       </a>
-      <a href="boutique.html" class="tp-panier-tete" aria-label="Mon panier">🛒<span id="badgePanierGlobal">0</span></a>
+      <a href="boutique.html?panier=1" class="tp-panier-tete" aria-label="Mon panier">🛒<span id="badgePanierGlobal">0</span></a>
       <button class="tp-theme-toggle" id="btnTheme" type="button" aria-label="Basculer entre le thème sombre et le thème clair" title="Changer de thème"></button>
       <button class="tp-burger" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
       <nav>

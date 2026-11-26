@@ -8,7 +8,7 @@ import {
   formatPrix, esc, nettoie, alerte, boutonChargement, montreWA,
   clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase, exigeCompte,
 } from "./tp-pages.js?v=21";
-import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=19";
+import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=21";
 
 initPage("boutique.html");
 
@@ -332,20 +332,43 @@ document.getElementById("btnCoupon").addEventListener("click", () => {
   rendPanier(); majMsgCoupon();
 });
 
-function ouvreTiroir() {
+function ouvreTiroir(versFormulaire = false) {
   rendPanier(); majMsgCoupon();
   overlay.hidden = false;
   tiroir.hidden = false;
   requestAnimationFrame(() => { document.body.classList.add("tiroir-ouvert"); });
+  /* Ouverture depuis l'icône 🛒 de l'en-tête : intention = commander.
+     On fait défiler jusqu'au récap + formulaire de coordonnées. */
+  if (versFormulaire && getPanier().length) {
+    setTimeout(() => {
+      const corps = tiroir.querySelector(".tiroir-corps");
+      const recap = contenu.querySelector(".tiroir-recap");
+      if (corps && recap) {
+        corps.scrollTo({ top: Math.max(0, recap.offsetTop - corps.offsetTop - 10), behavior: "smooth" });
+      }
+    }, 380);
+  }
 }
 function fermeTiroir() {
   document.body.classList.remove("tiroir-ouvert");
   setTimeout(() => { overlay.hidden = true; tiroir.hidden = true; }, 280);
 }
 
-document.getElementById("btnVoirPanier").addEventListener("click", ouvreTiroir);
+document.getElementById("btnVoirPanier").addEventListener("click", () => ouvreTiroir());
 document.getElementById("btnFermerTiroir").addEventListener("click", fermeTiroir);
 overlay.addEventListener("click", fermeTiroir);
+
+/* Icône 🛒 de l'en-tête : sur la boutique, elle OUVRE le panier au lieu
+   de recharger la page ; depuis une autre page (?panier=1), le tiroir
+   s'ouvre automatiquement à l'arrivée. */
+const lienPanierTete = document.querySelector(".tp-panier-tete");
+if (lienPanierTete) {
+  lienPanierTete.addEventListener("click", (e) => { e.preventDefault(); ouvreTiroir(true); });
+}
+if (new URLSearchParams(location.search).get("panier") === "1") {
+  ouvreTiroir(true);
+  history.replaceState(null, "", "boutique.html");
+}
 
 contenu.addEventListener("click", (e) => {
   const b = e.target.closest("button");
