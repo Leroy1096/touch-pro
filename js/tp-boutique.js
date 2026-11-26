@@ -7,7 +7,7 @@ import {
   initPage, getPanier, retireDuPanier, changeQte, videPanier, totalPanier,
   formatPrix, esc, nettoie, alerte, boutonChargement, montreWA,
   clientCourant, envoiTropRapide, ajoutePanier, waLien, getSupabase, exigeCompte,
-} from "./tp-pages.js?v=21";
+} from "./tp-pages.js?v=22";
 import { CATEGORIES_BOUTIQUE, majBadgeGlobal } from "./tp-config.js?v=21";
 
 initPage("boutique.html");
@@ -66,11 +66,11 @@ function calcRemise(sousTotal) {
 }
 
 const fmtVentes = (n) => n >= 1000 ? (n / 1000).toFixed(1).replace(".", ",").replace(",0", "") + "k+" : n + "+";
-const reducPct = (p) => (p.prix_promo && p.prix_promo < p.prix) ? Math.round((1 - p.prix_promo / p.prix) * 100) : 0;
+const reducPct = (p) => (p.prix_promo && p.prix_promo > p.prix) ? Math.round((1 - p.prix / p.prix_promo) * 100) : 0;
 
 /* ---------- Rendu carte ---------- */
 function carte(p, compacte = false) {
-  const prix = p.prix_promo || p.prix;
+  const prix = p.prix; /* convention unique : prix = prix de vente, prix_promo = prix barré */
   const reduc = reducPct(p);
   const rupture = Number(p.stock) <= 0;
   const tailles = p.tailles ? p.tailles.split(",").map((t) => t.trim()).filter(Boolean) : [];
@@ -88,7 +88,7 @@ function carte(p, compacte = false) {
     </div>
     <div class="infos">
       <h3>${esc(p.nom)}</h3>
-      <p class="prix"><strong>${formatPrix(prix)}</strong>${p.prix_promo ? `<del>${formatPrix(p.prix)}</del>` : ""}</p>
+      <p class="prix"><strong>${formatPrix(prix)}</strong>${reduc ? `<del>${formatPrix(p.prix_promo)}</del>` : ""}</p>
       ${(p.ventes || p.note) ? `<p class="meta">${p.note ? `★ ${String(p.note).replace(".", ",")}` : ""}${p.note && p.ventes ? " · " : ""}${p.ventes ? `${fmtVentes(p.ventes)} vendus` : ""}</p>` : ""}
       ${p.flash && !compacte ? `<div class="jauge"><i style="width:${pctVendu}%"></i></div><small class="jauge-txt">${pctVendu}% vendu${pctVendu >= 80 ? " · Presque épuisé" : ""}</small>` : ""}
       ${!p.flash && Number(p.stock) > 0 && Number(p.stock) <= 10 ? `<small class="stock-bas">Plus que ${p.stock} en stock</small>` : ""}
@@ -105,7 +105,7 @@ function filtreCourant() {
     (!depActif || (p.categorie || p.departement) === depActif) &&
     (!favActif || favs.includes(String(p.id))) &&
     (!q || (p.nom + " " + (p.description || "")).toLowerCase().includes(q)));
-  const prixDe = (p) => p.prix_promo || p.prix;
+  const prixDe = (p) => p.prix;
   switch (triActif) {
     case "prix-asc": liste.sort((a, b) => prixDe(a) - prixDe(b)); break;
     case "prix-desc": liste.sort((a, b) => prixDe(b) - prixDe(a)); break;
@@ -168,7 +168,7 @@ document.getElementById("railCoupons").addEventListener("click", (e) => {
 
 /* ---------- Chargement : démo immédiat, puis BDD ---------- */
 async function charge() {
-  const data = await import("./tp-data.js?v=19");
+  const data = await import("./tp-data.js?v=21");
   tous = data.PRODUITS_DEMO;
   coupons = data.COUPONS;
   livraisonOfferte = data.LIVRAISON_OFFERTE;

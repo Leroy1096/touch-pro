@@ -3,9 +3,9 @@
    galerie, témoignages. Données BDD en priorité, données démo en repli.
    ========================================================================== */
 
-import { TP, DEPARTEMENTS, injecteChrome, animeReveals, formatPrix } from "./tp-config.js?v=17";
+import { TP, DEPARTEMENTS, injecteChrome, animeReveals, formatPrix } from "./tp-config.js?v=21";
 import { getSupabase } from "./supabaseClient.js?v=24";
-import { PRODUITS_DEMO, PROMOS_DEMO, ACTUS_DEMO, AVIS_DEMO, SERVICES_DEMO } from "./tp-data.js?v=20";
+import { PRODUITS_DEMO, PROMOS_DEMO, ACTUS_DEMO, AVIS_DEMO, SERVICES_DEMO } from "./tp-data.js?v=21";
 
 injecteChrome("index.html");
 document.getElementById("btnItineraire").href = TP.itineraire;
@@ -81,7 +81,7 @@ charge("#grilleProduits",
       ${p.image_url ? `<img class="visuel" src="${esc(p.image_url)}" alt="${esc(p.nom)}" loading="lazy">` : ""}
       <div class="corps">
         <h3>${esc(p.nom)}</h3>
-        <p class="tp-prix">${p.prix_promo ? `<del>${formatPrix(p.prix)}</del>${formatPrix(p.prix_promo)}` : formatPrix(p.prix)}</p>
+        <p class="tp-prix">${p.prix_promo && p.prix_promo > p.prix ? `<del>${formatPrix(p.prix_promo)}</del>` : ""}${formatPrix(p.prix)}</p>
         <p>${p.stock > 0 ? "✅ En stock" : "❌ Rupture"}</p>
       </div>
     </article>`,

@@ -4,8 +4,8 @@
    ========================================================================== */
 
 import { getSupabase } from "../js/supabaseClient.js?v=24";
-import { DEPARTEMENTS, CATEGORIES_BOUTIQUE, TP } from "../js/tp-config.js?v=17";
-import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=21";
+import { DEPARTEMENTS, CATEGORIES_BOUTIQUE, TP } from "../js/tp-config.js?v=21";
+import { esc, formatPrix, alerte, boutonChargement, nettoie } from "../js/tp-pages.js?v=22";
 
 let sb = null;
 
@@ -176,8 +176,8 @@ async function produits() {
         <input name="nom" placeholder="Nom *" required>
         <select name="categorie" title="Rayon de la boutique">${CATEGORIES_BOUTIQUE.filter(c => c.code).map(c => `<option value="${c.code}">${c.icone} ${c.nom}</option>`).join("")}</select>
         <select name="departement"><option value="">— Aucun département —</option>${DEPARTEMENTS.map(d => `<option value="${d.code}">${d.icone} ${d.nom}</option>`).join("")}</select>
-        <input name="prix" type="number" min="0" placeholder="Prix FCFA *" required>
-        <input name="prix_promo" type="number" min="0" placeholder="Prix promo">
+        <input name="prix" type="number" min="0" placeholder="Prix de vente FCFA *" required>
+        <input name="prix_promo" type="number" min="0" placeholder="Prix barré (optionnel)">
         <input name="stock" type="number" min="0" placeholder="Stock *" required>
         <input name="tailles" placeholder="Tailles (S,M,L)">
         <input name="image_url" placeholder="URL image">
@@ -189,7 +189,7 @@ async function produits() {
       <tr><th>Produit</th><th>Rayon</th><th>Prix</th><th>Stock</th><th>Visible</th><th></th></tr>
       ${(data || []).map(p => `<tr>
         <td><strong>${esc(p.nom)}</strong></td><td><small>${esc(nomRayon(p.categorie || p.departement))}</small></td>
-        <td>${formatPrix(p.prix)}${p.prix_promo ? ` → <b style="color:var(--tp-or)">${formatPrix(p.prix_promo)}</b>` : ""}</td>
+        <td><b style="color:var(--tp-or)">${formatPrix(p.prix)}</b>${p.prix_promo && p.prix_promo > p.prix ? ` <del>${formatPrix(p.prix_promo)}</del>` : ""}</td>
         <td><input type="number" min="0" value="${p.stock}" data-id="${p.id}" class="inp-stock" style="width:80px"></td>
         <td><input type="checkbox" ${p.actif ? "checked" : ""} data-id="${p.id}" class="chk-actif"></td>
         <td class="actions"><button class="btn btn-contour btn-suppr" data-id="${p.id}">🗑</button></td>

@@ -2,7 +2,7 @@
    TOUCH PRO — Moteur partagé : panier, formulaires, rendus
    ========================================================================== */
 
-import { TP, waLien, formatPrix, injecteChrome } from "./tp-config.js?v=16";
+import { TP, waLien, formatPrix, injecteChrome } from "./tp-config.js?v=21";
 import { getSupabase } from "./supabaseClient.js?v=24";
 
 export { TP, waLien, formatPrix, getSupabase };
@@ -124,12 +124,12 @@ export function carteProduit(p) {
   const rupture = p.stock <= 0;
   const tailles = p.tailles ? p.tailles.split(",").map((t) => t.trim()).filter(Boolean) : [];
   return `
-  <article class="tp-carte" data-id="${esc(String(p.id))}" data-nom="${esc(p.nom)}" data-prix="${p.prix_promo || p.prix}" data-stock="${Number(p.stock) || 0}">
+  <article class="tp-carte" data-id="${esc(String(p.id))}" data-nom="${esc(p.nom)}" data-prix="${p.prix}" data-stock="${Number(p.stock) || 0}">
     ${p.image_url ? `<img class="visuel" src="${esc(p.image_url)}" alt="${esc(p.nom)}" loading="lazy">` : `<div class="visuel" style="display:flex;align-items:center;justify-content:center;font-size:3rem">🛍️</div>`}
     <div class="corps">
       <h3>${esc(p.nom)}</h3>
       ${p.description ? `<p>${esc(p.description)}</p>` : ""}
-      <p class="tp-prix">${p.prix_promo ? `<del>${formatPrix(p.prix)}</del>${formatPrix(p.prix_promo)}` : formatPrix(p.prix)}</p>
+      <p class="tp-prix">${p.prix_promo && p.prix_promo > p.prix ? `<del>${formatPrix(p.prix_promo)}</del>` : ""}${formatPrix(p.prix)}</p>
       ${tailles.length ? `<select class="sel-taille" style="background:var(--noir-3);color:var(--blanc);border:var(--bordure);border-radius:8px;padding:.4rem">${tailles.map((t) => `<option>${esc(t)}</option>`).join("")}</select>` : ""}
       <button class="btn ${rupture ? "btn-contour" : "btn-or"} btn-ajouter" ${rupture ? "disabled" : ""}>${rupture ? "Rupture de stock" : "🛒 Ajouter au panier"}</button>
     </div>
@@ -153,7 +153,7 @@ export function branchePanier(grille) {
 /* Affiche le catalogue démo immédiatement, puis le remplace par la BDD si disponible */
 export async function chargeProduits(sel, departement = null) {
   const zone = document.querySelector(sel);
-  const { PRODUITS_DEMO } = await import("./tp-data.js?v=20");
+  const { PRODUITS_DEMO } = await import("./tp-data.js?v=21");
   const demo = departement ? PRODUITS_DEMO.filter((p) => p.departement === departement) : PRODUITS_DEMO;
   const rendu = (data) => {
     zone.innerHTML = data.length ? data.map(carteProduit).join("") : `<div class="tp-vide">Les produits arrivent très vite !</div>`;

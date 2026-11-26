@@ -5,8 +5,8 @@
 
 import {
   initPage, formatPrix, esc, ajoutePanier, waLien, getSupabase, majBadgePanier, exigeCompte,
-} from "./tp-pages.js?v=21";
-import { majBadgeGlobal } from "./tp-config.js?v=19";
+} from "./tp-pages.js?v=22";
+import { majBadgeGlobal } from "./tp-config.js?v=21";
 
 initPage("boutique.html");
 
@@ -23,7 +23,7 @@ let tailleChoisie = null;
 
 /* ---------- Chargement : démo immédiat, puis BDD ---------- */
 async function charge() {
-  const { PRODUITS_DEMO } = await import("./tp-data.js?v=19");
+  const { PRODUITS_DEMO } = await import("./tp-data.js?v=21");
   let tous = PRODUITS_DEMO;
   produit = tous.find((p) => String(p.id) === String(id)) || tous[0];
   rend(tous);
@@ -39,9 +39,9 @@ async function charge() {
   } catch { /* démo conservée */ }
 }
 
-const reducPct = (p) => (p.prix_promo && p.prix_promo < p.prix) ? Math.round((1 - p.prix_promo / p.prix) * 100) : 0;
+const reducPct = (p) => (p.prix_promo && p.prix_promo > p.prix) ? Math.round((1 - p.prix / p.prix_promo) * 100) : 0;
 const fmtVentes = (n) => n >= 1000 ? (n / 1000).toFixed(1).replace(".", ",").replace(",0", "") + "k+" : n + "+";
-const prixUnit = () => produit.prix_promo || produit.prix;
+const prixUnit = () => produit.prix;
 
 function rend(tous) {
   const p = produit;
@@ -67,7 +67,7 @@ function rend(tous) {
     <div class="produit-corps">
       <h1>${esc(p.nom)}</h1>
       <p class="meta">${p.note ? `★ ${String(p.note).replace(".", ",")}` : ""}${p.note && p.ventes ? " · " : ""}${p.ventes ? `${fmtVentes(p.ventes)} vendus` : ""}</p>
-      <p class="prix"><strong>${formatPrix(prixUnit())}</strong>${p.prix_promo ? `<del>${formatPrix(p.prix)}</del>` : ""}${reduc ? `<span class="promo-txt">-${reduc}%</span>` : ""}</p>
+      <p class="prix"><strong>${formatPrix(prixUnit())}</strong>${reduc ? `<del>${formatPrix(p.prix_promo)}</del><span class="promo-txt">-${reduc}%</span>` : ""}</p>
       ${rupture ? `<p class="stock-bas">⚠️ Article épuisé — réapprovisionnement bientôt.</p>`
         : Number(p.stock) <= 10 ? `<p class="stock-bas">🔥 Plus que ${p.stock} en stock</p>` : ""}
 
@@ -102,7 +102,7 @@ function rend(tous) {
           <a class="sim" href="produit.html?id=${encodeURIComponent(String(s.id))}">
             ${s.image_url ? `<img src="${esc(s.image_url)}" alt="${esc(s.nom)}" loading="lazy">` : `<span class="emoji">🛍️</span>`}
             <strong>${esc(s.nom)}</strong>
-            <span class="prix">${formatPrix(s.prix_promo || s.prix)}</span>
+            <span class="prix">${formatPrix(s.prix)}</span>
           </a>`).join("")}</div>` : ""}
     </div>`;
 
