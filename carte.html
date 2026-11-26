@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(){try{var t=localStorage.getItem("theme")||(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="light"?"#ffffff":"#0b0a08")}catch(e){document.documentElement.dataset.theme="dark"}})();</script>
   <title>Carte de visite — TOUCH PRO | Oupoyo</title>
   <meta name="description" content="Carte de visite numérique TOUCH PRO : beauté, tech, digital & boutique à Oupoyo. Appelez, WhatsApp, itinéraire, enregistrez le contact.">
   <link rel="icon" type="image/png" href="images/tp/favicon-tp.png">
   <meta name="theme-color" content="#0b0a08">
   <link rel="stylesheet" href="css/style.css?v=18">
-  <link rel="stylesheet" href="css/touchpro.css?v=20">
+  <link rel="stylesheet" href="css/touchpro.css?v=26">
   <style>
     /* ---------- Carte de visite : 100 % responsive ---------- */
     .carte-page {
@@ -38,6 +39,8 @@
       background: #000;
     }
     .carte h1 { font-size: clamp(1.35rem, 6vw, 1.7rem); letter-spacing: clamp(1px, 1vw, 3px); margin: 0; }
+    /* La carte reste noire & or même en thème clair : on fige ses variables */
+    [data-theme="light"] .carte { --blanc: #f5f2ea; --gris: #b3a78f; --or: #d6a94f; --or-clair: #e9cd93; }
     .carte h1 span { color: var(--or); }
     .carte .sig { color: var(--or); font-size: clamp(.62rem, 2.6vw, .74rem); letter-spacing: clamp(1.5px, 1vw, 3px); font-weight: 700; margin: 0 0 .35rem; }
     .carte .slogan { color: var(--gris); font-style: italic; font-size: clamp(.78rem, 3.4vw, .88rem); margin-top: .3rem; }
